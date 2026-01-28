@@ -1,4 +1,4 @@
-function NewTask() {
+const NewTask = () => {
   return <div>NewTask</div>
 }
 

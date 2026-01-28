@@ -1,15 +1,20 @@
 
 import { Navigate, Route, Routes } from 'react-router-dom'
+import LoggedLayout from './components/LoggedLayout'
 import Calendar from './pages/Calendar'
 import Home from './pages/Home'
 import NewTask from './pages/NewTask'
 
-function App() {
+
+
+const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/new" element={<NewTask />} />
-      <Route path="/calendar" element={<Calendar />} />
+      <Route element={<LoggedLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/new" element={<NewTask />} />
+        <Route path="/calendar" element={<Calendar />} />
+      </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
