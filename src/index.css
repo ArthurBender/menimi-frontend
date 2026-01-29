@@ -25,3 +25,8 @@
   --color-dark: var(--dark);
   --color-shadow: var(--shadow);
 }
+
+
+.nav-link {
+  @apply text-4xl cursor-pointer;
+}
