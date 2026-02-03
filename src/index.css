@@ -30,3 +30,20 @@
 .nav-link {
   @apply text-4xl cursor-pointer;
 }
+
+.sidebar-link {
+  @apply flex items-center gap-2 text-xl font-semibold cursor-pointer hover:bg-accent rounded-3xl p-2
+    border border-transparent transition-[padding] duration-300 flex-nowrap text-nowrap;
+}
+
+.sidebar-link span {
+  @apply text-3xl;
+}
+
+.sidebar-link.expanded {
+  @apply px-8;
+}
+
+.sidebar-link.active {
+  @apply border-light;
+}

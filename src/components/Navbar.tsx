@@ -13,7 +13,7 @@ type NavbarProps = {
 const Navbar = ({ isSidebarOpen, onToggleSidebar }: NavbarProps) => {
   return (
     <nav className="flex items-center justify-between bg-primary px-4 py-2 text-light">
-      <button type="button" onClick={onToggleSidebar} className={`nav-link transition-all ${!isSidebarOpen && "-translate-x-15"}`}>
+      <button type="button" onClick={onToggleSidebar} className={`nav-link transition-all ${!isSidebarOpen && "-translate-x-17.5"}`}>
         <MdMenu />
       </button>
       <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
