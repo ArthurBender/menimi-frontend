@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "react-big-calendar/lib/css/react-big-calendar.css";
 
 :root {
   --background: #FAF7F2;
@@ -46,4 +47,14 @@
 
 .sidebar-link.active {
   @apply border-light;
+}
+
+.rbc-date-cell {
+  text-align: center;
+  padding-right: 0px;
+  padding-top: 5px;
+}
+
+.rbc-today {
+  background-color: var(--color-surface);
 }
