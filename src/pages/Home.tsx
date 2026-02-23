@@ -1,16 +1,20 @@
-import { useState } from "react";
 import { username, tasks, resume } from "../api/mock";
 
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import HomeTaskRow from "../components/HomeTaskRow";
+import { useHomeCalendarEventRenderer } from "../components/HomeCalendarEventRenderer";
 
 import moment from "moment";
 
-const localizer = momentLocalizer(moment);
-
-const currentMonth = moment().format("MMMM - YYYY");
+import { buildTaskEventsForMonth } from "../utils/occurrences";
 
 const Home = () => {
+  const localizer = momentLocalizer(moment);
+  const currentMonth = moment().format("MMMM - YYYY");
+
+  const homeTasks = buildTaskEventsForMonth(tasks, new Date());
+  const DateHeader = useHomeCalendarEventRenderer(homeTasks);
+  
   return (
     <div className="p-20 w-full h-full">
       <div className="flex flex-col gap-10 justify-between h-full">
@@ -22,6 +26,8 @@ const Home = () => {
               localizer={localizer}
               views={["month"]}
               toolbar={false}
+              events={[]}
+              components={{ month: { dateHeader: DateHeader } }}
             />
           </div>
         </div>

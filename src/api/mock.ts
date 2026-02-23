@@ -18,17 +18,17 @@ const tasks: Task[] = [
     "occurrences": [
       {
         "id": 36,
-        "occurred_at": "2026-03-02T11:10:00.000Z",
+        "occurred_at": "2026-02-02T11:10:00.000Z",
         "status": "done"
       },
       {
         "id": 37,
-        "occurred_at": "2026-03-03T11:05:00.000Z",
+        "occurred_at": "2026-02-03T11:05:00.000Z",
         "status": "done"
       },
       {
         "id": 38,
-        "occurred_at": "2026-03-04T11:40:00.000Z",
+        "occurred_at": "2026-02-04T11:40:00.000Z",
         "status": "missed"
       }
     ]
@@ -48,12 +48,12 @@ const tasks: Task[] = [
     "occurrences": [
       {
         "id": 39,
-        "occurred_at": "2026-03-02T22:10:00.000Z",
+        "occurred_at": "2026-02-02T22:10:00.000Z",
         "status": "done"
       },
       {
         "id": 40,
-        "occurred_at": "2026-03-04T22:20:00.000Z",
+        "occurred_at": "2026-02-04T22:20:00.000Z",
         "status": "done"
       }
     ]
@@ -73,12 +73,12 @@ const tasks: Task[] = [
     "occurrences": [
       {
         "id": 41,
-        "occurred_at": "2026-03-05T12:05:00.000Z",
+        "occurred_at": "2026-02-05T12:05:00.000Z",
         "status": "done"
       },
       {
         "id": 42,
-        "occurred_at": "2026-03-06T12:05:00.000Z",
+        "occurred_at": "2026-02-06T12:05:00.000Z",
         "status": "canceled"
       }
     ]
