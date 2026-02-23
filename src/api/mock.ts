@@ -17,6 +17,31 @@ const tasks: Task[] = [
     "updated_at": "2026-02-04T14:35:58.357Z",
     "occurrences": [
       {
+        "id": 31,
+        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "status": "done"
+      },
+      {
+        "id": 32,
+        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "status": "done"
+      },
+      {
+        "id": 33,
+        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "status": "done"
+      },
+      {
+        "id": 34,
+        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "status": "done"
+      },
+      {
+        "id": 35,
+        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "status": "done"
+      },
+      {
         "id": 36,
         "occurred_at": "2026-02-02T11:10:00.000Z",
         "status": "done"

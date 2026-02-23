@@ -25,18 +25,20 @@ export const useHomeCalendarEventRenderer = (events: CalendarTask[]) => {
 
   return ({ label, date }: { label: string; date: Date }) => {
     const statuses = statusesByDay.get(dayKey(date)) ?? [];
+    const overflowingStatuses = statuses.length - 5;
 
     return (
       <div className="flex w-full flex-col items-center">
         <span className="block w-full text-center">{label}</span>
         {statuses.length > 0 && (
           <div className="mt-0.5 flex items-center justify-center gap-0.5">
-            {statuses.slice(0, 5).map((status, index) => (
+            {statuses.slice(0, overflowingStatuses > 0 ? 3 : 4).map((status, index) => (
               <span
                 key={`${status}-${index}`}
                 className={`h-2 w-2 rounded-full ${dotClassByStatus[status]}`}
               />
             ))}
+            {overflowingStatuses > 0 && <span className="text-[8px] leading-none">+{overflowingStatuses}</span>}
           </div>
         )}
       </div>
