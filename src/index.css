@@ -66,3 +66,15 @@
 .calendar-navigation {
   @apply bg-accent px-4 py-2 rounded-lg text-light font-bold cursor-pointer hover:bg-accent/80;
 }
+
+.task-field-group {
+  @apply flex flex-col gap-1;
+}
+
+.task-field-group > input, .task-field-group > textarea, .task-field-group > select {
+  @apply rounded-xl border border-accent bg-light px-3 py-2 outline-none;
+}
+
+.task-field-group > label {
+  @apply text-sm font-semibold;
+}
