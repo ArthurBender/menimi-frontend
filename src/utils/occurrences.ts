@@ -8,7 +8,7 @@ export function buildTaskEventsForMonth(tasks: Task[], date: Date): CalendarTask
   // Set range
   const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
   const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
-  const rangeStart = new Date(Math.max(dayKey(date), monthStart.getTime()));
+  const pendingRangeStart = getPendingRangeStart(monthStart);
 
   const events: CalendarTask[] = [];
   const existingDaysByTask = new Map<number, Set<number>>();
@@ -38,29 +38,34 @@ export function buildTaskEventsForMonth(tasks: Task[], date: Date): CalendarTask
   }
 
   // Create pending tasks
-  for (const task of tasks) {
-    if (!task.active) continue;
+  if (pendingRangeStart) {
+    for (const task of tasks) {
+      if (!task.active) continue;
 
-    const startsAt = new Date(task.starts_at);
-    const existingDays = existingDaysByTask.get(task.id) ?? new Set<number>();
-    const scheduledDates = task.rrule ? parseRRule(task.rrule, startsAt).between(rangeStart, monthEnd, true) : [startsAt];
+      const startsAt = new Date(task.starts_at);
+      const existingDays = existingDaysByTask.get(task.id) ?? new Set<number>();
+      const scheduledDates = task.rrule
+        ? parseRRule(task.rrule, startsAt).between(pendingRangeStart, monthEnd, true)
+        : [startsAt];
 
-    for (const scheduledDate of scheduledDates) {
-      const scheduledDay = dayKey(scheduledDate);
-      if (!task.rrule && (scheduledDay < dayKey(monthStart) || scheduledDate > monthEnd)) continue;
-      if (existingDays.has(scheduledDay)) continue;
+      for (const scheduledDate of scheduledDates) {
+        const scheduledDay = dayKey(scheduledDate);
+        if (!task.rrule && (scheduledDay < dayKey(monthStart) || scheduledDate > monthEnd)) continue;
+        if (scheduledDate < pendingRangeStart) continue;
+        if (existingDays.has(scheduledDay)) continue;
 
-      events.push(
-        makeEvent({
-          id: `pending-${task.id}-${scheduledDay}`,
-          title: task.title,
-          start: scheduledDate,
-          status: "pending",
-          taskId: task.id,
-          occurrenceId: null,
-          generated: true,
-        }),
-      );
+        events.push(
+          makeEvent({
+            id: `pending-${task.id}-${scheduledDay}`,
+            title: task.title,
+            start: scheduledDate,
+            status: "pending",
+            taskId: task.id,
+            occurrenceId: null,
+            generated: true,
+          }),
+        );
+      }
     }
   }
 
@@ -100,6 +105,16 @@ function parseRRule(rrule: string, startsAt: Date) {
 
 function dayKey(value: Date): number {
   return new Date(value.getFullYear(), value.getMonth(), value.getDate()).getTime();
+}
+
+function getPendingRangeStart(monthStart: Date): Date | null {
+  const today = new Date();
+  const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  if (monthStart < currentMonthStart) return null;
+  if (monthStart > currentMonthStart) return monthStart;
+
+  return new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 }
 
 function toUtcIcsDate(date: Date): string {
