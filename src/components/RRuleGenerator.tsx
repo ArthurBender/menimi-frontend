@@ -378,11 +378,7 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
         </div>
       )}
 
-      <div className="task-field-group">
-        <label htmlFor="rrule_preview">RRULE</label>
-        <input id="rrule_preview" type="text" value={rruleValue} readOnly />
-        <input type="hidden" name={name} value={rruleValue} />
-      </div>
+      <input type="hidden" name={name} value={rruleValue} />
     </div>
   );
 };
