@@ -78,3 +78,19 @@
 .task-field-group > label {
   @apply text-sm font-semibold;
 }
+
+.rrule-square-grid {
+  @apply flex flex-wrap gap-2 mx-auto justify-center;
+}
+
+.rrule-square-input {
+  @apply sr-only;
+}
+
+.rrule-square-toggle {
+  @apply flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-accent/80 text-xs font-semibold text-light transition-colors;
+}
+
+.rrule-square-input:checked + .rrule-square-toggle {
+  @apply bg-accent;
+}

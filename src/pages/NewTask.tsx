@@ -1,4 +1,5 @@
 import { useState } from "react";
+import RRuleGenerator from "../components/RRuleGenerator";
 import { timezoneOptions } from "../utils/timezones";
 
 function getCurrentLocalDateTime() {
@@ -11,7 +12,7 @@ const NewTask = () => {
   const [isRecurrent, setIsRecurrent] = useState(false);
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
+    <div className="mx-auto w-full max-w-4xl">
       <form className="mt-8 flex flex-col gap-8 rounded-2xl bg-surface p-6">
         <div className="flex justify-center">
           <h2 className="text-4xl font-bold">New Task</h2>
@@ -38,7 +39,7 @@ const NewTask = () => {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-2 gap-4">
           <div className="task-field-group">
             <label htmlFor="starts_at">
               <span title="required">*</span> Date / Starts At
@@ -71,7 +72,7 @@ const NewTask = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
             <input
               id="recurrent"
@@ -90,14 +91,7 @@ const NewTask = () => {
         </div>
 
         {isRecurrent && (
-          <div className="task-field-group">
-            <label htmlFor="rrule">RRULE</label>
-            <input
-              id="rrule"
-              name="rrule"
-              type="text"
-            />
-          </div>
+          <RRuleGenerator />
         )}
 
         <div className="mt-2 flex justify-center">
