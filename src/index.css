@@ -10,6 +10,10 @@
   --light: #fff7ed;
   --dark: #2a1f18;
   --shadow: #FDE2E2;
+
+  --occurrence-status-pending: #9CA3AF;
+  --occurrence-status-done: #22C55E;
+  --occurrence-status-missed: #EF4444;
 }
 
 .dark {
@@ -57,4 +61,8 @@
 
 .rbc-today {
   background-color: var(--color-surface);
+}
+
+.calendar-navigation {
+  @apply bg-accent px-4 py-2 rounded-lg text-light font-bold cursor-pointer hover:bg-accent/80;
 }

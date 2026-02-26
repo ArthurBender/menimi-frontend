@@ -1,7 +1,7 @@
 
 import { Navigate, Route, Routes } from 'react-router-dom'
 import LoggedLayout from './components/LoggedLayout'
-import Calendar from './pages/Calendar'
+import CalendarPage from './pages/CalendarPage'
 import Home from './pages/Home'
 import NewTask from './pages/NewTask'
 
@@ -13,7 +13,7 @@ const App = () => {
       <Route element={<LoggedLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/new" element={<NewTask />} />
-        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/calendar" element={<CalendarPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

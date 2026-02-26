@@ -1,13 +1,8 @@
 import { useMemo } from "react";
 import type { CalendarTask } from "../api/types";
+import { getOccurrenceStatusColor } from "../utils/calendarEventColors";
 
 const dayKey = (value: Date) => new Date(value.getFullYear(), value.getMonth(), value.getDate()).getTime();
-
-const dotClassByStatus: Partial<Record<"pending" | "done" | "missed", string>> = {
-  pending: "bg-gray-400",
-  done: "bg-green-500",
-  missed: "bg-red-500",
-};
 
 export const useHomeCalendarEventRenderer = (events: CalendarTask[]) => {
   const statusesByDay = useMemo(() => {
@@ -35,7 +30,8 @@ export const useHomeCalendarEventRenderer = (events: CalendarTask[]) => {
             {statuses.slice(0, overflowingStatuses > 0 ? 3 : 4).map((status, index) => (
               <span
                 key={`${status}-${index}`}
-                className={`h-2 w-2 rounded-full ${dotClassByStatus[status]}`}
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: getOccurrenceStatusColor(status) }}
               />
             ))}
             {overflowingStatuses > 0 && <span className="text-[8px] leading-none">+{overflowingStatuses}</span>}
