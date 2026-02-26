@@ -63,6 +63,15 @@
   background-color: var(--color-surface);
 }
 
+.rbc-button-link {
+  @apply cursor-default;
+}
+
+.rbc-event-content {
+  text-align: center;
+  width: 100%;
+}
+
 .calendar-navigation {
   @apply bg-accent px-4 py-2 rounded-lg text-light font-bold cursor-pointer hover:bg-accent/80;
 }
