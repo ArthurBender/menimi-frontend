@@ -9,51 +9,51 @@ const tasks: Task[] = [
     "title": "Daily journal",
     "description": "Write a short daily journal entry.",
     "rrule": "FREQ=DAILY;INTERVAL=1",
-    "starts_at": "2026-02-01T11:00:00.000Z",
+    "starts_at": "2026-03-01T11:00:00.000Z",
     "timezone": "America/Sao_Paulo",
     "carry_over": false,
     "active": true,
-    "created_at": "2026-02-04T14:35:58.357Z",
-    "updated_at": "2026-02-04T14:35:58.357Z",
+    "created_at": "2026-03-02T14:35:58.357Z",
+    "updated_at": "2026-03-02T14:35:58.357Z",
     "occurrences": [
       {
         "id": 31,
-        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "occurred_at": "2026-03-02T11:10:00.000Z",
         "status": "done"
       },
       {
         "id": 32,
-        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "occurred_at": "2026-03-02T11:10:00.000Z",
         "status": "done"
       },
       {
         "id": 33,
-        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "occurred_at": "2026-03-02T11:10:00.000Z",
         "status": "done"
       },
       {
         "id": 34,
-        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "occurred_at": "2026-03-02T11:10:00.000Z",
         "status": "done"
       },
       {
         "id": 35,
-        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "occurred_at": "2026-03-02T11:10:00.000Z",
         "status": "done"
       },
       {
         "id": 36,
-        "occurred_at": "2026-02-02T11:10:00.000Z",
+        "occurred_at": "2026-03-02T11:10:00.000Z",
         "status": "done"
       },
       {
         "id": 37,
-        "occurred_at": "2026-02-03T11:05:00.000Z",
+        "occurred_at": "2026-03-03T11:05:00.000Z",
         "status": "done"
       },
       {
         "id": 38,
-        "occurred_at": "2026-02-04T11:40:00.000Z",
+        "occurred_at": "2026-03-02T11:40:00.000Z",
         "status": "missed"
       }
     ]
@@ -64,21 +64,21 @@ const tasks: Task[] = [
     "title": "Gym session",
     "description": "Strength training workout.",
     "rrule": "FREQ=WEEKLY;BYDAY=MO,WE,FR",
-    "starts_at": "2026-02-03T21:30:00.000Z",
+    "starts_at": "2026-03-03T21:30:00.000Z",
     "timezone": "America/Sao_Paulo",
     "carry_over": true,
     "active": true,
-    "created_at": "2026-02-04T14:35:58.361Z",
-    "updated_at": "2026-02-04T14:35:58.361Z",
+    "created_at": "2026-03-02T14:35:58.361Z",
+    "updated_at": "2026-03-02T14:35:58.361Z",
     "occurrences": [
       {
         "id": 39,
-        "occurred_at": "2026-02-02T22:10:00.000Z",
+        "occurred_at": "2026-03-02T22:10:00.000Z",
         "status": "done"
       },
       {
         "id": 40,
-        "occurred_at": "2026-02-04T22:20:00.000Z",
+        "occurred_at": "2026-03-02T22:20:00.000Z",
         "status": "done"
       }
     ]
@@ -89,21 +89,21 @@ const tasks: Task[] = [
     "title": "Pay rent",
     "description": "Monthly rent payment.",
     "rrule": "FREQ=MONTHLY;BYMONTHDAY=5",
-    "starts_at": "2026-02-05T12:00:00.000Z",
+    "starts_at": "2026-03-01T12:00:00.000Z",
     "timezone": "America/Sao_Paulo",
     "carry_over": false,
     "active": true,
-    "created_at": "2026-02-04T14:35:58.365Z",
-    "updated_at": "2026-02-04T14:35:58.365Z",
+    "created_at": "2026-03-02T14:35:58.365Z",
+    "updated_at": "2026-03-02T14:35:58.365Z",
     "occurrences": [
       {
         "id": 41,
-        "occurred_at": "2026-02-05T12:05:00.000Z",
+        "occurred_at": "2026-03-01T12:05:00.000Z",
         "status": "done"
       },
       {
         "id": 42,
-        "occurred_at": "2026-02-06T12:05:00.000Z",
+        "occurred_at": "2026-03-06T12:05:00.000Z",
         "status": "canceled"
       }
     ]
@@ -114,12 +114,12 @@ const tasks: Task[] = [
     "title": "Read a book",
     "description": "Read for 30 minutes.",
     "rrule": null,
-    "starts_at": "2026-02-05T00:00:00.000Z",
+    "starts_at": "2026-03-01T00:00:00.000Z",
     "timezone": "America/Sao_Paulo",
     "carry_over": false,
     "active": true,
-    "created_at": "2026-02-04T14:35:58.370Z",
-    "updated_at": "2026-02-04T14:35:58.370Z",
+    "created_at": "2026-03-02T14:35:58.370Z",
+    "updated_at": "2026-03-02T14:35:58.370Z",
     "occurrences": []
   }
 ];
