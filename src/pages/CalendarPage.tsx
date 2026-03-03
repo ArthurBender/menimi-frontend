@@ -14,7 +14,7 @@ const CalendarPage = () => {
   const calendarTasksData = tasks;
 
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedEvent, setSelectedEvent] = useState<CalendarTask | null>(null);
+  const [selectedTask, setSelectedTask] = useState<CalendarTask | null>(null);
   const [addOccurrenceDate, setAddOccurrenceDate] = useState<Date | null>(null);
 
   const localizer = momentLocalizer(moment);
@@ -23,10 +23,6 @@ const CalendarPage = () => {
   const year = currentDate.getFullYear();
 
   const calendarTasks = buildTaskEventsForMonth(calendarTasksData, currentDate);
-  const selectedTask = selectedEvent
-    ? calendarTasksData.find((task) => task.id === selectedEvent.resource.taskId) ?? null
-    : null;
-
   const handleMonthChange = (type: "next" | "previous") => {
     if (type === "next") {
       setCurrentDate((prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1, 1));
@@ -35,13 +31,13 @@ const CalendarPage = () => {
     }
   }
 
-  const handleEventSelect = (event: CalendarTask) => {
+  const handleTaskSelect = (task: CalendarTask) => {
     setAddOccurrenceDate(null);
-    setSelectedEvent(event);
+    setSelectedTask(task);
   };
 
   const closeOccurrenceModal = () => {
-    setSelectedEvent(null);
+    setSelectedTask(null);
   };
 
   const handleEditOccurrenceSave = (_payload: { taskId: number; occurredAt: Date; status: "done" | "missed" }) => {
@@ -49,7 +45,7 @@ const CalendarPage = () => {
   };
 
   const handleSlotSelect = ({ start }: SlotInfo) => {
-    setSelectedEvent(null);
+    setSelectedTask(null);
     setAddOccurrenceDate(start);
   };
 
@@ -80,7 +76,7 @@ const CalendarPage = () => {
           selectable
           events={calendarTasks}
           date={currentDate}
-          onSelectEvent={handleEventSelect}
+          onSelectEvent={handleTaskSelect}
           onSelectSlot={handleSlotSelect}
           eventPropGetter={(event) => ({
             style: getCalendarEventStyle(event.resource.status),
@@ -88,14 +84,14 @@ const CalendarPage = () => {
         />
       </div>
 
-      {selectedEvent && (
+      {selectedTask && (
         <OccurrenceModal
-          description={selectedTask?.description}
+          key={`edit-${selectedTask.resource.taskId}-${selectedTask.start.toISOString()}-${selectedTask.resource.status}`}
           mode="edit"
           tasks={calendarTasksData}
-          initialTaskId={selectedEvent.resource.taskId}
-          initialDate={selectedEvent.start}
-          initialStatus={selectedEvent.resource.status !== "pending" ? selectedEvent.resource.status : "done"}
+          initialTaskId={selectedTask.resource.taskId}
+          initialDate={selectedTask.start}
+          initialStatus={selectedTask.resource.status !== "pending" ? selectedTask.resource.status : "done"}
           onClose={closeOccurrenceModal}
           onSave={handleEditOccurrenceSave}
         />
@@ -103,6 +99,7 @@ const CalendarPage = () => {
 
       {addOccurrenceDate && (
         <OccurrenceModal
+          key={`create-${addOccurrenceDate.toISOString()}`}
           mode="create"
           tasks={calendarTasksData}
           initialTaskId={null}

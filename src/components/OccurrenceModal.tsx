@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { SubmitEventHandler } from "react";
 
 import type { Task } from "../api/types";
@@ -11,7 +11,6 @@ interface OccurrenceModalProps {
   initialTaskId: number | null;
   initialDate: Date;
   initialStatus: OccurrenceStatus;
-  description?: string;
   onClose: () => void;
   onSave: (payload: { taskId: number; occurredAt: Date; status: OccurrenceStatus }) => void;
 }
@@ -30,7 +29,7 @@ function toDateTimeLocalValue(date: Date): string {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatus, description, onClose, onSave }: OccurrenceModalProps) => {
+const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatus, onClose, onSave }: OccurrenceModalProps) => {
   const availableTasks = useMemo(
     () => (mode === "create" ? tasks.filter((task) => task.active) : tasks),
     [mode, tasks],
@@ -41,13 +40,7 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
 
   const [taskId, setTaskId] = useState<number | null>(defaultTaskId);
   const [status, setStatus] = useState<OccurrenceStatus>(initialStatus);
-  const [occurredAt, setOccurredAt] = useState(toDateTimeLocalValue(initialDate));
-
-  useEffect(() => {
-    setTaskId(defaultTaskId);
-    setStatus(initialStatus);
-    setOccurredAt(toDateTimeLocalValue(initialDate));
-  }, [defaultTaskId, initialDate, initialStatus]);
+  const [occurredAt, setOccurredAt] = useState(() => toDateTimeLocalValue(initialDate));
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -67,10 +60,6 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
         onClick={(event) => event.stopPropagation()}
       >
         <h3 className="text-2xl font-bold">{title}</h3>
-
-        {description && (
-          <p className="mt-4 rounded-lg bg-surface/70 p-3 text-sm">{description}</p>
-        )}
 
         {!hasAvailableTasks ? (
           <p className="mt-4 text-sm">No active tasks available.</p>
