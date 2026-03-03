@@ -10,6 +10,7 @@
   --light: #fff7ed;
   --dark: #2a1f18;
   --shadow: #FDE2E2;
+  --disabled: #e6e6e6;
 
   --occurrence-status-pending: #9CA3AF;
   --occurrence-status-done: #22C55E;
@@ -29,6 +30,7 @@
   --color-light: var(--light);
   --color-dark: var(--dark);
   --color-shadow: var(--shadow);
+  --color-disabled: var(--disabled);
 }
 
 
@@ -86,6 +88,10 @@
 
 .task-field-group > label {
   @apply text-sm font-semibold;
+}
+
+.task-field-group > :disabled {
+  @apply bg-disabled cursor-not-allowed opacity-60;
 }
 
 .rrule-square-grid {

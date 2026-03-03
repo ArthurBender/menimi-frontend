@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import RRuleGenerator from "../components/RRuleGenerator";
 import { timezoneOptions } from "../utils/timezones";
 
@@ -8,8 +9,19 @@ function getCurrentLocalDateTime() {
   return new Date(now.getTime() - offsetMs).toISOString().slice(0, 16);
 }
 
+function getInitialStartsAt(value: string | null) {
+  if (!value) return getCurrentLocalDateTime();
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return getCurrentLocalDateTime();
+
+  return value;
+}
+
 const NewTask = () => {
   const [isRecurrent, setIsRecurrent] = useState(false);
+  const [searchParams] = useSearchParams();
+  const initialStartsAt = getInitialStartsAt(searchParams.get("occurredAt"));
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -48,7 +60,7 @@ const NewTask = () => {
                 id="starts_at"
                 name="starts_at"
                 type="datetime-local"
-                defaultValue={getCurrentLocalDateTime()}
+                defaultValue={initialStartsAt}
                 required
               />
             </div>

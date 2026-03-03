@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { SubmitEventHandler } from "react";
+import { useNavigate } from "react-router-dom";
 
 import type { Task } from "../api/types";
 
@@ -30,13 +31,14 @@ function toDateTimeLocalValue(date: Date): string {
 }
 
 const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatus, onClose, onSave }: OccurrenceModalProps) => {
+  const navigate = useNavigate();
   const availableTasks = useMemo(
     () => (mode === "create" ? tasks.filter((task) => task.active) : tasks),
     [mode, tasks],
   );
   const defaultTaskId = initialTaskId ?? availableTasks[0]?.id ?? null;
   const hasAvailableTasks = availableTasks.length > 0;
-  const title = mode === "create" ? "Add occurrence" : "Occurrence details";
+  const title = mode === "create" ? "Add Task Occurrence" : "Edit Task Occurrence";
 
   const [taskId, setTaskId] = useState<number | null>(defaultTaskId);
   const [status, setStatus] = useState<OccurrenceStatus>(initialStatus);
@@ -52,6 +54,10 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
     onSave({ taskId, occurredAt: parsedDate, status });
   };
 
+  const handleCreateTask = () => {
+    navigate(`/new?occurredAt=${encodeURIComponent(occurredAt)}`);
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
       <form
@@ -59,7 +65,7 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
         onSubmit={handleSubmit}
         onClick={(event) => event.stopPropagation()}
       >
-        <h3 className="text-2xl font-bold">{title}</h3>
+        <h3 className="text-2xl font-bold text-center">{title}</h3>
 
         {!hasAvailableTasks ? (
           <p className="mt-4 text-sm">No active tasks available.</p>
@@ -67,6 +73,7 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
           <div className="mt-4 flex flex-col gap-3">
             <div className="task-field-group">
               <label htmlFor="occurrence-task">Task</label>
+              <div className="flex gap-2"></div>
               <select
                 id="occurrence-task"
                 value={taskId ?? ""}
@@ -79,7 +86,19 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
                   </option>
                 ))}
               </select>
+
+              {mode === "create" && (
+                <button
+                  type="button"
+                  className="text-white px-2 py-1 w-fit mx-auto rounded bg-accent hover:bg-accent/80"
+                  onClick={() => handleCreateTask()}
+                >
+                  Create New Task
+                </button>
+              )}
             </div>
+
+            <hr className="border-accent" />
 
             <div className="task-field-group">
               <label htmlFor="occurrence-datetime">Date and time</label>
