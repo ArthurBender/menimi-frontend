@@ -114,7 +114,7 @@ function getPendingRangeStart(monthStart: Date): Date | null {
   if (monthStart < currentMonthStart) return null;
   if (monthStart > currentMonthStart) return monthStart;
 
-  return new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+  return new Date(today.getFullYear(), today.getMonth(), today.getDate());
 }
 
 function toUtcIcsDate(date: Date): string {

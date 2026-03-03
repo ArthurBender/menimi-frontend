@@ -1,22 +1,25 @@
-type OccurrenceStatus = "done" | "missed";
+export type OccurrenceStatus = "done" | "missed" | "canceled";
+export type EditableOccurrenceStatus = Exclude<OccurrenceStatus, "canceled">;
+
+export interface TaskOccurrence {
+  id: number;
+  occurred_at: string;
+  status: OccurrenceStatus;
+}
 
 export interface Task {
-  id: number,
-  user_id: number,
-  title: string,
-  description: string,
-  rrule: string | null,
-  starts_at: string,
-  timezone: string,
-  carry_over: boolean,
-  active: boolean,
-  created_at: string,
-  updated_at: string,
-  occurrences: {
-    id: number,
-    occurred_at: string,
-    status: OccurrenceStatus | "canceled";
-  }[]
+  id: number;
+  user_id: number;
+  title: string;
+  description: string;
+  rrule: string | null;
+  starts_at: string;
+  timezone: string;
+  carry_over: boolean;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+  occurrences: TaskOccurrence[];
 }
 
 export interface CalendarTask {
@@ -28,7 +31,24 @@ export interface CalendarTask {
   resource: {
     taskId: number;
     occurrenceId: number | null;
-    status: OccurrenceStatus | "pending";
+    status: EditableOccurrenceStatus | "pending";
     generated: boolean;
   };
+}
+
+export interface CreateTaskInput {
+  user_id: number;
+  title: string;
+  description?: string;
+  rrule?: string | null;
+  starts_at: string;
+  timezone: string;
+  carry_over: boolean;
+  active: boolean;
+}
+
+export interface SaveTaskOccurrenceInput {
+  task_id: number;
+  occurred_at: string;
+  status: EditableOccurrenceStatus;
 }

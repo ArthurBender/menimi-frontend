@@ -4,25 +4,28 @@ import { Calendar, momentLocalizer } from "react-big-calendar"
 import type { SlotInfo } from "react-big-calendar";
 import moment from "moment";
 
-import { tasks } from "../api/mock";
 import type { CalendarTask } from "../api/types";
 import OccurrenceModal from "../components/OccurrenceModal";
 import { buildTaskEventsForMonth } from "../utils/occurrences";
 import { getCalendarEventStyle } from "../utils/calendarEventColors";
+import { useTasks } from "../api/useTasks";
+import { useAlert } from "../components/useAlert";
 
 const CalendarPage = () => {
-  const calendarTasksData = tasks;
+  const { tasks, isLoading, createOccurrence, updateOccurrence } = useTasks();
+  const { showError } = useAlert();
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedTask, setSelectedTask] = useState<CalendarTask | null>(null);
   const [addOccurrenceDate, setAddOccurrenceDate] = useState<Date | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const localizer = momentLocalizer(moment);
 
   const month = currentDate.toLocaleString('en-US', { month: 'long' });
   const year = currentDate.getFullYear();
 
-  const calendarTasks = buildTaskEventsForMonth(calendarTasksData, currentDate);
+  const calendarTasks = buildTaskEventsForMonth(tasks, currentDate);
   const handleMonthChange = (type: "next" | "previous") => {
     if (type === "next") {
       setCurrentDate((prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1, 1));
@@ -40,8 +43,30 @@ const CalendarPage = () => {
     setSelectedTask(null);
   };
 
-  const handleEditOccurrenceSave = (_payload: { taskId: number; occurredAt: Date; status: "done" | "missed" }) => {
-    closeOccurrenceModal();
+  const handleEditOccurrenceSave = async (payload: { taskId: number; occurredAt: Date; status: "done" | "missed" }) => {
+    setIsSaving(true);
+
+    try {
+      if (selectedTask?.resource.occurrenceId) {
+        await updateOccurrence(selectedTask.resource.occurrenceId, {
+          task_id: payload.taskId,
+          occurred_at: payload.occurredAt.toISOString(),
+          status: payload.status,
+        });
+      } else {
+        await createOccurrence({
+          task_id: payload.taskId,
+          occurred_at: payload.occurredAt.toISOString(),
+          status: payload.status,
+        });
+      }
+
+      closeOccurrenceModal();
+    } catch (error) {
+      showError(error, "There was an error saving the occurrence.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleSlotSelect = ({ start }: SlotInfo) => {
@@ -53,8 +78,21 @@ const CalendarPage = () => {
     setAddOccurrenceDate(null);
   };
 
-  const handleAddOccurrenceSave = (_payload: { taskId: number; occurredAt: Date; status: "done" | "missed" }) => {
-    closeAddOccurrenceModal();
+  const handleAddOccurrenceSave = async (payload: { taskId: number; occurredAt: Date; status: "done" | "missed" }) => {
+    setIsSaving(true);
+
+    try {
+      await createOccurrence({
+        task_id: payload.taskId,
+        occurred_at: payload.occurredAt.toISOString(),
+        status: payload.status,
+      });
+      closeAddOccurrenceModal();
+    } catch (error) {
+      showError(error, "There was an error creating the occurrence.");
+    } finally {
+      setIsSaving(false);
+    }
   };
   
   return (
@@ -67,6 +105,8 @@ const CalendarPage = () => {
           <button className="calendar-navigation" onClick={() => handleMonthChange("next")}>Next</button>
         </div>
       </div>
+
+      {isLoading && <p className="rounded-2xl bg-surface p-4 text-center">Loading calendar...</p>}
 
       <div className="h-150">
         <Calendar
@@ -87,11 +127,12 @@ const CalendarPage = () => {
       {selectedTask && (
         <OccurrenceModal
           key={`edit-${selectedTask.resource.taskId}-${selectedTask.start.toISOString()}-${selectedTask.resource.status}`}
-          mode="edit"
-          tasks={calendarTasksData}
+          mode={selectedTask.resource.generated ? "create" : "edit"}
+          tasks={tasks}
           initialTaskId={selectedTask.resource.taskId}
           initialDate={selectedTask.start}
           initialStatus={selectedTask.resource.status !== "pending" ? selectedTask.resource.status : "done"}
+          isSaving={isSaving}
           onClose={closeOccurrenceModal}
           onSave={handleEditOccurrenceSave}
         />
@@ -101,10 +142,11 @@ const CalendarPage = () => {
         <OccurrenceModal
           key={`create-${addOccurrenceDate.toISOString()}`}
           mode="create"
-          tasks={calendarTasksData}
+          tasks={tasks}
           initialTaskId={null}
           initialDate={addOccurrenceDate}
           initialStatus="done"
+          isSaving={isSaving}
           onClose={closeAddOccurrenceModal}
           onSave={handleAddOccurrenceSave}
         />

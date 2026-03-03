@@ -2,21 +2,20 @@ import { useMemo, useState } from "react";
 import type { SubmitEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
 
-import type { Task } from "../api/types";
-
-type OccurrenceStatus = "done" | "missed";
+import type { EditableOccurrenceStatus, Task } from "../api/types";
 
 interface OccurrenceModalProps {
   mode: "create" | "edit";
   tasks: Task[];
   initialTaskId: number | null;
   initialDate: Date;
-  initialStatus: OccurrenceStatus;
+  initialStatus: EditableOccurrenceStatus;
+  isSaving?: boolean;
   onClose: () => void;
-  onSave: (payload: { taskId: number; occurredAt: Date; status: OccurrenceStatus }) => void;
+  onSave: (payload: { taskId: number; occurredAt: Date; status: EditableOccurrenceStatus }) => void;
 }
 
-const STATUS_OPTIONS: Array<{ value: OccurrenceStatus; label: string }> = [
+const STATUS_OPTIONS: Array<{ value: EditableOccurrenceStatus; label: string }> = [
   { value: "done", label: "Done" },
   { value: "missed", label: "Missed" },
 ];
@@ -30,7 +29,16 @@ function toDateTimeLocalValue(date: Date): string {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatus, onClose, onSave }: OccurrenceModalProps) => {
+const OccurrenceModal = ({
+  mode,
+  tasks,
+  initialTaskId,
+  initialDate,
+  initialStatus,
+  isSaving = false,
+  onClose,
+  onSave,
+}: OccurrenceModalProps) => {
   const navigate = useNavigate();
   const availableTasks = useMemo(
     () => (mode === "create" ? tasks.filter((task) => task.active) : tasks),
@@ -41,8 +49,12 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
   const title = mode === "create" ? "Add Task Occurrence" : "Edit Task Occurrence";
 
   const [taskId, setTaskId] = useState<number | null>(defaultTaskId);
-  const [status, setStatus] = useState<OccurrenceStatus>(initialStatus);
+  const [status, setStatus] = useState<EditableOccurrenceStatus>(initialStatus);
   const [occurredAt, setOccurredAt] = useState(() => toDateTimeLocalValue(initialDate));
+
+  const handleCreateTask = () => {
+    navigate(`/new?occurredAt=${encodeURIComponent(occurredAt)}`);
+  };
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -54,9 +66,16 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
     onSave({ taskId, occurredAt: parsedDate, status });
   };
 
-  const handleCreateTask = () => {
-    navigate(`/new?occurredAt=${encodeURIComponent(occurredAt)}`);
-  };
+  const createTaskButton = (
+    <button
+      type="button"
+      className="text-white px-2 py-1 w-fit mx-auto rounded bg-accent hover:bg-accent/80"
+      onClick={handleCreateTask}
+      disabled={isSaving}
+    >
+      Create New Task
+    </button>
+  );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
@@ -68,7 +87,10 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
         <h3 className="text-2xl font-bold text-center">{title}</h3>
 
         {!hasAvailableTasks ? (
-          <p className="mt-4 text-sm">No active tasks available.</p>
+          <div className="flex flex-col gap-2 items-center">
+            <p className="mt-4 text-sm text-center">No active tasks available.</p>
+            {createTaskButton}
+          </div>
         ) : (
           <div className="mt-4 flex flex-col gap-3">
             <div className="task-field-group">
@@ -78,7 +100,7 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
                 id="occurrence-task"
                 value={taskId ?? ""}
                 onChange={(event) => setTaskId(Number(event.target.value))}
-                disabled={mode === "edit"}
+                disabled={mode === "edit" || isSaving}
               >
                 {availableTasks.map((task) => (
                   <option key={task.id} value={task.id}>
@@ -88,13 +110,7 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
               </select>
 
               {mode === "create" && (
-                <button
-                  type="button"
-                  className="text-white px-2 py-1 w-fit mx-auto rounded bg-accent hover:bg-accent/80"
-                  onClick={() => handleCreateTask()}
-                >
-                  Create New Task
-                </button>
+                createTaskButton
               )}
             </div>
 
@@ -107,6 +123,7 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
                 type="datetime-local"
                 value={occurredAt}
                 onChange={(event) => setOccurredAt(event.target.value)}
+                disabled={isSaving}
               />
             </div>
 
@@ -115,7 +132,8 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
               <select
                 id="occurrence-status"
                 value={status}
-                onChange={(event) => setStatus(event.target.value as OccurrenceStatus)}
+                onChange={(event) => setStatus(event.target.value as EditableOccurrenceStatus)}
+                disabled={isSaving}
               >
                 {STATUS_OPTIONS.map(({ value, label }) => (
                   <option key={value} value={value}>
@@ -128,12 +146,17 @@ const OccurrenceModal = ({ mode, tasks, initialTaskId, initialDate, initialStatu
         )}
 
         <div className="mt-6 flex justify-end gap-2">
-          <button type="button" className="calendar-navigation bg-gray-500! hover:bg-gray-600!" onClick={onClose}>
+          <button
+            type="button"
+            className="calendar-navigation bg-gray-500! hover:bg-gray-600!"
+            onClick={onClose}
+            disabled={isSaving}
+          >
             Cancel
           </button>
           {hasAvailableTasks && (
-            <button type="submit" className="calendar-navigation">
-              Save
+            <button type="submit" className="calendar-navigation" disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save"}
             </button>
           )}
         </div>

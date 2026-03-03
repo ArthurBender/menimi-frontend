@@ -1,7 +1,16 @@
 import { useState } from "react";
+import type { FormEvent } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RRuleGenerator from "../components/RRuleGenerator";
 import { timezoneOptions } from "../utils/timezones";
+import { API_USER_ID } from "../api/config";
+import { useTasks } from "../api/useTasks";
+import { useAlert } from "../components/useAlert";
+
+function getInitialTimezone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || "Etc/UTC";
+}
 
 function getCurrentLocalDateTime() {
   const now = new Date();
@@ -20,8 +29,47 @@ function getInitialStartsAt(value: string | null) {
 
 const NewTask = () => {
   const [isRecurrent, setIsRecurrent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { createTask } = useTasks();
+  const { showError } = useAlert();
   const initialStartsAt = getInitialStartsAt(searchParams.get("occurredAt"));
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(event.currentTarget);
+    const title = String(formData.get("title") ?? "").trim();
+    const startsAtValue = String(formData.get("starts_at") ?? "");
+    const startsAt = new Date(startsAtValue);
+
+    if (Number.isNaN(startsAt.getTime())) {
+      showError(new Error("Invalid start date."), "There was an error creating the task.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      await createTask({
+        user_id: API_USER_ID,
+        title,
+        description: String(formData.get("description") ?? "").trim(),
+        rrule: isRecurrent ? String(formData.get("rrule") ?? "").trim() || null : null,
+        starts_at: startsAt.toISOString(),
+        timezone: String(formData.get("timezone") ?? getInitialTimezone()),
+        carry_over: formData.get("carry_over") === "on",
+        active: true,
+      });
+
+      navigate("/");
+    } catch (error) {
+      showError(error, "There was an error creating the task.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -29,7 +77,7 @@ const NewTask = () => {
         <h2 className="text-4xl font-bold">New Task</h2>
       </div>
       <div className="mx-auto w-full max-w-4xl">
-        <form className="flex flex-col gap-8 rounded-2xl bg-surface p-6">
+        <form className="flex flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
           <div className="task-field-group">
             <label htmlFor="title">
               <span title="required">*</span> Title
@@ -73,7 +121,7 @@ const NewTask = () => {
                 id="timezone"
                 name="timezone"
                 required
-                defaultValue="Etc/UTC"
+                defaultValue={getInitialTimezone()}
               >
                 {timezoneOptions.map((timezone) => (
                   <option key={timezone.value} value={timezone.value}>
@@ -107,8 +155,8 @@ const NewTask = () => {
           )}
 
           <div className="mt-2 flex justify-center">
-            <button type="button" className="calendar-navigation">
-              Create Task
+            <button type="submit" className="calendar-navigation" disabled={isSubmitting}>
+              {isSubmitting ? "Creating..." : "Create Task"}
             </button>
           </div>
         </form>
