@@ -3,6 +3,8 @@ import type { SubmitEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
 
 import type { EditableOccurrenceStatus, Task } from "../api/types";
+import SelectField from "./custom-fields/SelectField";
+import TextField from "./custom-fields/TextField";
 
 interface OccurrenceModalProps {
   mode: "create" | "edit";
@@ -93,55 +95,46 @@ const OccurrenceModal = ({
           </div>
         ) : (
           <div className="mt-4 flex flex-col gap-3">
-            <div className="task-field-group">
-              <label htmlFor="occurrence-task">Task</label>
-              <div className="flex gap-2"></div>
-              <select
-                id="occurrence-task"
-                value={taskId ?? ""}
-                onChange={(event) => setTaskId(Number(event.target.value))}
-                disabled={mode === "edit" || isSaving}
-              >
+            <SelectField
+              id="occurrence-task"
+              label="Task"
+              value={taskId ?? ""}
+              onChange={(event) => setTaskId(Number(event.target.value))}
+              disabled={mode === "edit" || isSaving}
+            >
                 {availableTasks.map((task) => (
                   <option key={task.id} value={task.id}>
                     {task.title}
                   </option>
                 ))}
-              </select>
+            </SelectField>
 
-              {mode === "create" && (
-                createTaskButton
-              )}
-            </div>
+            {mode === "create" && createTaskButton}
 
             <hr className="border-accent" />
 
-            <div className="task-field-group">
-              <label htmlFor="occurrence-datetime">Date and time</label>
-              <input
-                id="occurrence-datetime"
-                type="datetime-local"
-                value={occurredAt}
-                onChange={(event) => setOccurredAt(event.target.value)}
-                disabled={isSaving}
-              />
-            </div>
+            <TextField
+              id="occurrence-datetime"
+              type="datetime-local"
+              value={occurredAt}
+              onChange={(event) => setOccurredAt(event.target.value)}
+              disabled={isSaving}
+              label="Date and time"
+            />
 
-            <div className="task-field-group">
-              <label htmlFor="occurrence-status">Status</label>
-              <select
-                id="occurrence-status"
-                value={status}
-                onChange={(event) => setStatus(event.target.value as EditableOccurrenceStatus)}
-                disabled={isSaving}
-              >
+            <SelectField
+              id="occurrence-status"
+              value={status}
+              onChange={(event) => setStatus(event.target.value as EditableOccurrenceStatus)}
+              disabled={isSaving}
+              label="Status"
+            >
                 {STATUS_OPTIONS.map(({ value, label }) => (
                   <option key={value} value={value}>
                     {label}
                   </option>
                 ))}
-              </select>
-            </div>
+            </SelectField>
           </div>
         )}
 

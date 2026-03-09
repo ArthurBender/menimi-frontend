@@ -3,6 +3,9 @@ import type { FormEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import RRuleGenerator from "../components/RRuleGenerator";
+import CheckboxField from "../components/custom-fields/CheckboxField";
+import SelectField from "../components/custom-fields/SelectField";
+import TextField from "../components/custom-fields/TextField";
 import { timezoneOptions } from "../utils/timezones";
 import { API_USER_ID } from "../api/config";
 import { useTasks } from "../api/useTasks";
@@ -75,76 +78,47 @@ const NewTask = () => {
       </div>
       <div className="mx-auto w-full max-w-4xl">
         <form className="flex flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
-          <div className="task-field-group">
-            <label htmlFor="title">
-              <span title="required">*</span> Title
-            </label>
-            <input
-              id="title"
-              name="title"
-              type="text"
-              required
-            />
-          </div>
+          <TextField id="title" name="title" type="text" label="Title" required requiredLabel />
 
-          <div className="task-field-group">
-            <label htmlFor="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              rows={2}
-            />
-          </div>
+          <TextField id="description" name="description" label="Description" rows={2} multiline />
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="task-field-group">
-              <label htmlFor="starts_at">
-                <span title="required">*</span> Date / Starts At
-              </label>
-              <input
-                id="starts_at"
-                name="starts_at"
-                type="datetime-local"
-                defaultValue={initialStartsAt}
-                required
-              />
-            </div>
+            <TextField
+              id="starts_at"
+              name="starts_at"
+              type="datetime-local"
+              defaultValue={initialStartsAt}
+              label="Date / Starts At"
+              required
+              requiredLabel
+            />
 
-            <div className="task-field-group">
-              <label htmlFor="timezone">
-                <span title="required">*</span> Timezone
-              </label>
-              <select
-                id="timezone"
-                name="timezone"
-                required
-                defaultValue={getInitialTimezone()}
-              >
+            <SelectField
+              id="timezone"
+              name="timezone"
+              label="Timezone"
+              required
+              requiredLabel
+              defaultValue={getInitialTimezone()}
+            >
                 {timezoneOptions.map((timezone) => (
                   <option key={timezone.value} value={timezone.value}>
                     {timezone.label}
                   </option>
                 ))}
-              </select>
-            </div>
+            </SelectField>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center gap-2">
-              <input
-                id="recurrent"
-                name="recurrent"
-                type="checkbox"
-                checked={isRecurrent}
-                onChange={(event) => setIsRecurrent(event.target.checked)}
-              />
-              <label htmlFor="recurrent" className="text-sm font-semibold">Recurrent</label>
-            </div>
+            <CheckboxField
+              id="recurrent"
+              name="recurrent"
+              checked={isRecurrent}
+              onChange={(event) => setIsRecurrent(event.target.checked)}
+              label="Recurrent"
+            />
 
-            <div className="flex items-center gap-2">
-              <input id="carry_over" name="carry_over" type="checkbox" />
-              <label htmlFor="carry_over" className="text-sm font-semibold">Carry Over</label>
-            </div>
+            <CheckboxField id="carry_over" name="carry_over" label="Carry Over" />
           </div>
 
           {isRecurrent && (

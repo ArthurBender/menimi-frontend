@@ -123,7 +123,7 @@ const CalendarPage = () => {
       {selectedTask && (
         <OccurrenceModal
           key={`edit-${selectedTask.resource.taskId}-${selectedTask.start.toISOString()}-${selectedTask.resource.status}`}
-          mode={selectedTask.resource.generated ? "create" : "edit"}
+          mode="edit"
           tasks={tasks}
           initialTaskId={selectedTask.resource.taskId}
           initialDate={selectedTask.start}
