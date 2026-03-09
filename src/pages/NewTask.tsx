@@ -6,7 +6,7 @@ import RRuleGenerator from "../components/RRuleGenerator";
 import { timezoneOptions } from "../utils/timezones";
 import { API_USER_ID } from "../api/config";
 import { useTasks } from "../api/useTasks";
-import { useAlert } from "../components/useAlert";
+import { toastApiError } from "../utils/toastError";
 
 function getInitialTimezone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone || "Etc/UTC";
@@ -33,7 +33,6 @@ const NewTask = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { createTask } = useTasks();
-  const { showError } = useAlert();
   const initialStartsAt = getInitialStartsAt(searchParams.get("occurredAt"));
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -46,7 +45,7 @@ const NewTask = () => {
     const startsAt = new Date(startsAtValue);
 
     if (Number.isNaN(startsAt.getTime())) {
-      showError(new Error("Invalid start date."), "There was an error creating the task.");
+      toastApiError(new Error("Invalid start date."), "There was an error creating the task.");
       setIsSubmitting(false);
       return;
     }
@@ -65,7 +64,7 @@ const NewTask = () => {
 
       navigate("/");
     } catch (error) {
-      showError(error, "There was an error creating the task.");
+      toastApiError(error, "There was an error creating the task.");
     } finally {
       setIsSubmitting(false);
     }

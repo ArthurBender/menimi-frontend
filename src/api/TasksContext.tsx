@@ -4,23 +4,22 @@ import type { PropsWithChildren } from "react";
 import { createTask, createTaskOccurrence, listTasks, updateTaskOccurrence } from "./tasks";
 import type { CreateTaskInput, SaveTaskOccurrenceInput, Task } from "./types";
 import { TasksContext } from "./tasks-context";
-import { useAlert } from "../components/useAlert";
+import { toastApiError } from "../utils/toastError";
 
 export function TasksProvider({ children }: PropsWithChildren) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { showError } = useAlert();
 
   const refreshTasks = useCallback(async () => {
     try {
       const response = await listTasks();
       setTasks(response);
     } catch (error) {
-      showError(error, "There was an error loading tasks.");
+      toastApiError(error, "There was an error loading tasks.");
     } finally {
       setIsLoading(false);
     }
-  }, [showError]);
+  }, []);
 
   useEffect(() => {
     void refreshTasks();

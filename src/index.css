@@ -109,7 +109,3 @@
 .rrule-square-input:checked + .rrule-square-toggle {
   @apply bg-accent;
 }
-
-.app-alert {
-  @apply max-w-sm rounded-2xl border border-light/30 bg-primary px-5 py-4 shadow-xl;
-}
