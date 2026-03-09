@@ -17,6 +17,7 @@ interface OccurrenceModalProps {
   isSaving?: boolean;
   onClose: () => void;
   onSave: (payload: { taskId: number; occurredAt: Date; status: EditableOccurrenceStatus }) => void;
+  onDelete?: () => void;
 }
 
 const STATUS_OPTIONS: Array<{ value: EditableOccurrenceStatus; label: string }> = [
@@ -43,6 +44,7 @@ const OccurrenceModal = ({
   isSaving = false,
   onClose,
   onSave,
+  onDelete,
 }: OccurrenceModalProps) => {
   const navigate = useNavigate();
   const availableTasks = useMemo(
@@ -112,6 +114,7 @@ const OccurrenceModal = ({
                 disabled={isSaving}
                 aria-label="Remove occurrence"
                 title="Remove occurrence"
+                onClick={onDelete}
               >
                 <FiTrash2 />
               </button>

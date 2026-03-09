@@ -11,6 +11,7 @@ export interface TasksContextValue {
   deleteTask: (taskId: number) => Promise<void>;
   createOccurrence: (input: SaveTaskOccurrenceInput) => Promise<void>;
   updateOccurrence: (occurrenceId: number, input: Partial<SaveTaskOccurrenceInput>) => Promise<void>;
+  deleteOccurrence: (occurrenceId: number) => Promise<void>;
 }
 
 export const TasksContext = createContext<TasksContextValue | null>(null);

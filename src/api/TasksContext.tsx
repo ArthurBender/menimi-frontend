@@ -5,6 +5,7 @@ import {
   createTask,
   createTaskOccurrence,
   deleteTask,
+  deleteTaskOccurrence,
   listTasks,
   updateTask,
   updateTaskOccurrence,
@@ -92,6 +93,17 @@ export function TasksProvider({ children }: PropsWithChildren) {
     }
   };
 
+  const handleDeleteOccurrence = async (occurrenceId: number) => {
+    try {
+      await deleteTaskOccurrence(occurrenceId);
+      await refreshTasks();
+      showToast("success", "Occurrence removed successfully.");
+    } catch (error) {
+      showToast("error", "There was an error removing the occurrence.", error);
+      throw error;
+    }
+  };
+
   return (
     <TasksContext.Provider
       value={{
@@ -103,6 +115,7 @@ export function TasksProvider({ children }: PropsWithChildren) {
         deleteTask: handleDeleteTask,
         createOccurrence: handleCreateOccurrence,
         updateOccurrence: handleUpdateOccurrence,
+        deleteOccurrence: handleDeleteOccurrence,
       }}
     >
       {children}

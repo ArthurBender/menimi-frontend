@@ -53,3 +53,10 @@ export function updateTaskOccurrence(id: number, taskOccurrence: Partial<SaveTas
     data: { task_occurrence: taskOccurrence },
   });
 }
+
+export function deleteTaskOccurrence(id: number) {
+  return apiRequest<void>({
+    url: `${API_BASE_URL}/task_occurrences/${id}`,
+    method: "DELETE",
+  });
+}

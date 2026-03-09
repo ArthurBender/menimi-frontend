@@ -11,7 +11,7 @@ import { getCalendarEventStyle } from "../utils/calendarEventColors";
 import { useTasks } from "../api/useTasks";
 
 const CalendarPage = () => {
-  const { tasks, isLoading, createOccurrence, updateOccurrence } = useTasks();
+  const { tasks, isLoading, createOccurrence, updateOccurrence, deleteOccurrence } = useTasks();
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedTask, setSelectedTask] = useState<CalendarTask | null>(null);
@@ -59,6 +59,19 @@ const CalendarPage = () => {
         });
       }
 
+      closeOccurrenceModal();
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteOccurrence = async () => {
+    if (!selectedTask?.resource.occurrenceId) return;
+
+    setIsSaving(true);
+
+    try {
+      await deleteOccurrence(selectedTask.resource.occurrenceId);
       closeOccurrenceModal();
     } finally {
       setIsSaving(false);
@@ -132,6 +145,7 @@ const CalendarPage = () => {
           isSaving={isSaving}
           onClose={closeOccurrenceModal}
           onSave={handleEditOccurrenceSave}
+          onDelete={handleDeleteOccurrence}
         />
       )}
 
