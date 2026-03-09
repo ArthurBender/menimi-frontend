@@ -1,15 +1,9 @@
 import { useState } from "react";
-import type { FormEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import RRuleGenerator from "../components/RRuleGenerator";
-import CheckboxField from "../components/custom-fields/CheckboxField";
-import SelectField from "../components/custom-fields/SelectField";
-import TextField from "../components/custom-fields/TextField";
-import { timezoneOptions } from "../utils/timezones";
+import TaskForm from "../components/TaskForm";
 import { API_USER_ID } from "../api/config";
 import { useTasks } from "../api/useTasks";
-import { showToast } from "../utils/toast";
 
 function getInitialTimezone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone || "Etc/UTC";
@@ -31,42 +25,32 @@ function getInitialStartsAt(value: string | null) {
 }
 
 const NewTask = () => {
-  const [isRecurrent, setIsRecurrent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [timezone, setTimezone] = useState(getInitialTimezone());
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { createTask } = useTasks();
   const initialStartsAt = getInitialStartsAt(searchParams.get("occurredAt"));
-  const timezoneSelectOptions = timezoneOptions.map((timezoneOption) => ({
-    value: timezoneOption.value,
-    label: timezoneOption.label,
-  }));
+  const initialTimezone = getInitialTimezone();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (values: {
+    title: string;
+    description: string;
+    startsAtIso: string;
+    timezone: string;
+    carryOver: boolean;
+    rrule: string | null;
+  }) => {
     setIsSubmitting(true);
-
-    const formData = new FormData(event.currentTarget);
-    const title = String(formData.get("title") ?? "").trim();
-    const startsAtValue = String(formData.get("starts_at") ?? "");
-    const startsAt = new Date(startsAtValue);
-
-    if (Number.isNaN(startsAt.getTime())) {
-      showToast("error", "Please provide a valid start date.");
-      setIsSubmitting(false);
-      return;
-    }
 
     try {
       await createTask({
         user_id: API_USER_ID,
-        title,
-        description: String(formData.get("description") ?? "").trim(),
-        rrule: isRecurrent ? String(formData.get("rrule") ?? "").trim() || null : null,
-        starts_at: startsAt.toISOString(),
-        timezone,
-        carry_over: formData.get("carry_over") === "on",
+        title: values.title,
+        description: values.description,
+        rrule: values.rrule,
+        starts_at: values.startsAtIso,
+        timezone: values.timezone,
+        carry_over: values.carryOver,
         active: true,
       });
 
@@ -82,59 +66,20 @@ const NewTask = () => {
         <h2 className="text-4xl font-bold">New Task</h2>
       </div>
       <div className="mx-auto w-full max-w-4xl">
-        <form className="flex flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
-          <TextField id="title" name="title" type="text" label="Title" required requiredLabel />
-
-          <TextField id="description" name="description" label="Description" rows={2} multiline />
-
-          <div className="grid grid-cols-2 gap-4">
-            <TextField
-              id="starts_at"
-              name="starts_at"
-              type="datetime-local"
-              defaultValue={initialStartsAt}
-              label="Date / Starts At"
-              required
-              requiredLabel
-            />
-
-            <SelectField
-              id="timezone"
-              name="timezone"
-              label="Timezone"
-              requiredLabel
-              value={timezone}
-              options={timezoneSelectOptions}
-              onChange={(value) => {
-                if (value) setTimezone(value);
-              }}
-              isSearchable
-              isDisabled={isSubmitting}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <CheckboxField
-              id="recurrent"
-              name="recurrent"
-              checked={isRecurrent}
-              onChange={(event) => setIsRecurrent(event.target.checked)}
-              label="Recurrent"
-            />
-
-            <CheckboxField id="carry_over" name="carry_over" label="Carry Over" />
-          </div>
-
-          {isRecurrent && (
-            <RRuleGenerator />
-          )}
-
-          <div className="mt-2 flex justify-center">
-            <button type="submit" className="calendar-navigation" disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Create Task"}
-            </button>
-          </div>
-        </form>
+        <TaskForm
+          initialValues={{
+            title: "",
+            description: "",
+            startsAt: initialStartsAt,
+            timezone: initialTimezone,
+            carryOver: false,
+            isRecurrent: false,
+          }}
+          isSubmitting={isSubmitting}
+          submitLabel="Create Task"
+          submittingLabel="Creating..."
+          onSubmit={handleSubmit}
+        />
       </div>
     </div>
   );
