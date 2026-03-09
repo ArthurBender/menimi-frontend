@@ -69,6 +69,11 @@ const OccurrenceModal = ({
     navigate(`/new?occurredAt=${encodeURIComponent(occurredAt)}`);
   };
 
+  const handleEditTask = () => {
+    if (taskId === null) return;
+    navigate(`/tasks/${taskId}/edit`);
+  };
+
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     if (taskId === null) return;
@@ -95,6 +100,7 @@ const OccurrenceModal = ({
                 disabled={isSaving}
                 aria-label="Edit related task"
                 title="Edit related task"
+                onClick={handleEditTask}
               >
                 <FiEdit2 />
               </button>
