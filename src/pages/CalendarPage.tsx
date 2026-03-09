@@ -9,7 +9,7 @@ import OccurrenceModal from "../components/OccurrenceModal";
 import { buildTaskEventsForMonth } from "../utils/occurrences";
 import { getCalendarEventStyle } from "../utils/calendarEventColors";
 import { useTasks } from "../api/useTasks";
-import { toastApiError } from "../utils/toastError";
+import { showToast } from "../utils/toast";
 
 const CalendarPage = () => {
   const { tasks, isLoading, createOccurrence, updateOccurrence } = useTasks();
@@ -62,7 +62,7 @@ const CalendarPage = () => {
 
       closeOccurrenceModal();
     } catch (error) {
-      toastApiError(error, "There was an error saving the occurrence.");
+      showToast("error", "There was an error saving the occurrence.", error);
     } finally {
       setIsSaving(false);
     }
@@ -88,7 +88,7 @@ const CalendarPage = () => {
       });
       closeAddOccurrenceModal();
     } catch (error) {
-      toastApiError(error, "There was an error creating the occurrence.");
+      showToast("error", "There was an error creating the occurrence.", error);
     } finally {
       setIsSaving(false);
     }

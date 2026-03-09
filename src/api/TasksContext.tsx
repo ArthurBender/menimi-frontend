@@ -4,7 +4,7 @@ import type { PropsWithChildren } from "react";
 import { createTask, createTaskOccurrence, listTasks, updateTaskOccurrence } from "./tasks";
 import type { CreateTaskInput, SaveTaskOccurrenceInput, Task } from "./types";
 import { TasksContext } from "./tasks-context";
-import { toastApiError } from "../utils/toastError";
+import { showToast } from "../utils/toast";
 
 export function TasksProvider({ children }: PropsWithChildren) {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -15,7 +15,7 @@ export function TasksProvider({ children }: PropsWithChildren) {
       const response = await listTasks();
       setTasks(response);
     } catch (error) {
-      toastApiError(error, "There was an error loading tasks.");
+      showToast("error", "There was an error loading tasks.", error);
     } finally {
       setIsLoading(false);
     }
