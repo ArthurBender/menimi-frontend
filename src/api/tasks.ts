@@ -1,6 +1,12 @@
 import { API_BASE_URL } from "./config";
 import { apiRequest } from "./client";
-import type { CreateTaskInput, SaveTaskOccurrenceInput, Task, TaskOccurrence } from "./types";
+import type {
+  CreateTaskInput,
+  SaveTaskOccurrenceInput,
+  Task,
+  TaskOccurrence,
+  UpdateTaskInput,
+} from "./types";
 
 export function listTasks() {
   return apiRequest<Task[]>({
@@ -14,6 +20,21 @@ export function createTask(task: CreateTaskInput) {
     url: `${API_BASE_URL}/tasks`,
     method: "POST",
     data: { task },
+  });
+}
+
+export function updateTask(id: number, task: UpdateTaskInput) {
+  return apiRequest<Task>({
+    url: `${API_BASE_URL}/tasks/${id}`,
+    method: "PATCH",
+    data: { task },
+  });
+}
+
+export function deleteTask(id: number) {
+  return apiRequest<void>({
+    url: `${API_BASE_URL}/tasks/${id}`,
+    method: "DELETE",
   });
 }
 

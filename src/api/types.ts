@@ -47,6 +47,8 @@ export interface CreateTaskInput {
   active: boolean;
 }
 
+export type UpdateTaskInput = Partial<CreateTaskInput>;
+
 export interface SaveTaskOccurrenceInput {
   task_id: number;
   occurred_at: string;

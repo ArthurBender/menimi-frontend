@@ -1,8 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import type { PropsWithChildren } from "react";
 
-import { createTask, createTaskOccurrence, listTasks, updateTaskOccurrence } from "./tasks";
-import type { CreateTaskInput, SaveTaskOccurrenceInput, Task } from "./types";
+import {
+  createTask,
+  createTaskOccurrence,
+  deleteTask,
+  listTasks,
+  updateTask,
+  updateTaskOccurrence,
+} from "./tasks";
+import type { CreateTaskInput, SaveTaskOccurrenceInput, Task, UpdateTaskInput } from "./types";
 import { TasksContext } from "./tasks-context";
 import { showToast } from "../utils/toast";
 
@@ -33,6 +40,29 @@ export function TasksProvider({ children }: PropsWithChildren) {
       return task;
     } catch (error) {
       showToast("error", "There was an error creating the task.", error);
+      throw error;
+    }
+  };
+
+  const handleUpdateTask = async (taskId: number, input: UpdateTaskInput) => {
+    try {
+      const updatedTask = await updateTask(taskId, input);
+      setTasks((current) => current.map((task) => (task.id === taskId ? updatedTask : task)));
+      showToast("success", "Task updated successfully.");
+      return updatedTask;
+    } catch (error) {
+      showToast("error", "There was an error updating the task.", error);
+      throw error;
+    }
+  };
+
+  const handleDeleteTask = async (taskId: number) => {
+    try {
+      await deleteTask(taskId);
+      setTasks((current) => current.filter((task) => task.id !== taskId));
+      showToast("success", "Task deleted successfully.");
+    } catch (error) {
+      showToast("error", "There was an error deleting the task.", error);
       throw error;
     }
   };
@@ -69,6 +99,8 @@ export function TasksProvider({ children }: PropsWithChildren) {
         isLoading,
         refreshTasks,
         createTask: handleCreateTask,
+        updateTask: handleUpdateTask,
+        deleteTask: handleDeleteTask,
         createOccurrence: handleCreateOccurrence,
         updateOccurrence: handleUpdateOccurrence,
       }}
