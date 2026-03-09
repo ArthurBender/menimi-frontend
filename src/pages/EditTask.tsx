@@ -4,16 +4,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import TaskForm from "../components/TaskForm";
 import { useTasks } from "../api/useTasks";
 
-function toDateTimeLocalValue(value: string): string {
+function toDateInputValue(value: string): string {
   const date = new Date(value);
   const offsetMs = date.getTimezoneOffset() * 60 * 1000;
-  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
+  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 10);
 }
 
 const EditTask = () => {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
-  const { tasks, isLoading, updateTask, deleteTask } = useTasks();
+  const { tasks, isLoading, updateTask } = useTasks();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -62,7 +62,7 @@ const EditTask = () => {
     setIsDeleting(true);
 
     try {
-      await deleteTask(task.id);
+      await updateTask(task.id, { active: false });
       navigate("/");
     } finally {
       setIsDeleting(false);
@@ -79,7 +79,7 @@ const EditTask = () => {
           initialValues={{
             title: task.title,
             description: task.description,
-            startsAt: toDateTimeLocalValue(task.starts_at),
+            startsAt: toDateInputValue(task.starts_at),
             timezone: task.timezone,
             carryOver: task.carry_over,
             isRecurrent: Boolean(task.rrule),

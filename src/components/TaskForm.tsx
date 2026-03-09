@@ -57,7 +57,7 @@ const TaskForm = ({
     const formData = new FormData(event.currentTarget);
     const title = String(formData.get("title") ?? "").trim();
     const startsAtValue = String(formData.get("starts_at") ?? "");
-    const startsAt = new Date(startsAtValue);
+    const startsAt = new Date(`${startsAtValue}T00:00:00`);
 
     if (Number.isNaN(startsAt.getTime())) {
       showToast("error", "Please provide a valid start date.");
@@ -91,7 +91,7 @@ const TaskForm = ({
         <TextField
           id="starts_at"
           name="starts_at"
-          type="datetime-local"
+          type="date"
           defaultValue={initialValues.startsAt}
           label="Date / Starts At"
           required

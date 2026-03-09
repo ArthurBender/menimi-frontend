@@ -9,19 +9,20 @@ function getInitialTimezone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone || "Etc/UTC";
 }
 
-function getCurrentLocalDateTime() {
+function getCurrentLocalDate() {
   const now = new Date();
   const offsetMs = now.getTimezoneOffset() * 60 * 1000;
-  return new Date(now.getTime() - offsetMs).toISOString().slice(0, 16);
+  return new Date(now.getTime() - offsetMs).toISOString().slice(0, 10);
 }
 
 function getInitialStartsAt(value: string | null) {
-  if (!value) return getCurrentLocalDateTime();
+  if (!value) return getCurrentLocalDate();
 
   const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return getCurrentLocalDateTime();
+  if (Number.isNaN(parsed.getTime())) return getCurrentLocalDate();
 
-  return value;
+  const offsetMs = parsed.getTimezoneOffset() * 60 * 1000;
+  return new Date(parsed.getTime() - offsetMs).toISOString().slice(0, 10);
 }
 
 const NewTask = () => {
