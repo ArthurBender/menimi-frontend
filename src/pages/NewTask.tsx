@@ -33,10 +33,15 @@ function getInitialStartsAt(value: string | null) {
 const NewTask = () => {
   const [isRecurrent, setIsRecurrent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [timezone, setTimezone] = useState(getInitialTimezone());
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { createTask } = useTasks();
   const initialStartsAt = getInitialStartsAt(searchParams.get("occurredAt"));
+  const timezoneSelectOptions = timezoneOptions.map((timezoneOption) => ({
+    value: timezoneOption.value,
+    label: timezoneOption.label,
+  }));
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,7 +65,7 @@ const NewTask = () => {
         description: String(formData.get("description") ?? "").trim(),
         rrule: isRecurrent ? String(formData.get("rrule") ?? "").trim() || null : null,
         starts_at: startsAt.toISOString(),
-        timezone: String(formData.get("timezone") ?? getInitialTimezone()),
+        timezone,
         carry_over: formData.get("carry_over") === "on",
         active: true,
       });
@@ -97,16 +102,15 @@ const NewTask = () => {
               id="timezone"
               name="timezone"
               label="Timezone"
-              required
               requiredLabel
-              defaultValue={getInitialTimezone()}
-            >
-                {timezoneOptions.map((timezone) => (
-                  <option key={timezone.value} value={timezone.value}>
-                    {timezone.label}
-                  </option>
-                ))}
-            </SelectField>
+              value={timezone}
+              options={timezoneSelectOptions}
+              onChange={(value) => {
+                if (value) setTimezone(value);
+              }}
+              isSearchable
+              isDisabled={isSubmitting}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">

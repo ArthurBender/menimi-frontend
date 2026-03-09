@@ -49,6 +49,14 @@ const OccurrenceModal = ({
   const defaultTaskId = initialTaskId ?? availableTasks[0]?.id ?? null;
   const hasAvailableTasks = availableTasks.length > 0;
   const title = mode === "create" ? "Add Task Occurrence" : "Edit Task Occurrence";
+  const taskOptions = availableTasks.map((task) => ({
+    value: task.id,
+    label: task.title,
+  }));
+  const statusOptions = STATUS_OPTIONS.map((statusOption) => ({
+    value: statusOption.value,
+    label: statusOption.label,
+  }));
 
   const [taskId, setTaskId] = useState<number | null>(defaultTaskId);
   const [status, setStatus] = useState<EditableOccurrenceStatus>(initialStatus);
@@ -98,16 +106,12 @@ const OccurrenceModal = ({
             <SelectField
               id="occurrence-task"
               label="Task"
-              value={taskId ?? ""}
-              onChange={(event) => setTaskId(Number(event.target.value))}
-              disabled={mode === "edit" || isSaving}
-            >
-                {availableTasks.map((task) => (
-                  <option key={task.id} value={task.id}>
-                    {task.title}
-                  </option>
-                ))}
-            </SelectField>
+              value={taskId}
+              options={taskOptions}
+              onChange={(value) => setTaskId(value)}
+              isSearchable
+              isDisabled={mode === "edit" || isSaving}
+            />
 
             {mode === "create" && createTaskButton}
 
@@ -125,16 +129,13 @@ const OccurrenceModal = ({
             <SelectField
               id="occurrence-status"
               value={status}
-              onChange={(event) => setStatus(event.target.value as EditableOccurrenceStatus)}
-              disabled={isSaving}
               label="Status"
-            >
-                {STATUS_OPTIONS.map(({ value, label }) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-            </SelectField>
+              options={statusOptions}
+              onChange={(value) => {
+                if (value) setStatus(value);
+              }}
+              isDisabled={isSaving}
+            />
           </div>
         )}
 

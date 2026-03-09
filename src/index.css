@@ -109,3 +109,7 @@
 .rrule-square-input:checked + .rrule-square-toggle {
   @apply bg-accent;
 }
+
+.task-field-group .react-select__control {
+  @apply border-accent! rounded-xl bg-light px-1 py-0.5 outline-none shadow-none;
+}
