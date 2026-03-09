@@ -128,6 +128,7 @@ const CalendarPage = () => {
           initialTaskId={selectedTask.resource.taskId}
           initialDate={selectedTask.start}
           initialStatus={selectedTask.resource.status !== "pending" ? selectedTask.resource.status : "done"}
+          isPending={selectedTask.resource.status === "pending"}
           isSaving={isSaving}
           onClose={closeOccurrenceModal}
           onSave={handleEditOccurrenceSave}

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { SubmitEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
+import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi";
 
 import type { EditableOccurrenceStatus, Task } from "../api/types";
 import SelectField from "./custom-fields/SelectField";
@@ -12,6 +13,7 @@ interface OccurrenceModalProps {
   initialTaskId: number | null;
   initialDate: Date;
   initialStatus: EditableOccurrenceStatus;
+  isPending?: boolean;
   isSaving?: boolean;
   onClose: () => void;
   onSave: (payload: { taskId: number; occurredAt: Date; status: EditableOccurrenceStatus }) => void;
@@ -37,6 +39,7 @@ const OccurrenceModal = ({
   initialTaskId,
   initialDate,
   initialStatus,
+  isPending = false,
   isSaving = false,
   onClose,
   onSave,
@@ -75,18 +78,6 @@ const OccurrenceModal = ({
 
     onSave({ taskId, occurredAt: parsedDate, status });
   };
-
-  const createTaskButton = (
-    <button
-      type="button"
-      className="text-white px-2 py-1 w-fit mx-auto rounded bg-accent hover:bg-accent/80"
-      onClick={handleCreateTask}
-      disabled={isSaving}
-    >
-      Create New Task
-    </button>
-  );
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
       <form
@@ -94,12 +85,49 @@ const OccurrenceModal = ({
         onSubmit={handleSubmit}
         onClick={(event) => event.stopPropagation()}
       >
-        <h3 className="text-2xl font-bold text-center">{title}</h3>
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-2xl font-bold">{title}</h3>
+          <div className="flex items-center gap-1">
+            {mode === "edit" && (
+              <button
+                type="button"
+                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-accent text-sm text-accent transition-colors hover:bg-accent/10"
+                disabled={isSaving}
+                aria-label="Edit related task"
+                title="Edit related task"
+              >
+                <FiEdit2 />
+              </button>
+            )}
+            {mode === "edit" && !isPending && (
+              <button
+                type="button"
+                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-accent text-sm text-accent transition-colors hover:bg-accent/10"
+                disabled={isSaving}
+                aria-label="Remove occurrence"
+                title="Remove occurrence"
+              >
+                <FiTrash2 />
+              </button>
+            )}
+            {mode === "create" && (
+              <button
+                type="button"
+                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-accent text-sm text-accent transition-colors hover:bg-accent/10"
+                disabled={isSaving}
+                aria-label="Create task"
+                title="Create task"
+                onClick={handleCreateTask}
+              >
+                <FiPlus />
+              </button>
+            )}
+          </div>
+        </div>
 
         {!hasAvailableTasks ? (
           <div className="flex flex-col gap-2 items-center">
             <p className="mt-4 text-sm text-center">No active tasks available.</p>
-            {createTaskButton}
           </div>
         ) : (
           <div className="mt-4 flex flex-col gap-3">
@@ -112,8 +140,6 @@ const OccurrenceModal = ({
               isSearchable
               isDisabled={mode === "edit" || isSaving}
             />
-
-            {mode === "create" && createTaskButton}
 
             <hr className="border-accent" />
 
@@ -139,7 +165,7 @@ const OccurrenceModal = ({
           </div>
         )}
 
-        <div className="mt-6 flex justify-end gap-2">
+        <div className="mt-6 flex justify-center gap-2">
           <button
             type="button"
             className="calendar-navigation bg-gray-500! hover:bg-gray-600!"
