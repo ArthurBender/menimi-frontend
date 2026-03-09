@@ -26,22 +26,40 @@ export function TasksProvider({ children }: PropsWithChildren) {
   }, [refreshTasks]);
 
   const handleCreateTask = async (input: CreateTaskInput) => {
-    const task = await createTask(input);
-    setTasks((current) => [...current, task]);
-    return task;
+    try {
+      const task = await createTask(input);
+      setTasks((current) => [...current, task]);
+      showToast("success", "Task created successfully.");
+      return task;
+    } catch (error) {
+      showToast("error", "There was an error creating the task.", error);
+      throw error;
+    }
   };
 
   const handleCreateOccurrence = async (input: SaveTaskOccurrenceInput) => {
-    await createTaskOccurrence(input);
-    await refreshTasks();
+    try {
+      await createTaskOccurrence(input);
+      await refreshTasks();
+      showToast("success", "Occurrence created successfully.");
+    } catch (error) {
+      showToast("error", "There was an error creating the occurrence.", error);
+      throw error;
+    }
   };
 
   const handleUpdateOccurrence = async (
     occurrenceId: number,
     input: Partial<SaveTaskOccurrenceInput>,
   ) => {
-    await updateTaskOccurrence(occurrenceId, input);
-    await refreshTasks();
+    try {
+      await updateTaskOccurrence(occurrenceId, input);
+      await refreshTasks();
+      showToast("success", "Occurrence updated successfully.");
+    } catch (error) {
+      showToast("error", "There was an error saving the occurrence.", error);
+      throw error;
+    }
   };
 
   return (

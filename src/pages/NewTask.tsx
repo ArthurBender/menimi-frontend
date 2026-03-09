@@ -45,7 +45,7 @@ const NewTask = () => {
     const startsAt = new Date(startsAtValue);
 
     if (Number.isNaN(startsAt.getTime())) {
-      showToast("error", "There was an error creating the task.", new Error("Invalid start date."));
+      showToast("error", "Please provide a valid start date.");
       setIsSubmitting(false);
       return;
     }
@@ -63,8 +63,6 @@ const NewTask = () => {
       });
 
       navigate("/");
-    } catch (error) {
-      showToast("error", "There was an error creating the task.", error);
     } finally {
       setIsSubmitting(false);
     }
