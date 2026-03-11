@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { signUp } from "../api/auth";
+import AuthLayout from "../components/AuthLayout";
 import SelectField from "../components/custom-fields/SelectField";
 import TextField from "../components/custom-fields/TextField";
 import { timezoneOptions } from "../utils/timezones";
@@ -47,14 +48,12 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <form className="flex w-full max-w-2xl flex-col gap-6 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-2 text-center">
-          <h1 className="text-3xl font-bold">Sign Up</h1>
-          <p className="text-sm text-primary/70">Create an account to start using Menimi.</p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
+    <AuthLayout
+      title="Sign Up"
+      description="Create an account to start using Menimi."
+    >
+      <form className="flex h-full flex-1 flex-col gap-6" onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextField
             id="signup-first-name"
             label="First Name"
@@ -103,7 +102,7 @@ const SignUpPage = () => {
           isDisabled={isSubmitting}
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextField
             id="signup-password"
             label="Password"
@@ -129,7 +128,7 @@ const SignUpPage = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="mt-auto flex flex-col gap-3 pt-6">
           <button type="submit" className="calendar-navigation" disabled={isSubmitting}>
             {isSubmitting ? "Creating account..." : "Sign Up"}
           </button>
@@ -138,7 +137,7 @@ const SignUpPage = () => {
           </Link>
         </div>
       </form>
-    </div>
+    </AuthLayout>
   );
 };
 

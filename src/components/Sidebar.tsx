@@ -13,7 +13,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
 
       <SidebarLinks isOpen={isOpen} />
 
-      <div className={`text-center font-semibold text-sm text-nowrap ${!isOpen && "invisible"}`}>© 2026. All rights reserved.</div>
+      <div className={`text-center font-semibold text-sm text-nowrap ${!isOpen && "invisible"}`}>© {new Date().getFullYear()}. All rights reserved.</div>
     </aside>
   )
 }

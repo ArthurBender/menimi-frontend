@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import TextField from "../components/custom-fields/TextField";
+import AuthLayout from "../components/AuthLayout";
 import { useAuth } from "../api/useAuth";
 
 const LoginPage = () => {
@@ -29,13 +30,11 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <form className="flex w-full max-w-md flex-col gap-6 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-2 text-center">
-          <h1 className="text-3xl font-bold">Login</h1>
-          <p className="text-sm text-primary/70">Use your account to access Menimi.</p>
-        </div>
-
+    <AuthLayout
+      title="Login"
+      description="Use your account to access Menimi."
+    >
+      <form className="flex h-full flex-1 flex-col gap-6" onSubmit={handleSubmit}>
         <TextField
           id="login-email"
           label="Email"
@@ -60,7 +59,7 @@ const LoginPage = () => {
           disabled={isSubmitting}
         />
 
-        <div className="flex flex-col gap-3">
+        <div className="mt-auto flex flex-col gap-3 pt-6">
           <button type="submit" className="calendar-navigation" disabled={isSubmitting}>
             {isSubmitting ? "Logging in..." : "Login"}
           </button>
@@ -69,7 +68,7 @@ const LoginPage = () => {
           </Link>
         </div>
       </form>
-    </div>
+    </AuthLayout>
   );
 };
 
