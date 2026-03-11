@@ -17,8 +17,9 @@ const Home = () => {
   const localizer = momentLocalizer(moment);
   const currentMonth = moment().format("MMMM - YYYY");
   const username = user ? formatUserName(user) || user.email : "there";
+  const timezone = user?.timezone ?? "Etc/UTC";
 
-  const homeTasks = buildTaskEventsForMonth(tasks, new Date());
+  const homeTasks = buildTaskEventsForMonth(tasks, new Date(), timezone);
   const DateHeader = useHomeCalendarEventRenderer(homeTasks);
   const todayTaskIds = new Set(
     homeTasks

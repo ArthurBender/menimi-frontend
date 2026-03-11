@@ -2,17 +2,14 @@ import type { FormEvent, ReactNode } from "react";
 import { useState } from "react";
 
 import CheckboxField from "./custom-fields/CheckboxField";
-import SelectField from "./custom-fields/SelectField";
 import TextField from "./custom-fields/TextField";
 import RRuleGenerator from "./RRuleGenerator";
 import { showToast } from "../utils/toast";
-import { timezoneOptions } from "../utils/timezones";
 
 export interface TaskFormInitialValues {
   title: string;
   description: string;
   startsAt: string;
-  timezone: string;
   carryOver: boolean;
   isRecurrent: boolean;
 }
@@ -21,7 +18,6 @@ export interface TaskFormSubmitValues {
   title: string;
   description: string;
   startsAtIso: string;
-  timezone: string;
   carryOver: boolean;
   rrule: string | null;
 }
@@ -44,12 +40,6 @@ const TaskForm = ({
   extraActions,
 }: TaskFormProps) => {
   const [isRecurrent, setIsRecurrent] = useState(initialValues.isRecurrent);
-  const [timezone, setTimezone] = useState(initialValues.timezone);
-
-  const timezoneSelectOptions = timezoneOptions.map((timezoneOption) => ({
-    value: timezoneOption.value,
-    label: timezoneOption.label,
-  }));
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -68,7 +58,6 @@ const TaskForm = ({
       title,
       description: String(formData.get("description") ?? "").trim(),
       startsAtIso: startsAt.toISOString(),
-      timezone,
       carryOver: formData.get("carry_over") === "on",
       rrule: isRecurrent ? String(formData.get("rrule") ?? "").trim() || null : null,
     });
@@ -87,31 +76,15 @@ const TaskForm = ({
         multiline
       />
 
-      <div className="grid grid-cols-2 gap-4">
-        <TextField
-          id="starts_at"
-          name="starts_at"
-          type="date"
-          defaultValue={initialValues.startsAt}
-          label="Date / Starts At"
-          required
-          requiredLabel
-        />
-
-        <SelectField
-          id="timezone"
-          name="timezone"
-          label="Timezone"
-          requiredLabel
-          value={timezone}
-          options={timezoneSelectOptions}
-          onChange={(value) => {
-            if (value) setTimezone(value);
-          }}
-          isSearchable
-          isDisabled={isSubmitting}
-        />
-      </div>
+      <TextField
+        id="starts_at"
+        name="starts_at"
+        type="date"
+        defaultValue={initialValues.startsAt}
+        label="Date / Starts At"
+        required
+        requiredLabel
+      />
 
       <div className="grid grid-cols-2 gap-4">
         <CheckboxField

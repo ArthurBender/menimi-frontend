@@ -7,7 +7,7 @@ const EVENT_DURATION_MS = DEFAULT_EVENT_MINUTES * 60 * 1000;
 
 const dateKeyFormatterByTimezone = new Map<string, Intl.DateTimeFormat>();
 
-export function buildTaskEventsForMonth(tasks: Task[], date: Date): CalendarTask[] {
+export function buildTaskEventsForMonth(tasks: Task[], date: Date, timezone: string): CalendarTask[] {
   const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
   const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
   const pendingRangeStart = getPendingRangeStart(monthStart);
@@ -16,7 +16,6 @@ export function buildTaskEventsForMonth(tasks: Task[], date: Date): CalendarTask
   const events: CalendarTask[] = [];
 
   for (const task of tasks) {
-    const timezone = task.timezone || "Etc/UTC";
     const startsAt = new Date(task.starts_at);
     const monthStartKey = dayKeyInTimezone(monthStart, timezone);
     const monthEndKey = dayKeyInTimezone(monthEnd, timezone);
@@ -25,7 +24,7 @@ export function buildTaskEventsForMonth(tasks: Task[], date: Date): CalendarTask
     const nonCanceledOccurrences = task.occurrences.filter((occurrence) => occurrence.status !== "canceled");
     const existingDays = new Set<string>();
     const pendingDays = new Set<string>();
-    const hiddenMissedIds = getHiddenMissedOccurrenceIds(task, nonCanceledOccurrences);
+    const hiddenMissedIds = getHiddenMissedOccurrenceIds(task, nonCanceledOccurrences, timezone);
 
     for (const occurrence of nonCanceledOccurrences) {
       const occurredAt = new Date(occurrence.occurred_at);
@@ -78,7 +77,6 @@ export function buildTaskEventsForMonth(tasks: Task[], date: Date): CalendarTask
       pendingDays.add(plannedDayKey);
     }
 
-    console.log(task.carry_over);
     if (!task.carry_over) continue;
 
     for (const missedOccurrence of nonCanceledOccurrences.filter((occurrence) => occurrence.status === "missed")) {
@@ -88,6 +86,7 @@ export function buildTaskEventsForMonth(tasks: Task[], date: Date): CalendarTask
         task,
         occurrences: nonCanceledOccurrences,
         missedOccurrence,
+        timezone,
       });
       const carryOverDayKey = dayKeyInTimezone(carryOverDay, timezone);
 
@@ -146,11 +145,10 @@ function makeEvent(params: {
   };
 }
 
-function getHiddenMissedOccurrenceIds(task: Task, occurrences: TaskOccurrence[]): Set<number> {
+function getHiddenMissedOccurrenceIds(task: Task, occurrences: TaskOccurrence[], timezone: string): Set<number> {
   const hiddenMissedIds = new Set<number>();
   if (!task.carry_over) return hiddenMissedIds;
 
-  const timezone = task.timezone || "Etc/UTC";
   const nowDayKey = dayKeyInTimezone(new Date(), timezone);
   const missedOccurrences = occurrences.filter((occurrence) => occurrence.status === "missed");
 
@@ -159,6 +157,7 @@ function getHiddenMissedOccurrenceIds(task: Task, occurrences: TaskOccurrence[])
       task,
       occurrences,
       missedOccurrence,
+      timezone,
     });
 
     if (
@@ -176,12 +175,13 @@ function getCarryOverWindow({
   task,
   occurrences,
   missedOccurrence,
+  timezone,
 }: {
   task: Task;
   occurrences: TaskOccurrence[];
   missedOccurrence: TaskOccurrence;
+  timezone: string;
 }) {
-  const timezone = task.timezone || "Etc/UTC";
   const missedDate = new Date(missedOccurrence.occurred_at);
   const missedDayKey = dayKeyInTimezone(missedDate, timezone);
 
@@ -191,7 +191,7 @@ function getCarryOverWindow({
     .filter((dayKey) => compareDayKeys(dayKey, missedDayKey) > 0)
     .sort(compareDayKeys)[0] ?? null;
 
-  const recurrentCutoff = task.rrule ? getNextPlannedDayKey(task, missedDate) : null;
+  const recurrentCutoff = task.rrule ? getNextPlannedDayKey(task, missedDate, timezone) : null;
 
   return {
     startKey: addDaysToDayKey(missedDayKey, 1),
@@ -205,14 +205,14 @@ function getPlannedDatesForRange(task: Task, rangeStart: Date, rangeEnd: Date): 
   return parseRRule(task.rrule, startsAt).between(rangeStart, rangeEnd, true);
 }
 
-function getNextPlannedDayKey(task: Task, afterDate: Date): string | null {
+function getNextPlannedDayKey(task: Task, afterDate: Date, timezone: string): string | null {
   if (!task.rrule) return null;
 
   const startsAt = new Date(task.starts_at);
   const nextPlannedDate = parseRRule(task.rrule, startsAt).after(afterDate, false);
   if (!nextPlannedDate) return null;
 
-  return dayKeyInTimezone(nextPlannedDate, task.timezone || "Etc/UTC");
+  return dayKeyInTimezone(nextPlannedDate, timezone);
 }
 
 function parseRRule(rrule: string, startsAt: Date) {

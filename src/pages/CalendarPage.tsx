@@ -6,11 +6,13 @@ import moment from "moment";
 
 import type { CalendarTask } from "../api/types";
 import OccurrenceModal from "../components/OccurrenceModal";
+import { useAuth } from "../api/useAuth";
 import { buildTaskEventsForMonth } from "../utils/occurrences";
 import { getCalendarEventStyle } from "../utils/calendarEventColors";
 import { useTasks } from "../api/useTasks";
 
 const CalendarPage = () => {
+  const { user } = useAuth();
   const { tasks, isLoading, createOccurrence, updateOccurrence, deleteOccurrence } = useTasks();
 
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -23,7 +25,7 @@ const CalendarPage = () => {
   const month = currentDate.toLocaleString('en-US', { month: 'long' });
   const year = currentDate.getFullYear();
 
-  const calendarTasks = buildTaskEventsForMonth(tasks, currentDate);
+  const calendarTasks = buildTaskEventsForMonth(tasks, currentDate, user?.timezone ?? "Etc/UTC");
   const handleMonthChange = (type: "next" | "previous") => {
     if (type === "next") {
       setCurrentDate((prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1, 1));

@@ -35,7 +35,6 @@ const EditTask = () => {
     title: string;
     description: string;
     startsAtIso: string;
-    timezone: string;
     carryOver: boolean;
     rrule: string | null;
   }) => {
@@ -47,7 +46,6 @@ const EditTask = () => {
         title: values.title,
         description: values.description,
         starts_at: values.startsAtIso,
-        timezone: values.timezone,
         carry_over: values.carryOver,
         rrule: values.rrule,
         active: task.active,
@@ -80,7 +78,6 @@ const EditTask = () => {
             title: task.title,
             description: task.description,
             startsAt: toDateInputValue(task.starts_at),
-            timezone: task.timezone,
             carryOver: task.carry_over,
             isRecurrent: Boolean(task.rrule),
           }}

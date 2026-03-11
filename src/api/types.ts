@@ -26,7 +26,6 @@ export interface Task {
   description: string;
   rrule: string | null;
   starts_at: string;
-  timezone: string;
   carry_over: boolean;
   active: boolean;
   created_at: string;
@@ -56,7 +55,6 @@ export interface CreateTaskInput {
   description?: string;
   rrule?: string | null;
   starts_at: string;
-  timezone: string;
   carry_over: boolean;
   active: boolean;
 }

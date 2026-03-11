@@ -5,10 +5,6 @@ import TaskForm from "../components/TaskForm";
 import { useAuth } from "../api/useAuth";
 import { useTasks } from "../api/useTasks";
 
-function getInitialTimezone() {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone || "Etc/UTC";
-}
-
 function getCurrentLocalDate() {
   const now = new Date();
   const offsetMs = now.getTimezoneOffset() * 60 * 1000;
@@ -32,13 +28,11 @@ const NewTask = () => {
   const { user } = useAuth();
   const { createTask } = useTasks();
   const initialStartsAt = getInitialStartsAt(searchParams.get("occurredAt"));
-  const initialTimezone = user?.timezone ?? getInitialTimezone();
 
   const handleSubmit = async (values: {
     title: string;
     description: string;
     startsAtIso: string;
-    timezone: string;
     carryOver: boolean;
     rrule: string | null;
   }) => {
@@ -51,7 +45,6 @@ const NewTask = () => {
         description: values.description,
         rrule: values.rrule,
         starts_at: values.startsAtIso,
-        timezone: values.timezone,
         carry_over: values.carryOver,
         active: true,
       });
@@ -73,7 +66,6 @@ const NewTask = () => {
             title: "",
             description: "",
             startsAt: initialStartsAt,
-            timezone: initialTimezone,
             carryOver: false,
             isRecurrent: false,
           }}
