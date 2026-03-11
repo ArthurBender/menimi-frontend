@@ -38,7 +38,7 @@ const Home = () => {
     <div className="flex flex-col gap-10 justify-between h-full">
       <div className="flex gap-10 items-center justify-around">
         <h2 className="text-7xl font-semibold">Hey, there {username}!</h2>
-        <div className="h-50 w-100">
+        <div className="h-70 w-120">
           <p className="text-center font-medium">{currentMonth}</p>
           <Calendar 
             localizer={localizer}

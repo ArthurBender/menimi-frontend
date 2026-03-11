@@ -1,9 +1,10 @@
+import { useAuth } from "../api/useAuth";
+import { useNavigate } from "react-router-dom";
+
 import { Link } from "react-router-dom";
-
 import logo from "../assets/logo.svg";
-import { MdSettings } from "react-icons/md";
+import { MdSettings, MdLogout } from "react-icons/md";
 import { MdMenu } from "react-icons/md";
-
 
 type NavbarProps = {
   isSidebarOpen: boolean;
@@ -11,6 +12,18 @@ type NavbarProps = {
 };
 
 const Navbar = ({ isSidebarOpen, onToggleSidebar }: NavbarProps) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
   return (
     <nav className="flex items-center justify-between bg-primary px-4 py-2 text-light">
       <button type="button" onClick={onToggleSidebar} className={`nav-link transition-all ${!isSidebarOpen && "-translate-x-17.5"}`}>
@@ -20,7 +33,11 @@ const Navbar = ({ isSidebarOpen, onToggleSidebar }: NavbarProps) => {
         <img src={logo} alt="Menimi logo" className="h-10 w-10" />
         <span>Menimi</span>
       </Link>
-      <Link to="/settings" className="nav-link"><MdSettings /></Link>
+
+      <div className="flex gap-4">
+        <Link to="/settings" className="nav-link"><MdSettings /></Link>
+        <button className="nav-link" onClick={handleLogout}><MdLogout /></button>
+      </div>
     </nav>
   )
 }
