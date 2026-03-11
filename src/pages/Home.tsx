@@ -4,16 +4,19 @@ import { useHomeCalendarEventRenderer } from "../components/HomeCalendarEventRen
 
 import moment from "moment";
 
+import { formatUserName } from "../api/auth";
+import { useAuth } from "../api/useAuth";
 import { buildTaskEventsForMonth } from "../utils/occurrences";
 import { useTasks } from "../api/useTasks";
 
-const username = "there";
 const resume = "Your active tasks are loaded from the API and grouped below.";
 
 const Home = () => {
+  const { user } = useAuth();
   const { tasks, isLoading } = useTasks();
   const localizer = momentLocalizer(moment);
   const currentMonth = moment().format("MMMM - YYYY");
+  const username = user ? formatUserName(user) || user.email : "there";
 
   const homeTasks = buildTaskEventsForMonth(tasks, new Date());
   const DateHeader = useHomeCalendarEventRenderer(homeTasks);

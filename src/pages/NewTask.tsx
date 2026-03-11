@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import TaskForm from "../components/TaskForm";
-import { API_USER_ID } from "../api/config";
+import { useAuth } from "../api/useAuth";
 import { useTasks } from "../api/useTasks";
 
 function getInitialTimezone() {
@@ -29,9 +29,10 @@ const NewTask = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { createTask } = useTasks();
   const initialStartsAt = getInitialStartsAt(searchParams.get("occurredAt"));
-  const initialTimezone = getInitialTimezone();
+  const initialTimezone = user?.timezone ?? getInitialTimezone();
 
   const handleSubmit = async (values: {
     title: string;
@@ -45,7 +46,7 @@ const NewTask = () => {
 
     try {
       await createTask({
-        user_id: API_USER_ID,
+        user_id: user?.id,
         title: values.title,
         description: values.description,
         rrule: values.rrule,
