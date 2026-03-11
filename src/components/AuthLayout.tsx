@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from "react";
 
-import backgroundImage from "../assets/background.png";
+import backgroundImage from "../assets/background.jpg";
+import splashTexture from "../assets/splash-texture.png";
 import { usePreferences } from "../preferences/usePreferences";
 import PreferenceToggle from "./PreferenceToggle";
 
@@ -15,9 +16,24 @@ const AuthLayout = ({ title, description, children }: AuthLayoutProps) => {
   return (
     <div className="flex min-h-screen bg-background">
       <div
-        className="hidden flex-1 bg-cover bg-center bg-no-repeat lg:block"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      />
+        className="hidden flex-1 items-center justify-center bg-cover bg-center bg-no-repeat px-12 lg:flex"
+        style={{
+          backgroundImage: `url(${splashTexture}), url(${backgroundImage})`,
+          backgroundPosition: "center, center",
+          backgroundRepeat: "no-repeat, no-repeat",
+          backgroundSize: "cover, cover",
+        }}
+      >
+        <div className="flex flex-col items-center gap-20 text-center">
+          <p className="text-9xl font-bold text-light bg-accent px-4 py-2 rounded-2xl">MENIMI</p>
+          <p className="text-5xl font-semibold text-accent bg-light px-4 py-2 rounded-2xl">
+            The app to <b>remember</b> you of all your tasks.
+          </p>
+          <p className="text-3xl text-light bg-accent px-4 py-2 rounded-2xl">
+            Don&apos;t leave it for <b>tomorrow</b> what you should be remembering to do <b>today</b>.
+          </p>
+        </div>
+      </div>
       <aside className="flex min-h-screen w-full flex-col bg-white px-4 py-8 lg:w-[30rem] lg:px-8">
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col">
           <div className="flex items-start justify-between gap-4 pt-4">
