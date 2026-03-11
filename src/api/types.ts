@@ -33,6 +33,8 @@ export interface CalendarTask {
     occurrenceId: number | null;
     status: EditableOccurrenceStatus | "pending";
     generated: boolean;
+    pendingSource?: "planned" | "carry_over";
+    carriedFromOccurrenceId?: number;
   };
 }
 
@@ -53,4 +55,5 @@ export interface SaveTaskOccurrenceInput {
   task_id: number;
   occurred_at: string;
   status: EditableOccurrenceStatus;
+  carried_from?: number;
 }

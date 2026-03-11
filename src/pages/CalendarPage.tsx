@@ -56,6 +56,11 @@ const CalendarPage = () => {
           task_id: payload.taskId,
           occurred_at: payload.occurredAt.toISOString(),
           status: payload.status,
+          carried_from:
+            selectedTask?.resource.pendingSource === "carry_over" &&
+            payload.status === "done"
+              ? selectedTask.resource.carriedFromOccurrenceId
+              : undefined,
         });
       }
 
