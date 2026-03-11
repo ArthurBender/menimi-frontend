@@ -18,7 +18,15 @@
 }
 
 .dark {
-  /* TO DO */
+  --background: #181311;
+  --surface: #2b201c;
+  --primary: #ff6b6b;
+  --accent: #d18e90;
+  --text: #f7ede4;
+  --light: #3a2b25;
+  --dark: #0f0b09;
+  --shadow: #1f1714;
+  --disabled: #4f433d;
 }
 
 @theme {
@@ -31,6 +39,11 @@
   --color-dark: var(--dark);
   --color-shadow: var(--shadow);
   --color-disabled: var(--disabled);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
 }
 
 

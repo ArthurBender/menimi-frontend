@@ -1,13 +1,16 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 
+import PreferenceToggle from "../components/PreferenceToggle";
 import SelectField from "../components/custom-fields/SelectField";
 import TextField from "../components/custom-fields/TextField";
 import { useAuth } from "../api/useAuth";
+import { usePreferences } from "../preferences/usePreferences";
 import { timezoneOptions } from "../utils/timezones";
 
 const SettingsPage = () => {
   const { user, updateAccount } = useAuth();
+  const { theme, setTheme, language, setLanguage } = usePreferences();
   const [email, setEmail] = useState(user?.email ?? "");
   const [firstName, setFirstName] = useState(user?.first_name ?? "");
   const [lastName, setLastName] = useState(user?.last_name ?? "");
@@ -117,6 +120,42 @@ const SettingsPage = () => {
           </button>
         </div>
       </form>
+
+      <div className="flex flex-col gap-6 rounded-2xl bg-surface p-6">
+        <h3 className="text-2xl font-semibold">Preferences</h3>
+
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="font-semibold">Theme</p>
+            <p className="text-sm text-primary/70">Stored locally between sessions.</p>
+          </div>
+
+          <PreferenceToggle
+            value={theme}
+            onChange={setTheme}
+            options={[
+              { value: "light", label: "Light" },
+              { value: "dark", label: "Dark" },
+            ]}
+          />
+        </div>
+
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="font-semibold">Language</p>
+            <p className="text-sm text-primary/70">Stored now for future i18n wiring.</p>
+          </div>
+
+          <PreferenceToggle
+            value={language}
+            onChange={setLanguage}
+            options={[
+              { value: "en", label: "English" },
+              { value: "pt-BR", label: "PT-BR" },
+            ]}
+          />
+        </div>
+      </div>
     </div>
   );
 };

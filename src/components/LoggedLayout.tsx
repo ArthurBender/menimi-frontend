@@ -1,10 +1,11 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
+
+import { usePreferences } from "../preferences/usePreferences";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
 const LoggedLayout = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { isSidebarOpen, setIsSidebarOpen } = usePreferences();
 
   return (
     <div className="flex min-h-screen">
@@ -12,7 +13,7 @@ const LoggedLayout = () => {
       <div className="flex min-w-0 flex-1 flex-col">
         <Navbar
           isSidebarOpen={isSidebarOpen}
-          onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         />
         <div className="border-t border-l border-accent h-full w-full px-20 py-10">
           <Outlet />
