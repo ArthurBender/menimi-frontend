@@ -13,12 +13,22 @@ import {
 import type { CreateTaskInput, SaveTaskOccurrenceInput, Task, UpdateTaskInput } from "./types";
 import { TasksContext } from "./tasks-context";
 import { showToast } from "../utils/toast";
+import { useAuth } from "./useAuth";
 
 export function TasksProvider({ children }: PropsWithChildren) {
+  const { isAuthenticated } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(isAuthenticated);
 
   const refreshTasks = useCallback(async () => {
+    if (!isAuthenticated) {
+      setTasks([]);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
       const response = await listTasks();
       setTasks(response);
@@ -27,11 +37,17 @@ export function TasksProvider({ children }: PropsWithChildren) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setTasks([]);
+      setIsLoading(false);
+      return;
+    }
+
     void refreshTasks();
-  }, [refreshTasks]);
+  }, [isAuthenticated, refreshTasks]);
 
   const handleCreateTask = async (input: CreateTaskInput) => {
     try {

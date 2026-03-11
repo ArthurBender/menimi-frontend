@@ -2,6 +2,7 @@ import axios from "axios";
 import type { AxiosRequestConfig } from "axios";
 
 import { API_BASE_URL } from "./config";
+import { getStoredAuthToken } from "./auth-storage";
 
 export class ApiError extends Error {
   status: number;
@@ -23,10 +24,25 @@ const apiClient = axios.create({
   },
 });
 
+apiClient.interceptors.request.use((config) => {
+  const authToken = getStoredAuthToken();
+
+  if (authToken) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = authToken;
+  }
+
+  return config;
+});
+
 export async function apiRequest<T>(config: AxiosRequestConfig) {
+  const response = await apiRequestWithResponse<T>(config);
+  return response.data;
+}
+
+export async function apiRequestWithResponse<T>(config: AxiosRequestConfig) {
   try {
-    const response = await apiClient.request<T>(config);
-    return response.data;
+    return await apiClient.request<T>(config);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status ?? 500;
