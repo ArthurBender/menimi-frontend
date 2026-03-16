@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import "react-toastify/dist/ReactToastify.css";
+import "./i18n/config";
 import App from './App.tsx'
 import { AuthProvider } from './api/AuthContext.tsx'
 import { TasksProvider } from './api/TasksContext.tsx'

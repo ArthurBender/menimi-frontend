@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { SubmitEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 import type { EditableOccurrenceStatus, Task } from "../api/types";
 import SelectField from "./custom-fields/SelectField";
@@ -20,9 +21,9 @@ interface OccurrenceModalProps {
   onDelete?: () => void;
 }
 
-const STATUS_OPTIONS: Array<{ value: EditableOccurrenceStatus; label: string }> = [
-  { value: "done", label: "Done" },
-  { value: "missed", label: "Missed" },
+const STATUS_OPTIONS: Array<{ value: EditableOccurrenceStatus; labelKey: "calendar.done" | "calendar.missed" }> = [
+  { value: "done", labelKey: "calendar.done" },
+  { value: "missed", labelKey: "calendar.missed" },
 ];
 
 function toDateTimeLocalValue(date: Date): string {
@@ -47,20 +48,21 @@ const OccurrenceModal = ({
   onDelete,
 }: OccurrenceModalProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const availableTasks = useMemo(
     () => (mode === "create" ? tasks.filter((task) => task.active) : tasks),
     [mode, tasks],
   );
   const defaultTaskId = initialTaskId ?? availableTasks[0]?.id ?? null;
   const hasAvailableTasks = availableTasks.length > 0;
-  const title = mode === "create" ? "Add Task Occurrence" : "Edit Task Occurrence";
+  const title = mode === "create" ? t("calendar.addOccurrence") : t("calendar.editOccurrence");
   const taskOptions = availableTasks.map((task) => ({
     value: task.id,
     label: task.title,
   }));
   const statusOptions = STATUS_OPTIONS.map((statusOption) => ({
     value: statusOption.value,
-    label: statusOption.label,
+    label: t(statusOption.labelKey),
   }));
 
   const [taskId, setTaskId] = useState<number | null>(defaultTaskId);
@@ -100,8 +102,8 @@ const OccurrenceModal = ({
                 type="button"
                 className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-accent text-sm text-accent transition-colors hover:bg-accent/10"
                 disabled={isSaving}
-                aria-label="Edit related task"
-                title="Edit related task"
+                aria-label={t("calendar.editRelatedTask")}
+                title={t("calendar.editRelatedTask")}
                 onClick={handleEditTask}
               >
                 <FiEdit2 />
@@ -112,8 +114,8 @@ const OccurrenceModal = ({
                 type="button"
                 className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-accent text-sm text-accent transition-colors hover:bg-accent/10"
                 disabled={isSaving}
-                aria-label="Remove occurrence"
-                title="Remove occurrence"
+                aria-label={t("calendar.removeOccurrence")}
+                title={t("calendar.removeOccurrence")}
                 onClick={onDelete}
               >
                 <FiTrash2 />
@@ -124,8 +126,8 @@ const OccurrenceModal = ({
                 type="button"
                 className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-accent text-sm text-accent transition-colors hover:bg-accent/10"
                 disabled={isSaving}
-                aria-label="Create task"
-                title="Create task"
+                aria-label={t("calendar.createTask")}
+                title={t("calendar.createTask")}
                 onClick={handleCreateTask}
               >
                 <FiPlus />
@@ -136,13 +138,13 @@ const OccurrenceModal = ({
 
         {!hasAvailableTasks ? (
           <div className="flex flex-col gap-2 items-center">
-            <p className="mt-4 text-sm text-center">No active tasks available.</p>
+            <p className="mt-4 text-sm text-center">{t("calendar.noActiveTasks")}</p>
           </div>
         ) : (
           <div className="mt-4 flex flex-col gap-3">
             <SelectField
               id="occurrence-task"
-              label="Task"
+              label={t("common.task")}
               value={taskId}
               options={taskOptions}
               onChange={(value) => setTaskId(value)}
@@ -158,13 +160,13 @@ const OccurrenceModal = ({
               value={occurredAt}
               onChange={(event) => setOccurredAt(event.target.value)}
               disabled={isSaving}
-              label="Date and time"
+              label={t("calendar.dateTime")}
             />
 
             <SelectField
               id="occurrence-status"
               value={status}
-              label="Status"
+              label={t("common.status")}
               options={statusOptions}
               onChange={(value) => {
                 if (value) setStatus(value);
@@ -181,11 +183,11 @@ const OccurrenceModal = ({
             onClick={onClose}
             disabled={isSaving}
           >
-            Cancel
+            {t("common.cancel")}
           </button>
           {hasAvailableTasks && (
             <button type="submit" className="calendar-navigation" disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save"}
+              {isSaving ? t("common.saving") : t("common.save")}
             </button>
           )}
         </div>

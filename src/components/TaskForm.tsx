@@ -1,5 +1,6 @@
 import type { FormEvent, ReactNode } from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import CheckboxField from "./custom-fields/CheckboxField";
 import TextField from "./custom-fields/TextField";
@@ -40,6 +41,7 @@ const TaskForm = ({
   extraActions,
 }: TaskFormProps) => {
   const [isRecurrent, setIsRecurrent] = useState(initialValues.isRecurrent);
+  const { t } = useTranslation();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -50,7 +52,7 @@ const TaskForm = ({
     const startsAt = new Date(`${startsAtValue}T00:00:00`);
 
     if (Number.isNaN(startsAt.getTime())) {
-      showToast("error", "Please provide a valid start date.");
+      showToast("error", t("validation.invalidStartDate"));
       return;
     }
 
@@ -65,12 +67,20 @@ const TaskForm = ({
 
   return (
     <form className="flex flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
-      <TextField id="title" name="title" type="text" label="Title" defaultValue={initialValues.title} required requiredLabel />
+      <TextField
+        id="title"
+        name="title"
+        type="text"
+        label={t("common.title")}
+        defaultValue={initialValues.title}
+        required
+        requiredLabel
+      />
 
       <TextField
         id="description"
         name="description"
-        label="Description"
+        label={t("task.description")}
         rows={2}
         defaultValue={initialValues.description}
         multiline
@@ -81,7 +91,7 @@ const TaskForm = ({
         name="starts_at"
         type="date"
         defaultValue={initialValues.startsAt}
-        label="Date / Starts At"
+        label={t("task.startsAt")}
         required
         requiredLabel
       />
@@ -92,14 +102,14 @@ const TaskForm = ({
           name="recurrent"
           checked={isRecurrent}
           onChange={(event) => setIsRecurrent(event.target.checked)}
-          label="Recurrent"
+          label={t("task.recurrent")}
         />
 
         <CheckboxField
           id="carry_over"
           name="carry_over"
           defaultChecked={initialValues.carryOver}
-          label="Carry Over"
+          label={t("task.carryOver")}
         />
       </div>
 

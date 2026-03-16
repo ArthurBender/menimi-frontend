@@ -1,0 +1,186 @@
+{
+  "app": {
+    "brand": "MENIMI"
+  },
+  "common": {
+    "allRightsReserved": "Todos os direitos reservados.",
+    "cancel": "Cancelar",
+    "email": "E-mail",
+    "english": "Ingles",
+    "firstName": "Nome",
+    "language": "Idioma",
+    "loading": "Carregando...",
+    "lastName": "Sobrenome",
+    "next": "Proximo",
+    "password": "Senha",
+    "passwordConfirmation": "Confirmacao de senha",
+    "portugueseBrazil": "PT-BR",
+    "previous": "Anterior",
+    "required": "obrigatorio",
+    "save": "Salvar",
+    "saveChanges": "Salvar alteracoes",
+    "saving": "Salvando...",
+    "settings": "Configuracoes",
+    "status": "Status",
+    "task": "Tarefa",
+    "theme": "Tema",
+    "timezone": "Fuso horario",
+    "title": "Titulo"
+  },
+  "auth": {
+    "hero": {
+      "tagline": "O app para lembrar voce de todas as suas tarefas.",
+      "quote": "Nao deixe para amanha o que voce deve se lembrar de fazer hoje."
+    },
+    "login": {
+      "title": "Entrar",
+      "description": "Use sua conta para acessar o Menimi.",
+      "submit": "Entrar",
+      "submitting": "Entrando...",
+      "createAccount": "Criar conta"
+    },
+    "signup": {
+      "title": "Criar conta",
+      "description": "Crie uma conta para comecar a usar o Menimi.",
+      "submit": "Cadastrar",
+      "submitting": "Criando conta...",
+      "backToLogin": "Voltar para entrar"
+    }
+  },
+  "calendar": {
+    "loading": "Carregando calendario...",
+    "addOccurrence": "Adicionar ocorrencia da tarefa",
+    "editOccurrence": "Editar ocorrencia da tarefa",
+    "editRelatedTask": "Editar tarefa relacionada",
+    "removeOccurrence": "Remover ocorrencia",
+    "createTask": "Criar tarefa",
+    "noActiveTasks": "Nao ha tarefas ativas disponiveis.",
+    "dateTime": "Data e hora",
+    "done": "Concluida",
+    "missed": "Perdida"
+  },
+  "home": {
+    "resume": "Suas tarefas ativas sao carregadas da API e agrupadas abaixo.",
+    "greeting": "Oi, {{name}}!",
+    "guestName": "voce",
+    "loading": "Carregando tarefas...",
+    "today": "Hoje",
+    "thisWeek": "Esta semana",
+    "empty": "Nenhuma tarefa agendada."
+  },
+  "nav": {
+    "home": "Inicio",
+    "calendar": "Calendario",
+    "newTask": "Nova tarefa",
+    "openMenu": "Alternar barra lateral",
+    "settings": "Configuracoes",
+    "logout": "Sair"
+  },
+  "settings": {
+    "preferences": "Preferencias",
+    "account": {
+      "themeDescription": "Armazenado localmente entre sessoes.",
+      "languageDescription": "Atualiza o idioma do app imediatamente."
+    },
+    "light": "Claro",
+    "dark": "Escuro",
+    "newPassword": "Nova senha"
+  },
+  "task": {
+    "newTitle": "Nova tarefa",
+    "editTitle": "Editar tarefa",
+    "create": "Criar tarefa",
+    "creating": "Criando...",
+    "delete": "Excluir tarefa",
+    "deleting": "Excluindo...",
+    "notFound": "Tarefa nao encontrada.",
+    "loading": "Carregando tarefa...",
+    "description": "Descricao",
+    "startsAt": "Data / Inicio",
+    "recurrent": "Recorrente",
+    "carryOver": "Carregar pendencia"
+  },
+  "rrule": {
+    "frequency": "Frequencia",
+    "interval": "Intervalo",
+    "repeatOn": "Repetir em",
+    "monthlyRuleType": "Tipo de regra mensal",
+    "yearlyRuleType": "Tipo de regra anual",
+    "byMonthDay": "Por dia do mes",
+    "byWeekdayPosition": "Por posicao do dia da semana",
+    "monthDays": "Dias do mes",
+    "weekPositions": "Posicoes da semana",
+    "weekdays": "Dias da semana",
+    "months": "Meses",
+    "ends": "Termina",
+    "never": "Nunca",
+    "untilDate": "Ate a data",
+    "afterNOccurrences": "Depois de N ocorrencias",
+    "until": "Ate",
+    "occurrences": "Ocorrencias",
+    "daily": "Diariamente",
+    "weekly": "Semanalmente",
+    "monthly": "Mensalmente",
+    "yearly": "Anualmente"
+  },
+  "weekday": {
+    "mon": "Seg",
+    "tue": "Ter",
+    "wed": "Qua",
+    "thu": "Qui",
+    "fri": "Sex",
+    "sat": "Sab",
+    "sun": "Dom"
+  },
+  "month": {
+    "jan": "Jan",
+    "feb": "Fev",
+    "mar": "Mar",
+    "apr": "Abr",
+    "may": "Mai",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Ago",
+    "sep": "Set",
+    "oct": "Out",
+    "nov": "Nov",
+    "dec": "Dez"
+  },
+  "ordinal": {
+    "1": "1a",
+    "2": "2a",
+    "3": "3a",
+    "4": "4a",
+    "5": "5a"
+  },
+  "validation": {
+    "invalidStartDate": "Informe uma data de inicio valida."
+  },
+  "toast": {
+    "loginSuccess": "Login realizado com sucesso.",
+    "loginError": "Ocorreu um erro ao entrar.",
+    "logoutError": "Ocorreu um erro ao sair.",
+    "accountCreated": "Conta criada com sucesso.",
+    "accountCreateError": "Ocorreu um erro ao criar sua conta.",
+    "accountUpdated": "Conta atualizada com sucesso.",
+    "accountUpdateError": "Ocorreu um erro ao atualizar sua conta.",
+    "tasksLoadError": "Ocorreu um erro ao carregar as tarefas.",
+    "taskCreated": "Tarefa criada com sucesso.",
+    "taskCreateError": "Ocorreu um erro ao criar a tarefa.",
+    "taskUpdated": "Tarefa atualizada com sucesso.",
+    "taskUpdateError": "Ocorreu um erro ao atualizar a tarefa.",
+    "taskDeleted": "Tarefa excluida com sucesso.",
+    "taskDeleteError": "Ocorreu um erro ao excluir a tarefa.",
+    "occurrenceCreated": "Ocorrencia criada com sucesso.",
+    "occurrenceCreateError": "Ocorreu um erro ao criar a ocorrencia.",
+    "occurrenceUpdated": "Ocorrencia atualizada com sucesso.",
+    "occurrenceUpdateError": "Ocorreu um erro ao salvar a ocorrencia.",
+    "occurrenceDeleted": "Ocorrencia removida com sucesso.",
+    "occurrenceDeleteError": "Ocorreu um erro ao remover a ocorrencia."
+  },
+  "error": {
+    "serverReturnedError": "O servidor retornou um erro.",
+    "requestFailed": "Nao foi possivel concluir a solicitacao.",
+    "missingAuthToken": "O login foi concluido, mas nenhum token de autorizacao foi retornado."
+  }
+}

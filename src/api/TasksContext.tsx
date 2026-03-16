@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { PropsWithChildren } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   createTask,
@@ -16,6 +17,7 @@ import { showToast } from "../utils/toast";
 import { useAuth } from "./useAuth";
 
 export function TasksProvider({ children }: PropsWithChildren) {
+  const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(isAuthenticated);
@@ -33,11 +35,11 @@ export function TasksProvider({ children }: PropsWithChildren) {
       const response = await listTasks();
       setTasks(response);
     } catch (error) {
-      showToast("error", "There was an error loading tasks.", error);
+      showToast("error", t("toast.tasksLoadError"), error);
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, t]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -53,10 +55,10 @@ export function TasksProvider({ children }: PropsWithChildren) {
     try {
       const task = await createTask(input);
       setTasks((current) => [...current, task]);
-      showToast("success", "Task created successfully.");
+      showToast("success", t("toast.taskCreated"));
       return task;
     } catch (error) {
-      showToast("error", "There was an error creating the task.", error);
+      showToast("error", t("toast.taskCreateError"), error);
       throw error;
     }
   };
@@ -65,10 +67,10 @@ export function TasksProvider({ children }: PropsWithChildren) {
     try {
       const updatedTask = await updateTask(taskId, input);
       setTasks((current) => current.map((task) => (task.id === taskId ? updatedTask : task)));
-      showToast("success", "Task updated successfully.");
+      showToast("success", t("toast.taskUpdated"));
       return updatedTask;
     } catch (error) {
-      showToast("error", "There was an error updating the task.", error);
+      showToast("error", t("toast.taskUpdateError"), error);
       throw error;
     }
   };
@@ -77,9 +79,9 @@ export function TasksProvider({ children }: PropsWithChildren) {
     try {
       await deleteTask(taskId);
       setTasks((current) => current.filter((task) => task.id !== taskId));
-      showToast("success", "Task deleted successfully.");
+      showToast("success", t("toast.taskDeleted"));
     } catch (error) {
-      showToast("error", "There was an error deleting the task.", error);
+      showToast("error", t("toast.taskDeleteError"), error);
       throw error;
     }
   };
@@ -88,9 +90,9 @@ export function TasksProvider({ children }: PropsWithChildren) {
     try {
       await createTaskOccurrence(input);
       await refreshTasks();
-      showToast("success", "Occurrence created successfully.");
+      showToast("success", t("toast.occurrenceCreated"));
     } catch (error) {
-      showToast("error", "There was an error creating the occurrence.", error);
+      showToast("error", t("toast.occurrenceCreateError"), error);
       throw error;
     }
   };
@@ -102,9 +104,9 @@ export function TasksProvider({ children }: PropsWithChildren) {
     try {
       await updateTaskOccurrence(occurrenceId, input);
       await refreshTasks();
-      showToast("success", "Occurrence updated successfully.");
+      showToast("success", t("toast.occurrenceUpdated"));
     } catch (error) {
-      showToast("error", "There was an error saving the occurrence.", error);
+      showToast("error", t("toast.occurrenceUpdateError"), error);
       throw error;
     }
   };
@@ -113,9 +115,9 @@ export function TasksProvider({ children }: PropsWithChildren) {
     try {
       await deleteTaskOccurrence(occurrenceId);
       await refreshTasks();
-      showToast("success", "Occurrence removed successfully.");
+      showToast("success", t("toast.occurrenceDeleted"));
     } catch (error) {
-      showToast("error", "There was an error removing the occurrence.", error);
+      showToast("error", t("toast.occurrenceDeleteError"), error);
       throw error;
     }
   };

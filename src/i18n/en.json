@@ -1,0 +1,186 @@
+{
+  "app": {
+    "brand": "MENIMI"
+  },
+  "common": {
+    "allRightsReserved": "All rights reserved.",
+    "cancel": "Cancel",
+    "email": "Email",
+    "english": "English",
+    "firstName": "First Name",
+    "language": "Language",
+    "loading": "Loading...",
+    "lastName": "Last Name",
+    "next": "Next",
+    "password": "Password",
+    "passwordConfirmation": "Password Confirmation",
+    "portugueseBrazil": "PT-BR",
+    "previous": "Previous",
+    "required": "required",
+    "save": "Save",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "settings": "Settings",
+    "status": "Status",
+    "task": "Task",
+    "theme": "Theme",
+    "timezone": "Timezone",
+    "title": "Title"
+  },
+  "auth": {
+    "hero": {
+      "tagline": "The app to remember you of all your tasks.",
+      "quote": "Don't leave it for tomorrow what you should be remembering to do today."
+    },
+    "login": {
+      "title": "Login",
+      "description": "Use your account to access Menimi.",
+      "submit": "Login",
+      "submitting": "Logging in...",
+      "createAccount": "Create Account"
+    },
+    "signup": {
+      "title": "Sign Up",
+      "description": "Create an account to start using Menimi.",
+      "submit": "Sign Up",
+      "submitting": "Creating account...",
+      "backToLogin": "Back to Login"
+    }
+  },
+  "calendar": {
+    "loading": "Loading calendar...",
+    "addOccurrence": "Add Task Occurrence",
+    "editOccurrence": "Edit Task Occurrence",
+    "editRelatedTask": "Edit related task",
+    "removeOccurrence": "Remove occurrence",
+    "createTask": "Create task",
+    "noActiveTasks": "No active tasks available.",
+    "dateTime": "Date and time",
+    "done": "Done",
+    "missed": "Missed"
+  },
+  "home": {
+    "resume": "Your active tasks are loaded from the API and grouped below.",
+    "greeting": "Hey, {{name}}!",
+    "guestName": "there",
+    "loading": "Loading tasks...",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "empty": "No tasks scheduled."
+  },
+  "nav": {
+    "home": "Home",
+    "calendar": "Calendar",
+    "newTask": "New Task",
+    "openMenu": "Toggle sidebar",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "settings": {
+    "preferences": "Preferences",
+    "account": {
+      "themeDescription": "Stored locally between sessions.",
+      "languageDescription": "Updates the app language immediately."
+    },
+    "light": "Light",
+    "dark": "Dark",
+    "newPassword": "New Password"
+  },
+  "task": {
+    "newTitle": "New Task",
+    "editTitle": "Edit Task",
+    "create": "Create Task",
+    "creating": "Creating...",
+    "delete": "Delete Task",
+    "deleting": "Deleting...",
+    "notFound": "Task not found.",
+    "loading": "Loading task...",
+    "description": "Description",
+    "startsAt": "Date / Starts At",
+    "recurrent": "Recurrent",
+    "carryOver": "Carry Over"
+  },
+  "rrule": {
+    "frequency": "Frequency",
+    "interval": "Interval",
+    "repeatOn": "Repeat On",
+    "monthlyRuleType": "Monthly Rule Type",
+    "yearlyRuleType": "Yearly Rule Type",
+    "byMonthDay": "By Month Day",
+    "byWeekdayPosition": "By Weekday Position",
+    "monthDays": "Month Days",
+    "weekPositions": "Week Positions",
+    "weekdays": "Weekdays",
+    "months": "Months",
+    "ends": "Ends",
+    "never": "Never",
+    "untilDate": "Until Date",
+    "afterNOccurrences": "After N Occurrences",
+    "until": "Until",
+    "occurrences": "Occurrences",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Yearly"
+  },
+  "weekday": {
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun"
+  },
+  "month": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
+  },
+  "ordinal": {
+    "1": "1st",
+    "2": "2nd",
+    "3": "3rd",
+    "4": "4th",
+    "5": "5th"
+  },
+  "validation": {
+    "invalidStartDate": "Please provide a valid start date."
+  },
+  "toast": {
+    "loginSuccess": "Logged in successfully.",
+    "loginError": "There was an error logging in.",
+    "logoutError": "There was an error logging out.",
+    "accountCreated": "Account created successfully.",
+    "accountCreateError": "There was an error creating your account.",
+    "accountUpdated": "Account updated successfully.",
+    "accountUpdateError": "There was an error updating your account.",
+    "tasksLoadError": "There was an error loading tasks.",
+    "taskCreated": "Task created successfully.",
+    "taskCreateError": "There was an error creating the task.",
+    "taskUpdated": "Task updated successfully.",
+    "taskUpdateError": "There was an error updating the task.",
+    "taskDeleted": "Task deleted successfully.",
+    "taskDeleteError": "There was an error deleting the task.",
+    "occurrenceCreated": "Occurrence created successfully.",
+    "occurrenceCreateError": "There was an error creating the occurrence.",
+    "occurrenceUpdated": "Occurrence updated successfully.",
+    "occurrenceUpdateError": "There was an error saving the occurrence.",
+    "occurrenceDeleted": "Occurrence removed successfully.",
+    "occurrenceDeleteError": "There was an error removing the occurrence."
+  },
+  "error": {
+    "serverReturnedError": "The server returned an error.",
+    "requestFailed": "The request could not be completed.",
+    "missingAuthToken": "Login succeeded but no authorization token was returned."
+  }
+}

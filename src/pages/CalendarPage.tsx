@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import type { SlotInfo } from "react-big-calendar";
@@ -7,6 +8,7 @@ import moment from "moment";
 import type { CalendarTask } from "../api/types";
 import OccurrenceModal from "../components/OccurrenceModal";
 import { useAuth } from "../api/useAuth";
+import { localeFromLanguage } from "../i18n/config";
 import { buildTaskEventsForMonth } from "../utils/occurrences";
 import { getCalendarEventStyle } from "../utils/calendarEventColors";
 import { useTasks } from "../api/useTasks";
@@ -14,6 +16,8 @@ import { useTasks } from "../api/useTasks";
 const CalendarPage = () => {
   const { user } = useAuth();
   const { tasks, isLoading, createOccurrence, updateOccurrence, deleteOccurrence } = useTasks();
+  const { t, i18n } = useTranslation();
+  const locale = localeFromLanguage(i18n.resolvedLanguage);
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedTask, setSelectedTask] = useState<CalendarTask | null>(null);
@@ -22,8 +26,10 @@ const CalendarPage = () => {
 
   const localizer = momentLocalizer(moment);
 
-  const month = currentDate.toLocaleString('en-US', { month: 'long' });
-  const year = currentDate.getFullYear();
+  const monthYear = new Intl.DateTimeFormat(locale, {
+    month: "long",
+    year: "numeric",
+  }).format(currentDate);
 
   const calendarTasks = buildTaskEventsForMonth(tasks, currentDate, user?.timezone ?? "Etc/UTC");
   const handleMonthChange = (type: "next" | "previous") => {
@@ -114,15 +120,15 @@ const CalendarPage = () => {
   return (
     <div className="flex flex-col gap-10">
       <div className="flex justify-between items-center gap-10">
-        <h2 className="text-4xl font-bold">{month} - {year}</h2>
+        <h2 className="text-4xl font-bold">{monthYear}</h2>
 
         <div className="flex gap-2">
-          <button className="calendar-navigation" onClick={() => handleMonthChange("previous")}>Previous</button>
-          <button className="calendar-navigation" onClick={() => handleMonthChange("next")}>Next</button>
+          <button className="calendar-navigation" onClick={() => handleMonthChange("previous")}>{t("common.previous")}</button>
+          <button className="calendar-navigation" onClick={() => handleMonthChange("next")}>{t("common.next")}</button>
         </div>
       </div>
 
-      {isLoading && <p className="rounded-2xl bg-surface p-4 text-center">Loading calendar...</p>}
+      {isLoading && <p className="rounded-2xl bg-surface p-4 text-center">{t("calendar.loading")}</p>}
 
       <div className="h-150">
         <Calendar

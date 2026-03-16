@@ -1,6 +1,7 @@
 import axios from "axios";
 import type { AxiosRequestConfig } from "axios";
 
+import i18n from "../i18n/config";
 import { API_BASE_URL } from "./config";
 import { getStoredAuthToken } from "./auth-storage";
 
@@ -48,13 +49,13 @@ export async function apiRequestWithResponse<T>(config: AxiosRequestConfig) {
       const status = error.response?.status ?? 500;
       const details = extractErrorDetails(error.response?.data);
       const fallbackMessage = status >= 500
-        ? "The server returned an error."
-        : "The request could not be completed.";
+        ? i18n.t("error.serverReturnedError")
+        : i18n.t("error.requestFailed");
 
       throw new ApiError(details[0] ?? fallbackMessage, status, details);
     }
 
-    throw new ApiError("The request could not be completed.", 500);
+    throw new ApiError(i18n.t("error.requestFailed"), 500);
   }
 }
 

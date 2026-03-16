@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { PropsWithChildren } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AuthContext } from "./auth-context";
 import { clearStoredAuth, getStoredAuthToken, getStoredUser, storeAuthSession } from "./auth-storage";
@@ -8,6 +9,7 @@ import type { LoginInput, UpdateAccountInput, User } from "./types";
 import { showToast } from "../utils/toast";
 
 export function AuthProvider({ children }: PropsWithChildren) {
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(() => getStoredUser());
   const [authToken, setAuthToken] = useState<string | null>(() => getStoredAuthToken());
 
@@ -16,15 +18,15 @@ export function AuthProvider({ children }: PropsWithChildren) {
       const response = await loginRequest(input);
 
       if (!response.authToken) {
-        throw new Error("Login succeeded but no authorization token was returned.");
+        throw new Error(t("error.missingAuthToken"));
       }
 
       storeAuthSession(response.authToken, response.user);
       setAuthToken(response.authToken);
       setUser(response.user);
-      showToast("success", "Logged in successfully.");
+      showToast("success", t("toast.loginSuccess"));
     } catch (error) {
-      showToast("error", "There was an error logging in.", error);
+      showToast("error", t("toast.loginError"), error);
       throw error;
     }
   };
@@ -39,10 +41,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
       }
 
       setUser(response.user);
-      showToast("success", "Account updated successfully.");
+      showToast("success", t("toast.accountUpdated"));
       return response.user;
     } catch (error) {
-      showToast("error", "There was an error updating your account.", error);
+      showToast("error", t("toast.accountUpdateError"), error);
       throw error;
     }
   };
@@ -53,7 +55,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         await logoutRequest();
       }
     } catch (error) {
-      showToast("error", "There was an error logging out.", error);
+      showToast("error", t("toast.logoutError"), error);
       throw error;
     } finally {
       clearStoredAuth();

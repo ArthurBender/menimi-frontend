@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type Frequency = "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
 type EndMode = "never" | "until" | "count";
@@ -6,39 +7,39 @@ type MonthlyMode = "monthday" | "weekday";
 type YearlyMode = "monthday" | "weekday";
 
 const weekdayOptions = [
-  { code: "MO", label: "Mon" },
-  { code: "TU", label: "Tue" },
-  { code: "WE", label: "Wed" },
-  { code: "TH", label: "Thu" },
-  { code: "FR", label: "Fri" },
-  { code: "SA", label: "Sat" },
-  { code: "SU", label: "Sun" },
-];
+  { code: "MO", labelKey: "weekday.mon" },
+  { code: "TU", labelKey: "weekday.tue" },
+  { code: "WE", labelKey: "weekday.wed" },
+  { code: "TH", labelKey: "weekday.thu" },
+  { code: "FR", labelKey: "weekday.fri" },
+  { code: "SA", labelKey: "weekday.sat" },
+  { code: "SU", labelKey: "weekday.sun" },
+] as const;
 
 const monthOptions = [
-  { value: "1", label: "Jan" },
-  { value: "2", label: "Feb" },
-  { value: "3", label: "Mar" },
-  { value: "4", label: "Apr" },
-  { value: "5", label: "May" },
-  { value: "6", label: "Jun" },
-  { value: "7", label: "Jul" },
-  { value: "8", label: "Aug" },
-  { value: "9", label: "Sep" },
-  { value: "10", label: "Oct" },
-  { value: "11", label: "Nov" },
-  { value: "12", label: "Dec" },
-];
+  { value: "1", labelKey: "month.jan" },
+  { value: "2", labelKey: "month.feb" },
+  { value: "3", labelKey: "month.mar" },
+  { value: "4", labelKey: "month.apr" },
+  { value: "5", labelKey: "month.may" },
+  { value: "6", labelKey: "month.jun" },
+  { value: "7", labelKey: "month.jul" },
+  { value: "8", labelKey: "month.aug" },
+  { value: "9", labelKey: "month.sep" },
+  { value: "10", labelKey: "month.oct" },
+  { value: "11", labelKey: "month.nov" },
+  { value: "12", labelKey: "month.dec" },
+] as const;
 
 const monthDayOptions = Array.from({ length: 31 }, (_, index) => String(index + 1));
 
 const weekPositionOptions = [
-  { value: "1", label: "1st" },
-  { value: "2", label: "2nd" },
-  { value: "3", label: "3rd" },
-  { value: "4", label: "4th" },
-  { value: "5", label: "5th" },
-];
+  { value: "1", labelKey: "ordinal.1" },
+  { value: "2", labelKey: "ordinal.2" },
+  { value: "3", labelKey: "ordinal.3" },
+  { value: "4", labelKey: "ordinal.4" },
+  { value: "5", labelKey: "ordinal.5" },
+] as const;
 
 function toUntilUtcDate(dateValue: string): string {
   const date = new Date(`${dateValue}T23:59:59`);
@@ -64,6 +65,7 @@ interface RRuleGeneratorProps {
 }
 
 const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
+  const { t } = useTranslation();
   const [frequency, setFrequency] = useState<Frequency>("DAILY");
   const [interval, setInterval] = useState("1");
 
@@ -187,21 +189,21 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
       <hr />
       <div className="grid grid-cols-2 gap-4">
         <div className="task-field-group">
-          <label htmlFor="rrule_frequency">Frequency</label>
+          <label htmlFor="rrule_frequency">{t("rrule.frequency")}</label>
           <select
             id="rrule_frequency"
             value={frequency}
             onChange={(event) => setFrequency(event.target.value as Frequency)}
           >
-            <option value="DAILY">Daily</option>
-            <option value="WEEKLY">Weekly</option>
-            <option value="MONTHLY">Monthly</option>
-            <option value="YEARLY">Yearly</option>
+            <option value="DAILY">{t("rrule.daily")}</option>
+            <option value="WEEKLY">{t("rrule.weekly")}</option>
+            <option value="MONTHLY">{t("rrule.monthly")}</option>
+            <option value="YEARLY">{t("rrule.yearly")}</option>
           </select>
         </div>
 
         <div className="task-field-group">
-          <label htmlFor="rrule_interval">Interval</label>
+          <label htmlFor="rrule_interval">{t("rrule.interval")}</label>
           <input
             id="rrule_interval"
             type="number"
@@ -214,10 +216,10 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
 
       {frequency === "WEEKLY" && (
         <div className="task-field-group">
-          <label>Repeat On</label>
+          <label>{t("rrule.repeatOn")}</label>
           {renderSquareCheckboxGroup(
             "weekday",
-            weekdayOptions.map((weekday) => ({ value: weekday.code, label: weekday.label })),
+            weekdayOptions.map((weekday) => ({ value: weekday.code, label: t(weekday.labelKey) })),
             weekdays,
             toggleWeekday,
           )}
@@ -227,20 +229,20 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
       {frequency === "MONTHLY" && (
         <div className="flex flex-col gap-4">
           <div className="task-field-group">
-            <label htmlFor="rrule_monthly_mode">Monthly Rule Type</label>
+            <label htmlFor="rrule_monthly_mode">{t("rrule.monthlyRuleType")}</label>
             <select
               id="rrule_monthly_mode"
               value={monthlyMode}
               onChange={(event) => setMonthlyMode(event.target.value as MonthlyMode)}
             >
-              <option value="monthday">By Month Day</option>
-              <option value="weekday">By Weekday Position</option>
+              <option value="monthday">{t("rrule.byMonthDay")}</option>
+              <option value="weekday">{t("rrule.byWeekdayPosition")}</option>
             </select>
           </div>
 
           {monthlyMode === "monthday" && (
             <div className="task-field-group">
-              <label>Month Days</label>
+              <label>{t("rrule.monthDays")}</label>
               {renderSquareCheckboxGroup(
                 "monthly_day",
                 monthDayOptions.map((day) => ({ value: day, label: day })),
@@ -253,10 +255,13 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
           {monthlyMode === "weekday" && (
             <>
               <div className="task-field-group">
-                <label>Week Positions</label>
+                <label>{t("rrule.weekPositions")}</label>
                 {renderSquareCheckboxGroup(
                   "monthly_pos",
-                  weekPositionOptions,
+                  weekPositionOptions.map((position) => ({
+                    value: position.value,
+                    label: t(position.labelKey),
+                  })),
                   monthlyWeekPositions,
                   (position) =>
                     setMonthlyWeekPositions((previous) => toggleArrayValue(previous, position)),
@@ -264,10 +269,10 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
               </div>
 
               <div className="task-field-group">
-                <label>Weekdays</label>
+                <label>{t("rrule.weekdays")}</label>
                 {renderSquareCheckboxGroup(
                   "monthly_weekday",
-                  weekdayOptions.map((weekday) => ({ value: weekday.code, label: weekday.label })),
+                  weekdayOptions.map((weekday) => ({ value: weekday.code, label: t(weekday.labelKey) })),
                   monthlyWeekdays,
                   (day) => setMonthlyWeekdays((previous) => toggleArrayValue(previous, day)),
                 )}
@@ -280,30 +285,30 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
       {frequency === "YEARLY" && (
         <div className="flex flex-col gap-4">
           <div className="task-field-group">
-            <label>Months</label>
+            <label>{t("rrule.months")}</label>
             {renderSquareCheckboxGroup(
               "yearly_month",
-              monthOptions,
+              monthOptions.map((month) => ({ value: month.value, label: t(month.labelKey) })),
               yearlyMonths,
               (month) => setYearlyMonths((previous) => toggleArrayValue(previous, month)),
             )}
           </div>
 
           <div className="task-field-group">
-            <label htmlFor="rrule_yearly_mode">Yearly Rule Type</label>
+            <label htmlFor="rrule_yearly_mode">{t("rrule.yearlyRuleType")}</label>
             <select
               id="rrule_yearly_mode"
               value={yearlyMode}
               onChange={(event) => setYearlyMode(event.target.value as YearlyMode)}
             >
-              <option value="monthday">By Month Day</option>
-              <option value="weekday">By Weekday Position</option>
+              <option value="monthday">{t("rrule.byMonthDay")}</option>
+              <option value="weekday">{t("rrule.byWeekdayPosition")}</option>
             </select>
           </div>
 
           {yearlyMode === "monthday" && (
             <div className="task-field-group">
-              <label>Month Days</label>
+              <label>{t("rrule.monthDays")}</label>
               {renderSquareCheckboxGroup(
                 "yearly_day",
                 monthDayOptions.map((day) => ({ value: day, label: day })),
@@ -316,10 +321,13 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
           {yearlyMode === "weekday" && (
             <>
               <div className="task-field-group">
-                <label>Week Positions</label>
+                <label>{t("rrule.weekPositions")}</label>
                 {renderSquareCheckboxGroup(
                   "yearly_pos",
-                  weekPositionOptions,
+                  weekPositionOptions.map((position) => ({
+                    value: position.value,
+                    label: t(position.labelKey),
+                  })),
                   yearlyWeekPositions,
                   (position) =>
                     setYearlyWeekPositions((previous) => toggleArrayValue(previous, position)),
@@ -327,10 +335,10 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
               </div>
 
               <div className="task-field-group">
-                <label>Weekdays</label>
+                <label>{t("rrule.weekdays")}</label>
                 {renderSquareCheckboxGroup(
                   "yearly_weekday",
-                  weekdayOptions.map((weekday) => ({ value: weekday.code, label: weekday.label })),
+                  weekdayOptions.map((weekday) => ({ value: weekday.code, label: t(weekday.labelKey) })),
                   yearlyWeekdays,
                   (day) => setYearlyWeekdays((previous) => toggleArrayValue(previous, day)),
                 )}
@@ -341,21 +349,21 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
       )}
 
       <div className="task-field-group">
-        <label htmlFor="rrule_end_mode">Ends</label>
+        <label htmlFor="rrule_end_mode">{t("rrule.ends")}</label>
         <select
           id="rrule_end_mode"
           value={endMode}
           onChange={(event) => setEndMode(event.target.value as EndMode)}
         >
-          <option value="never">Never</option>
-          <option value="until">Until Date</option>
-          <option value="count">After N Occurrences</option>
+          <option value="never">{t("rrule.never")}</option>
+          <option value="until">{t("rrule.untilDate")}</option>
+          <option value="count">{t("rrule.afterNOccurrences")}</option>
         </select>
       </div>
 
       {endMode === "until" && (
         <div className="task-field-group">
-          <label htmlFor="rrule_until">Until</label>
+          <label htmlFor="rrule_until">{t("rrule.until")}</label>
           <input
             id="rrule_until"
             type="date"
@@ -367,7 +375,7 @@ const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
 
       {endMode === "count" && (
         <div className="task-field-group">
-          <label htmlFor="rrule_count">Occurrences</label>
+          <label htmlFor="rrule_count">{t("rrule.occurrences")}</label>
           <input
             id="rrule_count"
             type="number"

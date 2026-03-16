@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import type { PropsWithChildren } from "react";
+import moment from "moment";
+import "moment/locale/pt-br";
+import i18n from "i18next";
 
 import type { LanguagePreference, ThemePreference } from "./preferences-context";
 import { PreferencesContext } from "./preferences-context";
@@ -47,6 +50,9 @@ export function PreferencesProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     if (!canUseStorage()) return;
     window.localStorage.setItem(LANGUAGE_KEY, language);
+    document.documentElement.lang = language;
+    moment.locale(language === "pt-BR" ? "pt-br" : "en");
+    void i18n.changeLanguage(language);
   }, [language]);
 
   useEffect(() => {

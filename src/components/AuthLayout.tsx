@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from "react";
+import { useTranslation } from "react-i18next";
 
 import backgroundImage from "../assets/background.jpg";
 import splashTexture from "../assets/splash-texture.png";
@@ -12,6 +13,7 @@ interface AuthLayoutProps extends PropsWithChildren {
 
 const AuthLayout = ({ title, description, children }: AuthLayoutProps) => {
   const { language, setLanguage } = usePreferences();
+  const { t } = useTranslation();
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -25,12 +27,12 @@ const AuthLayout = ({ title, description, children }: AuthLayoutProps) => {
         }}
       >
         <div className="flex flex-col items-center gap-20 text-center">
-          <p className="text-9xl font-bold text-light bg-accent px-4 py-2 rounded-2xl">MENIMI</p>
+          <p className="text-9xl font-bold text-light bg-accent px-4 py-2 rounded-2xl">{t("app.brand")}</p>
           <p className="text-5xl font-semibold text-accent bg-light px-4 py-2 rounded-2xl">
-            The app to <b>remember</b> you of all your tasks.
+            {t("auth.hero.tagline")}
           </p>
           <p className="text-3xl text-light bg-accent px-4 py-2 rounded-2xl">
-            Don&apos;t leave it for <b>tomorrow</b> what you should be remembering to do <b>today</b>.
+            {t("auth.hero.quote")}
           </p>
         </div>
       </div>
@@ -46,8 +48,8 @@ const AuthLayout = ({ title, description, children }: AuthLayoutProps) => {
               value={language}
               onChange={setLanguage}
               options={[
-                { value: "en", label: "EN" },
-                { value: "pt-BR", label: "PT" },
+                { value: "en", label: t("common.english") },
+                { value: "pt-BR", label: t("common.portugueseBrazil") },
               ]}
             />
           </div>
@@ -56,7 +58,9 @@ const AuthLayout = ({ title, description, children }: AuthLayoutProps) => {
             {children}
           </div>
 
-          <div className="pt-6 text-center text-sm font-semibold text-nowrap">© {new Date().getFullYear()}. All rights reserved.</div>
+          <div className="pt-6 text-center text-sm font-semibold text-nowrap">
+            © {new Date().getFullYear()}. {t("common.allRightsReserved")}
+          </div>
         </div>
       </aside>
     </div>

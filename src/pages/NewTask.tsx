@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import TaskForm from "../components/TaskForm";
 import { useAuth } from "../api/useAuth";
 import { useTasks } from "../api/useTasks";
@@ -26,6 +27,7 @@ const NewTask = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { createTask } = useTasks();
   const initialStartsAt = getInitialStartsAt(searchParams.get("occurredAt"));
 
@@ -58,7 +60,7 @@ const NewTask = () => {
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="flex justify-center">
-        <h2 className="text-4xl font-bold">New Task</h2>
+        <h2 className="text-4xl font-bold">{t("task.newTitle")}</h2>
       </div>
       <div className="mx-auto w-full max-w-4xl">
         <TaskForm
@@ -70,8 +72,8 @@ const NewTask = () => {
             isRecurrent: false,
           }}
           isSubmitting={isSubmitting}
-          submitLabel="Create Task"
-          submittingLabel="Creating..."
+          submitLabel={t("task.create")}
+          submittingLabel={t("task.creating")}
           onSubmit={handleSubmit}
         />
       </div>

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import TaskForm from "../components/TaskForm";
 import { useTasks } from "../api/useTasks";
@@ -14,6 +15,7 @@ const EditTask = () => {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
   const { tasks, isLoading, updateTask } = useTasks();
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -24,11 +26,11 @@ const EditTask = () => {
   );
 
   if (isLoading) {
-    return <p className="rounded-2xl bg-surface p-4 text-center">Loading task...</p>;
+    return <p className="rounded-2xl bg-surface p-4 text-center">{t("task.loading")}</p>;
   }
 
   if (!task) {
-    return <p className="rounded-2xl bg-surface p-4 text-center">Task not found.</p>;
+    return <p className="rounded-2xl bg-surface p-4 text-center">{t("task.notFound")}</p>;
   }
 
   const handleSubmit = async (values: {
@@ -70,7 +72,7 @@ const EditTask = () => {
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="flex justify-center">
-        <h2 className="text-4xl font-bold">Edit Task</h2>
+        <h2 className="text-4xl font-bold">{t("task.editTitle")}</h2>
       </div>
       <div className="mx-auto w-full max-w-4xl">
         <TaskForm
@@ -82,8 +84,8 @@ const EditTask = () => {
             isRecurrent: Boolean(task.rrule),
           }}
           isSubmitting={isSubmitting || isDeleting}
-          submitLabel="Save Changes"
-          submittingLabel="Saving..."
+          submitLabel={t("common.saveChanges")}
+          submittingLabel={t("common.saving")}
           onSubmit={handleSubmit}
           extraActions={(
             <button
@@ -92,7 +94,7 @@ const EditTask = () => {
               onClick={handleDelete}
               disabled={isSubmitting || isDeleting}
             >
-              {isDeleting ? "Deleting..." : "Delete Task"}
+              {isDeleting ? t("task.deleting") : t("task.delete")}
             </button>
           )}
         />
