@@ -9,6 +9,7 @@ import type { CalendarTask } from "../api/types";
 import OccurrenceModal from "../components/OccurrenceModal";
 import { useAuth } from "../api/useAuth";
 import { localeFromLanguage } from "../i18n/config";
+import { capitalize } from "../utils/formatting";
 import { buildTaskEventsForMonth } from "../utils/occurrences";
 import { getCalendarEventStyle } from "../utils/calendarEventColors";
 import { useTasks } from "../api/useTasks";
@@ -26,10 +27,12 @@ const CalendarPage = () => {
 
   const localizer = momentLocalizer(moment);
 
-  const monthYear = new Intl.DateTimeFormat(locale, {
-    month: "long",
-    year: "numeric",
-  }).format(currentDate);
+  const monthYear = capitalize(
+    new Intl.DateTimeFormat(locale, {
+      month: "long",
+      year: "numeric",
+    }).format(currentDate),
+  );
 
   const calendarTasks = buildTaskEventsForMonth(tasks, currentDate, user?.timezone ?? "Etc/UTC");
   const handleMonthChange = (type: "next" | "previous") => {

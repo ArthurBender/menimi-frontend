@@ -10,7 +10,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
 
   return (
     <aside className={`min-h-screen shrink-0 bg-primary text-light transition-width duration-300 ease-in-out
-      flex flex-col justify-between p-4 ${isOpen ? "w-60" : "w-20 overflow-hidden"}`}
+      flex flex-col justify-between p-4 ${isOpen ? "w-70" : "w-20 overflow-hidden"}`}
     >
       <div></div>
 

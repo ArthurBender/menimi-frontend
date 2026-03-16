@@ -8,6 +8,7 @@ import moment from "moment";
 import { formatUserName } from "../api/auth";
 import { useAuth } from "../api/useAuth";
 import { localeFromLanguage } from "../i18n/config";
+import { capitalize } from "../utils/formatting";
 import { buildTaskEventsForMonth } from "../utils/occurrences";
 import { useTasks } from "../api/useTasks";
 
@@ -17,10 +18,12 @@ const Home = () => {
   const { t, i18n } = useTranslation();
   const locale = localeFromLanguage(i18n.resolvedLanguage);
   const localizer = momentLocalizer(moment);
-  const currentMonth = new Intl.DateTimeFormat(locale, {
-    month: "long",
-    year: "numeric",
-  }).format(new Date());
+  const currentMonth = capitalize(
+    new Intl.DateTimeFormat(locale, {
+      month: "long",
+      year: "numeric",
+    }).format(new Date()),
+  );
   const username = user ? formatUserName(user) || user.email : t("home.guestName");
   const timezone = user?.timezone ?? "Etc/UTC";
 
