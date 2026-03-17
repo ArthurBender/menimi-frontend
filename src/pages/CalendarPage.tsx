@@ -12,6 +12,7 @@ import { localeFromLanguage } from "../i18n/config";
 import { capitalize } from "../utils/formatting";
 import { buildTaskEventsForMonth } from "../utils/occurrences";
 import { getCalendarEventStyle } from "../utils/calendarEventColors";
+import { saveCalendarTaskOccurrence } from "../utils/saveCalendarTaskOccurrence";
 import { useTasks } from "../api/useTasks";
 
 const CalendarPage = () => {
@@ -56,24 +57,16 @@ const CalendarPage = () => {
     setIsSaving(true);
 
     try {
-      if (selectedTask?.resource.occurrenceId) {
-        await updateOccurrence(selectedTask.resource.occurrenceId, {
-          task_id: payload.taskId,
-          occurred_at: payload.occurredAt.toISOString(),
-          status: payload.status,
-        });
-      } else {
-        await createOccurrence({
-          task_id: payload.taskId,
-          occurred_at: payload.occurredAt.toISOString(),
-          status: payload.status,
-          carried_from:
-            selectedTask?.resource.pendingSource === "carry_over" &&
-            payload.status === "done"
-              ? selectedTask.resource.carriedFromOccurrenceId
-              : undefined,
-        });
-      }
+      if (!selectedTask) return;
+
+      await saveCalendarTaskOccurrence({
+        calendarTask: selectedTask,
+        taskId: payload.taskId,
+        occurredAt: payload.occurredAt,
+        status: payload.status,
+        createOccurrence,
+        updateOccurrence,
+      });
 
       closeOccurrenceModal();
     } finally {

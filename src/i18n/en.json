@@ -66,7 +66,10 @@
     "loading": "Loading tasks...",
     "today": "Today",
     "thisWeek": "This Week",
-    "empty": "No tasks scheduled."
+    "empty": "No tasks scheduled.",
+    "openCalendar": "Open calendar",
+    "completeOccurrence": "Complete occurrence",
+    "missOccurrence": "Mark occurrence as missed"
   },
   "nav": {
     "home": "Home",
