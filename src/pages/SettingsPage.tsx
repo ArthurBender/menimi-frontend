@@ -42,13 +42,13 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
+    <div className="flex w-full flex-col gap-4">
       <div className="flex justify-center">
         <h2 className="text-4xl font-bold">{t("common.settings")}</h2>
       </div>
 
-      <form className="flex flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-4">
+      <form className="flex w-full flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextField
             id="settings-first-name"
             label={t("common.firstName")}
@@ -94,7 +94,7 @@ const SettingsPage = () => {
           isDisabled={isSaving}
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextField
             id="settings-password"
             label={t("settings.newPassword")}
@@ -123,39 +123,43 @@ const SettingsPage = () => {
         </div>
       </form>
 
-      <div className="flex flex-col gap-6 rounded-2xl bg-surface p-6">
+      <div className="flex w-full flex-col gap-6 rounded-2xl bg-surface p-6">
         <h3 className="text-2xl font-semibold">{t("settings.preferences")}</h3>
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-semibold">{t("common.theme")}</p>
             <p className="text-sm text-primary/70">{t("settings.account.themeDescription")}</p>
           </div>
 
-          <PreferenceToggle
-            value={theme}
-            onChange={setTheme}
-            options={[
-              { value: "light", label: t("settings.light") },
-              { value: "dark", label: t("settings.dark") },
-            ]}
-          />
+          <div className="w-fit self-start sm:self-auto">
+            <PreferenceToggle
+              value={theme}
+              onChange={setTheme}
+              options={[
+                { value: "light", label: t("settings.light") },
+                { value: "dark", label: t("settings.dark") },
+              ]}
+            />
+          </div>
         </div>
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-semibold">{t("common.language")}</p>
             <p className="text-sm text-primary/70">{t("settings.account.languageDescription")}</p>
           </div>
 
-          <PreferenceToggle
-            value={language}
-            onChange={setLanguage}
-            options={[
-              { value: "en", label: t("common.english") },
-              { value: "pt-BR", label: t("common.portugueseBrazil") },
-            ]}
-          />
+          <div className="w-fit self-start sm:self-auto">
+            <PreferenceToggle
+              value={language}
+              onChange={setLanguage}
+              options={[
+                { value: "en", label: t("common.english") },
+                { value: "pt-BR", label: t("common.portugueseBrazil") },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>

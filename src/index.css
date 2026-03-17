@@ -53,7 +53,7 @@ body {
 
 .sidebar-link {
   @apply flex items-center gap-2 text-xl font-semibold cursor-pointer hover:bg-accent rounded-3xl p-2
-    border border-transparent transition-[padding] duration-300 flex-nowrap text-nowrap;
+    border border-transparent transition-[padding] duration-300 flex-nowrap text-nowrap min-w-14;
 }
 
 .sidebar-link span {

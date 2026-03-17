@@ -64,11 +64,11 @@ const Home = () => {
   
   return (
     <div className="flex flex-col gap-10 justify-between h-full">
-      <div className="flex gap-10 items-center justify-around">
-        <h2 className="text-7xl font-semibold">{t("home.greeting", { name: username })}</h2>
+      <div className="flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-around md:gap-10">
+        <h2 className="text-center text-3xl font-semibold md:text-left md:text-7xl">{t("home.greeting", { name: username })}</h2>
         <Link
           to="/calendar"
-          className="block h-70 w-120 cursor-pointer"
+          className="block h-70 w-full max-w-120 cursor-pointer"
           aria-label={t("home.openCalendar")}
           title={t("home.openCalendar")}
         >
@@ -83,13 +83,13 @@ const Home = () => {
         </Link>
       </div>
 
-      <p className="text-xl bg-surface p-5 rounded-3xl">{t("home.resume")}</p>
+      <p className="rounded-3xl bg-surface p-4 text-base md:p-5 md:text-xl">{t("home.resume")}</p>
 
       {isLoading && <p className="rounded-2xl bg-surface p-4 text-center">{t("home.loading")}</p>}
 
-      <div className="flex gap-10">
+      <div className="flex flex-col gap-10 md:flex-row">
         <div className="w-full">
-          <h3 className="text-2xl font-semibold bg-accent w-full text-center p-2 rounded-3xl">{t("home.today")}</h3>
+          <h3 className="w-full rounded-3xl bg-accent p-2 text-center text-xl font-semibold md:text-2xl">{t("home.today")}</h3>
 
           <div className="flex flex-col">
             {todayTasks.map((task) => (
@@ -106,7 +106,7 @@ const Home = () => {
         </div>
 
         <div className="w-full">
-          <h3 className="text-2xl font-semibold bg-accent w-full text-center p-2 rounded-3xl">{t("home.thisWeek")}</h3>
+          <h3 className="w-full rounded-3xl bg-accent p-2 text-center text-xl font-semibold md:text-2xl">{t("home.thisWeek")}</h3>
 
           <div className="flex flex-col">
             {weekTasks.map((task) => (

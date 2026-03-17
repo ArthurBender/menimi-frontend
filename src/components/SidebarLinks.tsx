@@ -14,15 +14,15 @@ const SidebarLinks = ({ isOpen }: { isOpen: boolean }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex items-center justify-around gap-2 md:flex-col md:items-stretch md:justify-start">
       {links.map((link) => (
         <Link
           key={link.path}
           to={link.path}
-          className={`sidebar-link ${currentPath === link.path ? "active" : ""} ${isOpen && "expanded"}`}
+          className={`sidebar-link justify-center md:justify-start ${currentPath === link.path ? "active" : ""} ${isOpen ? "md:expanded" : ""}`}
         >
           <span>{link.icon}</span>
-          {isOpen && t(link.labelKey)}
+          <span className="hidden md:inline">{isOpen && t(link.labelKey)}</span>
         </Link>
       ))}
     </div>

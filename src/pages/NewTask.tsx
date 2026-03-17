@@ -62,7 +62,7 @@ const NewTask = () => {
       <div className="flex justify-center">
         <h2 className="text-4xl font-bold">{t("task.newTitle")}</h2>
       </div>
-      <div className="mx-auto w-full max-w-4xl">
+      <div className="w-full">
         <TaskForm
           initialValues={{
             title: "",

@@ -33,7 +33,7 @@ const Navbar = ({ isSidebarOpen, onToggleSidebar }: NavbarProps) => {
         onClick={onToggleSidebar}
         aria-label={t("nav.openMenu")}
         title={t("nav.openMenu")}
-        className={`nav-link transition-all ${!isSidebarOpen && "-translate-x-17.5"}`}
+        className={`nav-link hidden transition-all md:block md:z-50 ${!isSidebarOpen && "-translate-x-17.5"}`}
       >
         <MdMenu />
       </button>

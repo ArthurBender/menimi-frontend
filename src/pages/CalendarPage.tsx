@@ -132,6 +132,7 @@ const CalendarPage = () => {
           views={["month"]}
           toolbar={false}
           selectable
+          longPressThreshold={0.1}
           events={calendarTasks}
           date={currentDate}
           onSelectEvent={handleTaskSelect}

@@ -66,7 +66,7 @@ const TaskForm = ({
   };
 
   return (
-    <form className="flex flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
+    <form className="flex w-full flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
       <TextField
         id="title"
         name="title"
@@ -96,7 +96,7 @@ const TaskForm = ({
         requiredLabel
       />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <CheckboxField
           id="recurrent"
           name="recurrent"

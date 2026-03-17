@@ -15,7 +15,7 @@ const LoggedLayout = () => {
           isSidebarOpen={isSidebarOpen}
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         />
-        <div className="border-t border-l border-accent h-full w-full px-20 py-10">
+        <div className="h-full w-full border-t border-accent px-4 py-4 pb-24 md:border-l md:px-20 md:py-10 md:pb-10">
           <Outlet />
         </div>
       </div>
