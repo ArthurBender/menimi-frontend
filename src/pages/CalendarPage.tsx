@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { cloneElement, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Calendar, momentLocalizer } from "react-big-calendar"
-import type { SlotInfo } from "react-big-calendar";
+import type { DateCellWrapperProps } from "react-big-calendar";
 import moment from "moment";
 
 import type { CalendarTask } from "../api/types";
@@ -24,6 +24,8 @@ const CalendarPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedTask, setSelectedTask] = useState<CalendarTask | null>(null);
   const [addOccurrenceDate, setAddOccurrenceDate] = useState<Date | null>(null);
+  const [showMoreDate, setShowMoreDate] = useState<Date | null>(null);
+  const [showMoreEvents, setShowMoreEvents] = useState<CalendarTask[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
   const localizer = momentLocalizer(moment);
@@ -46,6 +48,8 @@ const CalendarPage = () => {
 
   const handleTaskSelect = (task: CalendarTask) => {
     setAddOccurrenceDate(null);
+    setShowMoreDate(null);
+    setShowMoreEvents([]);
     setSelectedTask(task);
   };
 
@@ -87,13 +91,27 @@ const CalendarPage = () => {
     }
   };
 
-  const handleSlotSelect = ({ start }: SlotInfo) => {
+  const handleDateSelect = (date: Date) => {
     setSelectedTask(null);
-    setAddOccurrenceDate(start);
+    setShowMoreDate(null);
+    setShowMoreEvents([]);
+    setAddOccurrenceDate(date);
+  };
+
+  const handleShowMore = (events: CalendarTask[], date: Date) => {
+    setSelectedTask(null);
+    setAddOccurrenceDate(null);
+    setShowMoreDate(date);
+    setShowMoreEvents(events);
   };
 
   const closeAddOccurrenceModal = () => {
     setAddOccurrenceDate(null);
+  };
+
+  const closeShowMoreModal = () => {
+    setShowMoreDate(null);
+    setShowMoreEvents([]);
   };
 
   const handleAddOccurrenceSave = async (payload: { taskId: number; occurredAt: Date; status: "done" | "missed" }) => {
@@ -112,6 +130,11 @@ const CalendarPage = () => {
       setIsSaving(false);
     }
   };
+
+  const DateCellWrapper = ({ value, children }: DateCellWrapperProps) =>
+    cloneElement(children, {
+      onClick: () => handleDateSelect(value),
+    });
   
   return (
     <div className="flex flex-col gap-10">
@@ -131,17 +154,62 @@ const CalendarPage = () => {
           localizer={localizer}
           views={["month"]}
           toolbar={false}
-          selectable
-          longPressThreshold={0.1}
           events={calendarTasks}
           date={currentDate}
           onSelectEvent={handleTaskSelect}
-          onSelectSlot={handleSlotSelect}
+          onShowMore={handleShowMore}
+          doShowMoreDrillDown={false}
+          components={{ dateCellWrapper: DateCellWrapper }}
           eventPropGetter={(event) => ({
             style: getCalendarEventStyle(event.resource.status),
           })}
         />
       </div>
+
+      {showMoreDate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={closeShowMoreModal}>
+          <div
+            className="flex w-full max-w-md flex-col gap-4 rounded-2xl bg-light p-6 shadow-lg"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-2xl font-bold">
+                {capitalize(
+                  new Intl.DateTimeFormat(locale, {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                  }).format(showMoreDate),
+                )}
+              </h3>
+              <button
+                type="button"
+                className="calendar-navigation bg-gray-500! hover:bg-gray-600!"
+                onClick={closeShowMoreModal}
+              >
+                {t("common.cancel")}
+              </button>
+            </div>
+
+            <div className="flex max-h-96 flex-col gap-2 overflow-y-auto">
+              {showMoreEvents.map((event) => (
+                <button
+                  key={event.id}
+                  type="button"
+                  className="cursor-pointer rounded-lg px-3 py-2 text-left text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                  style={getCalendarEventStyle(event.resource.status)}
+                  onClick={() => {
+                    closeShowMoreModal();
+                    handleTaskSelect(event);
+                  }}
+                >
+                  {event.title}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedTask && (
         <OccurrenceModal
