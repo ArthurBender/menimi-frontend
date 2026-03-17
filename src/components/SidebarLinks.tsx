@@ -19,10 +19,10 @@ const SidebarLinks = ({ isOpen }: { isOpen: boolean }) => {
         <Link
           key={link.path}
           to={link.path}
-          className={`sidebar-link justify-center md:justify-start ${currentPath === link.path ? "active" : ""} ${isOpen ? "md:expanded" : ""}`}
+          className={`sidebar-link justify-center ${currentPath === link.path ? "active" : ""} ${isOpen ? "md:expanded" : ""}`}
         >
           <span>{link.icon}</span>
-          <span className="hidden md:inline">{isOpen && t(link.labelKey)}</span>
+          <span className={`hidden md:inline ${isOpen && "md:pl-2"}`}>{isOpen && t(link.labelKey)}</span>
         </Link>
       ))}
     </div>

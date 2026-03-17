@@ -36,7 +36,7 @@ const AuthLayout = ({ title, description, children }: AuthLayoutProps) => {
           </p>
         </div>
       </div>
-      <aside className="flex min-h-screen w-full flex-col bg-white px-4 py-8 lg:w-[30rem] lg:px-8">
+      <aside className="flex min-h-screen w-full flex-col bg-background px-4 py-8 lg:w-[30rem] lg:px-8">
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col">
           <div className="flex flex-col gap-3 pt-4">
             <div className="flex items-start justify-between gap-4">

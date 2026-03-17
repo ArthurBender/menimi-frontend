@@ -52,12 +52,12 @@ body {
 }
 
 .sidebar-link {
-  @apply flex items-center gap-2 text-xl font-semibold cursor-pointer hover:bg-accent rounded-3xl p-2
+  @apply flex items-center text-xl font-semibold cursor-pointer hover:bg-accent rounded-3xl p-2
     border border-transparent transition-[padding] duration-300 flex-nowrap text-nowrap min-w-14;
 }
 
 .sidebar-link span {
-  @apply text-3xl;
+  @apply text-2xl;
 }
 
 .sidebar-link.expanded {
@@ -85,6 +85,10 @@ body {
 .rbc-event-content {
   text-align: center;
   width: 100%;
+}
+
+.rbc-button-link.rbc-show-more {
+  @apply bg-transparent!;
 }
 
 .calendar-navigation {
