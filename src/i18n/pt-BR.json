@@ -85,6 +85,22 @@
       "themeDescription": "Armazenado localmente entre sessões.",
       "languageDescription": "Atualiza o idioma do app imediatamente."
     },
+    "notifications": {
+      "title": "Notificações do Navegador",
+      "status": "Status",
+      "description": "Ative notificações push para este navegador e dispositivo.",
+      "enabledDescription": "Este navegador está inscrito e pode receber lembretes.",
+      "blockedDescription": "As notificações foram bloqueadas no navegador. Permita nas configurações do site para ativar o push.",
+      "unsupportedDescription": "Este navegador ou conexão não oferece suporte a notificações web push.",
+      "enable": "Ativar",
+      "enabling": "Ativando...",
+      "disable": "Desativar",
+      "disabling": "Desativando...",
+      "enabled": "Ativado",
+      "disabled": "Desativado",
+      "blocked": "Bloqueado",
+      "unsupported": "Sem suporte"
+    },
     "light": "Claro",
     "dark": "Escuro",
     "newPassword": "Nova Senha"
@@ -179,7 +195,11 @@
     "occurrenceUpdated": "Ocorrência atualizada com sucesso.",
     "occurrenceUpdateError": "Ocorreu um erro ao salvar a ocorrência.",
     "occurrenceDeleted": "Ocorrência removida com sucesso.",
-    "occurrenceDeleteError": "Ocorreu um erro ao remover a ocorrência."
+    "occurrenceDeleteError": "Ocorreu um erro ao remover a ocorrência.",
+    "pushEnabled": "Notificações do navegador ativadas.",
+    "pushEnableError": "Ocorreu um erro ao ativar as notificações do navegador.",
+    "pushDisabled": "Notificações do navegador desativadas.",
+    "pushDisableError": "Ocorreu um erro ao desativar as notificações do navegador."
   },
   "error": {
     "serverReturnedError": "O servidor retornou um erro.",

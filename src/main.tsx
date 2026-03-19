@@ -9,6 +9,9 @@ import { AuthProvider } from './api/AuthContext.tsx'
 import { TasksProvider } from './api/TasksContext.tsx'
 import { PreferencesProvider } from './preferences/PreferencesContext.tsx'
 import { ToastContainer } from "react-toastify";
+import { registerPushServiceWorker } from "./lib/pushNotifications";
+
+void registerPushServiceWorker();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

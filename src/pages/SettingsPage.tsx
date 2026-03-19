@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -6,7 +6,15 @@ import PreferenceToggle from "../components/PreferenceToggle";
 import SelectField from "../components/custom-fields/SelectField";
 import TextField from "../components/custom-fields/TextField";
 import { useAuth } from "../api/useAuth";
+import {
+  canUsePushNotifications,
+  disablePushNotifications,
+  enablePushNotifications,
+  getPushSupportStatus,
+  type PushSupportStatus,
+} from "../lib/pushNotifications";
 import { usePreferences } from "../preferences/usePreferences";
+import { showToast } from "../utils/toast";
 import { timezoneOptions } from "../utils/timezones";
 
 const SettingsPage = () => {
@@ -20,6 +28,26 @@ const SettingsPage = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [pushStatus, setPushStatus] = useState<PushSupportStatus>("disabled");
+  const [isUpdatingPush, setIsUpdatingPush] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadPushStatus = async () => {
+      const status = await getPushSupportStatus();
+
+      if (isMounted) {
+        setPushStatus(status);
+      }
+    };
+
+    void loadPushStatus();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,6 +68,39 @@ const SettingsPage = () => {
       setIsSaving(false);
     }
   };
+
+  const handleEnablePush = async () => {
+    setIsUpdatingPush(true);
+
+    try {
+      await enablePushNotifications();
+      setPushStatus("enabled");
+      showToast("success", t("toast.pushEnabled"));
+    } catch (error) {
+      setPushStatus(await getPushSupportStatus());
+      showToast("error", t("toast.pushEnableError"), error);
+    } finally {
+      setIsUpdatingPush(false);
+    }
+  };
+
+  const handleDisablePush = async () => {
+    setIsUpdatingPush(true);
+
+    try {
+      await disablePushNotifications();
+      setPushStatus("disabled");
+      showToast("success", t("toast.pushDisabled"));
+    } catch (error) {
+      setPushStatus(await getPushSupportStatus());
+      showToast("error", t("toast.pushDisableError"), error);
+    } finally {
+      setIsUpdatingPush(false);
+    }
+  };
+
+  const pushStatusLabel = getPushStatusLabel(t, pushStatus);
+  const pushDescription = getPushDescription(t, pushStatus);
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -161,9 +222,73 @@ const SettingsPage = () => {
             />
           </div>
         </div>
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-semibold">{t("settings.notifications.title")}</p>
+            <p className="text-sm text-primary/70">{pushDescription}</p>
+            <p className="mt-1 text-xs uppercase tracking-[0.24em] text-primary/50">
+              {t("settings.notifications.status")}: {pushStatusLabel}
+            </p>
+          </div>
+
+          <div className="w-fit self-start sm:self-auto">
+            {pushStatus === "enabled" ? (
+              <button
+                type="button"
+                className="calendar-navigation"
+                onClick={handleDisablePush}
+                disabled={isUpdatingPush}
+              >
+                {isUpdatingPush ? t("settings.notifications.disabling") : t("settings.notifications.disable")}
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="calendar-navigation"
+                onClick={handleEnablePush}
+                disabled={isUpdatingPush || !canUsePushNotifications()}
+              >
+                {isUpdatingPush ? t("settings.notifications.enabling") : t("settings.notifications.enable")}
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
+function getPushStatusLabel(
+  t: ReturnType<typeof useTranslation>["t"],
+  status: PushSupportStatus,
+) {
+  switch (status) {
+    case "enabled":
+      return t("settings.notifications.enabled");
+    case "blocked":
+      return t("settings.notifications.blocked");
+    case "unsupported":
+      return t("settings.notifications.unsupported");
+    default:
+      return t("settings.notifications.disabled");
+  }
+}
+
+function getPushDescription(
+  t: ReturnType<typeof useTranslation>["t"],
+  status: PushSupportStatus,
+) {
+  switch (status) {
+    case "enabled":
+      return t("settings.notifications.enabledDescription");
+    case "blocked":
+      return t("settings.notifications.blockedDescription");
+    case "unsupported":
+      return t("settings.notifications.unsupportedDescription");
+    default:
+      return t("settings.notifications.description");
+  }
+}
 
 export default SettingsPage;

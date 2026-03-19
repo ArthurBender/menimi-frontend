@@ -85,6 +85,22 @@
       "themeDescription": "Stored locally between sessions.",
       "languageDescription": "Updates the app language immediately."
     },
+    "notifications": {
+      "title": "Browser Notifications",
+      "status": "Status",
+      "description": "Enable push notifications for this browser and device.",
+      "enabledDescription": "This browser is subscribed and can receive reminders.",
+      "blockedDescription": "Notifications were blocked in the browser. Allow them in site settings to enable push.",
+      "unsupportedDescription": "This browser or connection does not support web push notifications.",
+      "enable": "Enable",
+      "enabling": "Enabling...",
+      "disable": "Disable",
+      "disabling": "Disabling...",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "blocked": "Blocked",
+      "unsupported": "Unsupported"
+    },
     "light": "Light",
     "dark": "Dark",
     "newPassword": "New Password"
@@ -179,7 +195,11 @@
     "occurrenceUpdated": "Occurrence updated successfully.",
     "occurrenceUpdateError": "There was an error saving the occurrence.",
     "occurrenceDeleted": "Occurrence removed successfully.",
-    "occurrenceDeleteError": "There was an error removing the occurrence."
+    "occurrenceDeleteError": "There was an error removing the occurrence.",
+    "pushEnabled": "Browser notifications enabled.",
+    "pushEnableError": "There was an error enabling browser notifications.",
+    "pushDisabled": "Browser notifications disabled.",
+    "pushDisableError": "There was an error disabling browser notifications."
   },
   "error": {
     "serverReturnedError": "The server returned an error.",
