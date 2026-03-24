@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import moment from "moment";
 
 import { formatUserName } from "../api/auth";
 import { useAuth } from "../api/useAuth";
+import { getWelcomeMessage } from "../api/welcomeMessage";
 import { localeFromLanguage } from "../i18n/config";
 import { capitalize } from "../utils/formatting";
 import { buildTaskEventsForMonth } from "../utils/occurrences";
@@ -21,6 +22,8 @@ const Home = () => {
   const { tasks, isLoading, createOccurrence, updateOccurrence } = useTasks();
   const { t, i18n } = useTranslation();
   const [savingEventId, setSavingEventId] = useState<string | null>(null);
+  const [welcomeMessage, setWelcomeMessage] = useState(t("home.resume"));
+  const [isLoadingWelcomeMessage, setIsLoadingWelcomeMessage] = useState(true);
   const locale = localeFromLanguage(i18n.resolvedLanguage);
   const localizer = momentLocalizer(moment);
   const currentMonth = capitalize(
@@ -46,6 +49,34 @@ const Home = () => {
     const taskDate = moment(task.start);
     return taskDate.isSame(today, "week") && taskDate.isAfter(today, "day");
   });
+
+  useEffect(() => {
+    let isActive = true;
+
+    setWelcomeMessage(t("home.resume"));
+    setIsLoadingWelcomeMessage(true);
+
+    const loadWelcomeMessage = async () => {
+      try {
+        const response = await getWelcomeMessage();
+        if (!isActive) return;
+        setWelcomeMessage(response.message || t("home.resume"));
+      } catch {
+        if (!isActive) return;
+        setWelcomeMessage(t("home.resume"));
+      } finally {
+        if (isActive) {
+          setIsLoadingWelcomeMessage(false);
+        }
+      }
+    };
+
+    void loadWelcomeMessage();
+
+    return () => {
+      isActive = false;
+    };
+  }, [t]);
 
   const handleOccurrenceStatusUpdate = async (eventId: string, status: "done" | "missed") => {
     const event = homeTasks.find((calendarTask) => calendarTask.id === eventId);
@@ -88,7 +119,16 @@ const Home = () => {
         </Link>
       </div>
 
-      <p className="rounded-3xl bg-surface p-4 text-base md:p-5 md:text-xl">{t("home.resume")}</p>
+      <div className="rounded-3xl bg-surface p-4 md:p-5">
+        {isLoadingWelcomeMessage ? (
+          <div className="flex flex-col gap-2" aria-live="polite" aria-busy="true">
+            <div className="h-5 w-11/12 animate-pulse rounded-full bg-dark/10 md:h-6" />
+            <div className="h-5 w-8/12 animate-pulse rounded-full bg-dark/10 md:h-6" />
+          </div>
+        ) : (
+          <p className="text-base md:text-xl">{welcomeMessage}</p>
+        )}
+      </div>
 
       {isLoading && <p className="rounded-2xl bg-surface p-4 text-center">{t("home.loading")}</p>}
 
