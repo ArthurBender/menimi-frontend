@@ -6,6 +6,7 @@ import type { CalendarTask } from "../api/types";
 interface HomeTaskRowProps {
   event: CalendarTask;
   isSaving: boolean;
+  dateLabel?: string;
   onComplete: () => void;
   onMiss: () => void;
 }
@@ -13,6 +14,7 @@ interface HomeTaskRowProps {
 const HomeTaskRow = ({
   event,
   isSaving,
+  dateLabel,
   onComplete,
   onMiss,
 }: HomeTaskRowProps) => {
@@ -20,7 +22,11 @@ const HomeTaskRow = ({
 
   return (
     <div className="flex items-center justify-between gap-4 border-b border-dark py-2 last:border-b-0">
-      <p className="min-w-0 truncate text-lg font-medium">{event.title}</p>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-lg font-medium">{event.title}</p>
+      </div>
+
+      {dateLabel && <p className="shrink-0 text-sm text-dark/70 md:text-base">{dateLabel}</p>}
 
       <div className="flex items-center gap-2">
         <button

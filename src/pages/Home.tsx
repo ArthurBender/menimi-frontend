@@ -31,6 +31,11 @@ const Home = () => {
   );
   const username = user ? formatUserName(user) || user.email : t("home.guestName");
   const timezone = user?.timezone ?? "Etc/UTC";
+  const weekTaskDateFormatter = new Intl.DateTimeFormat(locale, {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
 
   const homeTasks = buildTaskEventsForMonth(tasks, new Date(), timezone);
   const DateHeader = useHomeCalendarEventRenderer(homeTasks);
@@ -114,6 +119,7 @@ const Home = () => {
                 key={task.id}
                 event={task}
                 isSaving={savingEventId === task.id}
+                dateLabel={weekTaskDateFormatter.format(task.start)}
                 onComplete={() => void handleOccurrenceStatusUpdate(task.id, "done")}
                 onMiss={() => void handleOccurrenceStatusUpdate(task.id, "missed")}
               />
