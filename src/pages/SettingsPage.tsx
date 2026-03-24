@@ -14,11 +14,12 @@ import {
   type PushSupportStatus,
 } from "../lib/pushNotifications";
 import { usePreferences } from "../preferences/usePreferences";
+import type { UserLanguage } from "../api/types";
 import { showToast } from "../utils/toast";
 import { timezoneOptions } from "../utils/timezones";
 
 const SettingsPage = () => {
-  const { user, updateAccount } = useAuth();
+  const { user, updateAccount, updateAccountLanguage } = useAuth();
   const { theme, setTheme, language, setLanguage } = usePreferences();
   const { t } = useTranslation();
   const [email, setEmail] = useState(user?.email ?? "");
@@ -28,6 +29,7 @@ const SettingsPage = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [isUpdatingLanguage, setIsUpdatingLanguage] = useState(false);
   const [pushStatus, setPushStatus] = useState<PushSupportStatus>("disabled");
   const [isUpdatingPush, setIsUpdatingPush] = useState(false);
 
@@ -59,6 +61,7 @@ const SettingsPage = () => {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         timezone,
+        language,
         ...(password ? { password, password_confirmation: passwordConfirmation } : {}),
       });
 
@@ -96,6 +99,22 @@ const SettingsPage = () => {
       showToast("error", t("toast.pushDisableError"), error);
     } finally {
       setIsUpdatingPush(false);
+    }
+  };
+
+  const handleLanguageChange = async (nextLanguage: UserLanguage) => {
+    if (nextLanguage === language || isUpdatingLanguage) return;
+
+    const previousLanguage = language;
+    setLanguage(nextLanguage);
+    setIsUpdatingLanguage(true);
+
+    try {
+      await updateAccountLanguage(nextLanguage);
+    } catch {
+      setLanguage(previousLanguage);
+    } finally {
+      setIsUpdatingLanguage(false);
     }
   };
 
@@ -214,7 +233,8 @@ const SettingsPage = () => {
           <div className="w-fit self-start sm:self-auto">
             <PreferenceToggle
               value={language}
-              onChange={setLanguage}
+              onChange={handleLanguageChange}
+              disabled={isUpdatingLanguage}
               options={[
                 { value: "en", label: t("common.english") },
                 { value: "pt-BR", label: t("common.portugueseBrazil") },

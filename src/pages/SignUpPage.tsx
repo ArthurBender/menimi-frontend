@@ -7,6 +7,7 @@ import { signUp } from "../api/auth";
 import AuthLayout from "../components/AuthLayout";
 import SelectField from "../components/custom-fields/SelectField";
 import TextField from "../components/custom-fields/TextField";
+import { usePreferences } from "../preferences/usePreferences";
 import { timezoneOptions } from "../utils/timezones";
 import { showToast } from "../utils/toast";
 
@@ -17,6 +18,7 @@ function getInitialTimezone() {
 const SignUpPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { language } = usePreferences();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -35,6 +37,7 @@ const SignUpPage = () => {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         timezone,
+        language,
         password,
         password_confirmation: passwordConfirmation,
       });

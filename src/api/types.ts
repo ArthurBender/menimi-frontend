@@ -1,5 +1,6 @@
 export type OccurrenceStatus = "done" | "missed" | "canceled";
 export type EditableOccurrenceStatus = Exclude<OccurrenceStatus, "canceled">;
+export type UserLanguage = "en" | "pt-BR";
 
 export interface User {
   id: number;
@@ -7,6 +8,7 @@ export interface User {
   first_name: string;
   last_name: string;
   timezone: string;
+  language?: UserLanguage;
 }
 
 export interface UserResponse {
@@ -80,6 +82,7 @@ export interface SignUpInput {
   first_name: string;
   last_name: string;
   timezone: string;
+  language: UserLanguage;
 }
 
 export interface UpdateAccountInput {
@@ -89,4 +92,5 @@ export interface UpdateAccountInput {
   first_name?: string;
   last_name?: string;
   timezone?: string;
+  language?: UserLanguage;
 }

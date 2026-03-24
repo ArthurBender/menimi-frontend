@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "./config";
 import { apiRequest, apiRequestWithResponse } from "./client";
-import type { LoginInput, SignUpInput, UpdateAccountInput, User, UserResponse } from "./types";
+import type { LoginInput, SignUpInput, UpdateAccountInput, User, UserLanguage, UserResponse } from "./types";
 
 export function signUp(input: SignUpInput) {
   return apiRequest<UserResponse>({
@@ -28,6 +28,14 @@ export function updateAccount(input: UpdateAccountInput) {
     url: `${API_BASE_URL}/auth/account`,
     method: "PATCH",
     data: { user: input },
+  });
+}
+
+export function updateAccountLanguage(language: UserLanguage) {
+  return apiRequest<UserResponse>({
+    url: `${API_BASE_URL}/auth/account`,
+    method: "PATCH",
+    data: { user: { language } },
   });
 }
 

@@ -4,8 +4,13 @@ import { useTranslation } from "react-i18next";
 
 import { AuthContext } from "./auth-context";
 import { clearStoredAuth, getStoredAuthToken, getStoredUser, storeAuthSession } from "./auth-storage";
-import { login as loginRequest, logout as logoutRequest, updateAccount as updateAccountRequest } from "./auth";
-import type { LoginInput, UpdateAccountInput, User } from "./types";
+import {
+  login as loginRequest,
+  logout as logoutRequest,
+  updateAccount as updateAccountRequest,
+  updateAccountLanguage as updateAccountLanguageRequest,
+} from "./auth";
+import type { LoginInput, UpdateAccountInput, User, UserLanguage } from "./types";
 import { showToast } from "../utils/toast";
 
 export function AuthProvider({ children }: PropsWithChildren) {
@@ -49,6 +54,23 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   };
 
+  const handleUpdateAccountLanguage = async (language: UserLanguage) => {
+    try {
+      const response = await updateAccountLanguageRequest(language);
+      const currentToken = authToken ?? getStoredAuthToken();
+
+      if (currentToken) {
+        storeAuthSession(currentToken, response.user);
+      }
+
+      setUser(response.user);
+      return response.user;
+    } catch (error) {
+      showToast("error", t("toast.accountUpdateError"), error);
+      throw error;
+    }
+  };
+
   const handleLogout = async () => {
     try {
       if (authToken) {
@@ -71,6 +93,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     isLoading: false,
     login: handleLogin,
     updateAccount: handleUpdateAccount,
+    updateAccountLanguage: handleUpdateAccountLanguage,
     logout: handleLogout,
   };
 

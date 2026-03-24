@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import type { LoginInput, UpdateAccountInput, User } from "./types";
+import type { LoginInput, UpdateAccountInput, User, UserLanguage } from "./types";
 
 export interface AuthContextValue {
   user: User | null;
@@ -9,6 +9,7 @@ export interface AuthContextValue {
   isLoading: boolean;
   login: (input: LoginInput) => Promise<void>;
   updateAccount: (input: UpdateAccountInput) => Promise<User>;
+  updateAccountLanguage: (language: UserLanguage) => Promise<User>;
   logout: () => Promise<void>;
 }
 
