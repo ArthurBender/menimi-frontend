@@ -6,6 +6,7 @@ import type { DateCellWrapperProps } from "react-big-calendar";
 import moment from "moment";
 
 import type { CalendarTask } from "../api/types";
+import Modal from "../components/Modal";
 import OccurrenceModal from "../components/OccurrenceModal";
 import { useAuth } from "../api/useAuth";
 import { localeFromLanguage } from "../i18n/config";
@@ -137,19 +138,19 @@ const CalendarPage = () => {
     });
   
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex justify-between items-center gap-10">
-        <h2 className="text-4xl font-bold">{monthYear}</h2>
+    <div className="flex flex-col gap-5">
+      <div className="flex justify-between items-end gap-5">
+        <h2 className="text-2xl md:text-3xl font-bold">{monthYear}</h2>
 
         <div className="flex gap-2">
-          <button className="calendar-navigation" onClick={() => handleMonthChange("previous")}>{t("common.previous")}</button>
-          <button className="calendar-navigation" onClick={() => handleMonthChange("next")}>{t("common.next")}</button>
+          <button className="button" onClick={() => handleMonthChange("previous")}>{t("common.previous")}</button>
+          <button className="button" onClick={() => handleMonthChange("next")}>{t("common.next")}</button>
         </div>
       </div>
 
       {isLoading && <p className="rounded-2xl bg-surface p-4 text-center">{t("calendar.loading")}</p>}
 
-      <div className="h-150">
+      <div className="h-[calc(100vh-15rem)]">
         <Calendar
           localizer={localizer}
           views={["month"]}
@@ -167,48 +168,45 @@ const CalendarPage = () => {
       </div>
 
       {showMoreDate && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={closeShowMoreModal}>
-          <div
-            className="flex w-full max-w-md flex-col gap-4 rounded-2xl bg-surface p-6 shadow-lg"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <h3 className="text-2xl font-bold">
-                {capitalize(
-                  new Intl.DateTimeFormat(locale, {
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                  }).format(showMoreDate),
-                )}
-              </h3>
+        <Modal
+          title={capitalize(
+            new Intl.DateTimeFormat(locale, {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+            }).format(showMoreDate),
+          )}
+          onClose={closeShowMoreModal}
+          footer={
+            <div className="w-full text-center flex flex-col items-center gap-5">
+              <hr className="w-full border-t-2 border-primary" />
               <button
                 type="button"
-                className="calendar-navigation bg-gray-500! hover:bg-gray-600!"
+                className="button bg-primary"
                 onClick={closeShowMoreModal}
               >
                 {t("common.cancel")}
               </button>
             </div>
-
-            <div className="flex max-h-96 flex-col gap-2 overflow-y-auto">
-              {showMoreEvents.map((event) => (
-                <button
-                  key={event.id}
-                  type="button"
-                  className="cursor-pointer rounded-lg px-3 py-2 text-left text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                  style={getCalendarEventStyle(event.resource.status)}
-                  onClick={() => {
-                    closeShowMoreModal();
-                    handleTaskSelect(event);
-                  }}
-                >
-                  {event.title}
-                </button>
-              ))}
-            </div>
+          }
+        >
+          <div className="flex max-h-96 flex-col gap-2 overflow-y-auto">
+            {showMoreEvents.map((event) => (
+              <button
+                key={event.id}
+                type="button"
+                className="cursor-pointer rounded-lg px-3 py-2 text-left text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                style={getCalendarEventStyle(event.resource.status)}
+                onClick={() => {
+                  closeShowMoreModal();
+                  handleTaskSelect(event);
+                }}
+              >
+                {event.title}
+              </button>
+            ))}
           </div>
-        </div>
+        </Modal>
       )}
 
       {selectedTask && (

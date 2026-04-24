@@ -6,6 +6,7 @@
   --color-surface: #CCFBF1;
   --color-primary: #0D9488;
   --color-accent: #0F766E;
+  --color-secondary: #78716C;
   --color-text: #2f251e;
   --color-light: #fff7ed;
   --color-dark: #2a1f18;
@@ -14,9 +15,9 @@
 }
 
 :root {
-  --occurrence-status-pending: #9CA3AF;
-  --occurrence-status-done: #22C55E;
-  --occurrence-status-missed: #EF4444;
+  --occurrence-status-pending: #A8A29E;
+  --occurrence-status-done: #059669;
+  --occurrence-status-missed: #DC4848;
 }
 
 .dark {
@@ -24,11 +25,19 @@
   --color-surface: #2b201c;
   --color-primary: #2DD4BF;
   --color-accent: #14B8A6;
+  --color-secondary: #A8A29E;
   --color-text: #f7ede4;
   --color-light: #3a2b25;
   --color-dark: #0f0b09;
   --color-shadow: #1f1714;
   --color-disabled: #4f433d;
+}
+
+.button {
+  @apply bg-primary px-4 py-2 rounded-lg text-light font-bold cursor-pointer hover:bg-primary/80;
+}
+.button.secondary {
+  @apply bg-secondary hover:bg-secondary/80 text-light;
 }
 
 .nav-link {
@@ -67,16 +76,11 @@
 }
 
 .rbc-event-content {
-  text-align: center;
-  width: 100%;
+  @apply w-full text-center text-xs sm:text-sm md:text-base;
 }
 
 .rbc-button-link.rbc-show-more {
   @apply bg-transparent!;
-}
-
-.calendar-navigation {
-  @apply bg-accent px-4 py-2 rounded-lg text-light font-bold cursor-pointer hover:bg-accent/80;
 }
 
 .task-field-group {

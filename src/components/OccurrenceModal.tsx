@@ -5,6 +5,7 @@ import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
 import type { EditableOccurrenceStatus, Task } from "../api/types";
+import Modal from "./Modal";
 import SelectField from "./custom-fields/SelectField";
 import TextField from "./custom-fields/TextField";
 
@@ -35,6 +36,8 @@ function toDateTimeLocalValue(date: Date): string {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
+const HEADER_BTN = "flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-light/60 text-light transition-colors hover:bg-light/20 disabled:cursor-not-allowed disabled:opacity-50";
+
 const OccurrenceModal = ({
   mode,
   tasks,
@@ -63,143 +66,118 @@ const OccurrenceModal = ({
   const defaultTaskId = initialTaskId ?? availableTasks[0]?.id ?? null;
   const hasAvailableTasks = availableTasks.length > 0;
   const title = mode === "create" ? t("calendar.addOccurrence") : t("calendar.editOccurrence");
-  const taskOptions = availableTasks.map((task) => ({
-    value: task.id,
-    label: task.title,
-  }));
-  const statusOptions = STATUS_OPTIONS.map((statusOption) => ({
-    value: statusOption.value,
-    label: t(statusOption.labelKey),
-  }));
+  const taskOptions = availableTasks.map((task) => ({ value: task.id, label: task.title }));
+  const statusOptions = STATUS_OPTIONS.map((o) => ({ value: o.value, label: t(o.labelKey) }));
 
   const [taskId, setTaskId] = useState<number | null>(defaultTaskId);
   const [status, setStatus] = useState<EditableOccurrenceStatus>(initialStatus);
   const [occurredAt, setOccurredAt] = useState(() => toDateTimeLocalValue(initialDate));
 
-  const handleCreateTask = () => {
-    navigate(`/new?occurredAt=${encodeURIComponent(occurredAt)}`);
-  };
-
-  const handleEditTask = () => {
-    if (taskId === null) return;
-    navigate(`/tasks/${taskId}/edit`);
-  };
-
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     if (taskId === null) return;
-
     const parsedDate = new Date(occurredAt);
     if (Number.isNaN(parsedDate.getTime())) return;
-
     onSave({ taskId, occurredAt: parsedDate, status });
   };
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
-      <form
-        className="w-full max-w-md rounded-2xl bg-light p-6 shadow-lg"
-        onSubmit={handleSubmit}
-        onClick={(event) => event.stopPropagation()}
+
+  const headerActions = (
+    <>
+      {mode === "edit" && (
+        <button
+          type="button"
+          className={HEADER_BTN}
+          disabled={isSaving}
+          aria-label={t("calendar.editRelatedTask")}
+          title={t("calendar.editRelatedTask")}
+          onClick={() => taskId !== null && navigate(`/tasks/${taskId}/edit`)}
+        >
+          <FiEdit2 />
+        </button>
+      )}
+      {mode === "edit" && !isPending && (
+        <button
+          type="button"
+          className={HEADER_BTN}
+          disabled={isSaving}
+          aria-label={t("calendar.removeOccurrence")}
+          title={t("calendar.removeOccurrence")}
+          onClick={onDelete}
+        >
+          <FiTrash2 />
+        </button>
+      )}
+      {mode === "create" && (
+        <button
+          type="button"
+          className={HEADER_BTN}
+          disabled={isSaving}
+          aria-label={t("calendar.createTask")}
+          title={t("calendar.createTask")}
+          onClick={() => navigate(`/new?occurredAt=${encodeURIComponent(occurredAt)}`)}
+        >
+          <FiPlus />
+        </button>
+      )}
+    </>
+  );
+
+  const footer = (
+    <>
+      <button
+        type="button"
+        className="button secondary"
+        onClick={onClose}
+        disabled={isSaving}
       >
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="text-2xl font-bold">{title}</h3>
-          <div className="flex items-center gap-1">
-            {mode === "edit" && (
-              <button
-                type="button"
-                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-accent text-sm text-accent transition-colors hover:bg-accent/10"
-                disabled={isSaving}
-                aria-label={t("calendar.editRelatedTask")}
-                title={t("calendar.editRelatedTask")}
-                onClick={handleEditTask}
-              >
-                <FiEdit2 />
-              </button>
-            )}
-            {mode === "edit" && !isPending && (
-              <button
-                type="button"
-                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-accent text-sm text-accent transition-colors hover:bg-accent/10"
-                disabled={isSaving}
-                aria-label={t("calendar.removeOccurrence")}
-                title={t("calendar.removeOccurrence")}
-                onClick={onDelete}
-              >
-                <FiTrash2 />
-              </button>
-            )}
-            {mode === "create" && (
-              <button
-                type="button"
-                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-accent text-sm text-accent transition-colors hover:bg-accent/10"
-                disabled={isSaving}
-                aria-label={t("calendar.createTask")}
-                title={t("calendar.createTask")}
-                onClick={handleCreateTask}
-              >
-                <FiPlus />
-              </button>
-            )}
-          </div>
-        </div>
+        {t("common.cancel")}
+      </button>
+      {hasAvailableTasks && (
+        <button type="submit" form="occurrence-form" className="button" disabled={isSaving}>
+          {isSaving ? t("common.saving") : t("common.save")}
+        </button>
+      )}
+    </>
+  );
 
-        {!hasAvailableTasks ? (
-          <div className="flex flex-col gap-2 items-center">
-            <p className="mt-4 text-sm text-center">{t("calendar.noActiveTasks")}</p>
-          </div>
-        ) : (
-          <div className="mt-4 flex flex-col gap-3">
-            <SelectField
-              id="occurrence-task"
-              label={t("common.task")}
-              value={taskId}
-              options={taskOptions}
-              onChange={(value) => setTaskId(value)}
-              isSearchable
-              isDisabled={mode === "edit" || isSaving}
-            />
+  return (
+    <Modal title={title} onClose={onClose} headerActions={headerActions} footer={footer}>
+      {!hasAvailableTasks ? (
+        <p className="py-2 text-center text-sm">{t("calendar.noActiveTasks")}</p>
+      ) : (
+        <form id="occurrence-form" onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <SelectField
+            id="occurrence-task"
+            label={t("common.task")}
+            value={taskId}
+            options={taskOptions}
+            onChange={(value) => setTaskId(value)}
+            isSearchable
+            isDisabled={mode === "edit" || isSaving}
+          />
 
-            <hr className="border-accent" />
+          <hr className="border-accent" />
 
-            <TextField
-              id="occurrence-datetime"
-              type="datetime-local"
-              value={occurredAt}
-              onChange={(event) => setOccurredAt(event.target.value)}
-              disabled={isSaving}
-              label={t("calendar.dateTime")}
-            />
-
-            <SelectField
-              id="occurrence-status"
-              value={status}
-              label={t("common.status")}
-              options={statusOptions}
-              onChange={(value) => {
-                if (value) setStatus(value);
-              }}
-              isDisabled={isSaving}
-            />
-          </div>
-        )}
-
-        <div className="mt-6 flex justify-center gap-2">
-          <button
-            type="button"
-            className="calendar-navigation bg-gray-500! hover:bg-gray-600!"
-            onClick={onClose}
+          <TextField
+            id="occurrence-datetime"
+            type="datetime-local"
+            value={occurredAt}
+            onChange={(event) => setOccurredAt(event.target.value)}
             disabled={isSaving}
-          >
-            {t("common.cancel")}
-          </button>
-          {hasAvailableTasks && (
-            <button type="submit" className="calendar-navigation" disabled={isSaving}>
-              {isSaving ? t("common.saving") : t("common.save")}
-            </button>
-          )}
-        </div>
-      </form>
-    </div>
+            label={t("calendar.dateTime")}
+          />
+
+          <SelectField
+            id="occurrence-status"
+            value={status}
+            label={t("common.status")}
+            options={statusOptions}
+            onChange={(value) => { if (value) setStatus(value); }}
+            isDisabled={isSaving}
+          />
+        </form>
+      )}
+    </Modal>
   );
 };
 

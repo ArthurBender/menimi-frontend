@@ -62,10 +62,10 @@ const LoginPage = () => {
         />
 
         <div className="mt-auto flex flex-col gap-3 pt-6">
-          <button type="submit" className="calendar-navigation" disabled={isSubmitting}>
+          <button type="submit" className="button" disabled={isSubmitting}>
             {isSubmitting ? t("auth.login.submitting") : t("auth.login.submit")}
           </button>
-          <Link to="/signup" className="calendar-navigation text-center">
+          <Link to="/signup" className="button text-center">
             {t("auth.login.createAccount")}
           </Link>
         </div>

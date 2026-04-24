@@ -197,7 +197,7 @@ const SettingsPage = () => {
         </div>
 
         <div className="mt-2 flex justify-center gap-3">
-          <button type="submit" className="calendar-navigation" disabled={isSaving}>
+          <button type="submit" className="button" disabled={isSaving}>
             {isSaving ? t("common.saving") : t("common.saveChanges")}
           </button>
         </div>
@@ -256,7 +256,7 @@ const SettingsPage = () => {
             {pushStatus === "enabled" ? (
               <button
                 type="button"
-                className="calendar-navigation"
+                className="button"
                 onClick={handleDisablePush}
                 disabled={isUpdatingPush}
               >
@@ -265,7 +265,7 @@ const SettingsPage = () => {
             ) : (
               <button
                 type="button"
-                className="calendar-navigation"
+                className="button"
                 onClick={handleEnablePush}
                 disabled={isUpdatingPush || !canUsePushNotifications()}
               >

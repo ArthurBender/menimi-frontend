@@ -90,7 +90,7 @@ const EditTask = () => {
           extraActions={(
             <button
               type="button"
-              className="calendar-navigation bg-primary! hover:bg-primary/80!"
+              className="button bg-primary! hover:bg-primary/80!"
               onClick={handleDelete}
               disabled={isSubmitting || isDeleting}
             >

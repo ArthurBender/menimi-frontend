@@ -117,7 +117,7 @@ const TaskForm = ({
 
       <div className="mt-2 flex justify-center gap-3">
         {extraActions}
-        <button type="submit" className="calendar-navigation" disabled={isSubmitting}>
+        <button type="submit" className="button" disabled={isSubmitting}>
           {isSubmitting ? submittingLabel : submitLabel}
         </button>
       </div>
