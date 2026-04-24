@@ -16,16 +16,16 @@ const AuthLayout = ({ title, description, children }: AuthLayoutProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <div
-        className="hidden flex-1 items-center justify-center bg-cover bg-center bg-no-repeat px-12 lg:flex"
-        style={{
-          backgroundImage: `url(${splashTexture}), url(${backgroundImage})`,
-          backgroundPosition: "center, center",
-          backgroundRepeat: "no-repeat, no-repeat",
-          backgroundSize: "cover, cover",
-        }}
-      >
+    <div
+      className="flex min-h-screen p-4 lg:p-0"
+      style={{
+        backgroundImage: `url(${splashTexture}), url(${backgroundImage})`,
+        backgroundPosition: "center, center",
+        backgroundRepeat: "no-repeat, no-repeat",
+        backgroundSize: "cover, cover",
+      }}
+    >
+      <div className="hidden flex-1 items-center justify-center px-12 lg:flex">
         <div className="flex flex-col items-center gap-20 text-center">
           <p className="text-9xl font-bold text-light bg-accent px-4 py-2 rounded-2xl">{t("app.brand")}</p>
           <p className="text-5xl font-semibold text-accent bg-light px-4 py-2 rounded-2xl">
@@ -36,7 +36,7 @@ const AuthLayout = ({ title, description, children }: AuthLayoutProps) => {
           </p>
         </div>
       </div>
-      <aside className="flex min-h-screen w-full flex-col bg-background px-4 py-8 lg:w-[30rem] lg:px-8">
+      <aside className="flex min-h-[calc(100vh-2rem)] flex-col bg-background rounded-2xl p-8 lg:min-h-screen w-120 mx-auto lg:mx-0 lg:rounded-none">
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col">
           <div className="flex flex-col gap-3 pt-4">
             <div className="flex items-start justify-between gap-4">
