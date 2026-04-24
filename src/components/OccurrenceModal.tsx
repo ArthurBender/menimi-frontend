@@ -50,7 +50,14 @@ const OccurrenceModal = ({
   const navigate = useNavigate();
   const { t } = useTranslation();
   const availableTasks = useMemo(
-    () => (mode === "create" ? tasks.filter((task) => task.active) : tasks),
+    () =>
+      mode === "create"
+        ? tasks.filter((task) => {
+            if (!task.active) return false;
+            if (task.rrule !== null) return true;
+            return task.carry_over && !task.occurrences.some((o) => o.status === "done");
+          })
+        : tasks,
     [mode, tasks],
   );
   const defaultTaskId = initialTaskId ?? availableTasks[0]?.id ?? null;
