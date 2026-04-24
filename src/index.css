@@ -1,51 +1,35 @@
 @import "tailwindcss";
 @import "react-big-calendar/lib/css/react-big-calendar.css";
 
-:root {
-  --background: #FAF7F2;
-  --surface: #FDE2E2;
-  --primary: #E62525;
-  --accent: #AE696B;
-  --text: #2f251e;
-  --light: #fff7ed;
-  --dark: #2a1f18;
-  --shadow: #FDE2E2;
-  --disabled: #e6e6e6;
+@theme {
+  --color-background: #FAF7F2;
+  --color-surface: #CCFBF1;
+  --color-primary: #0D9488;
+  --color-accent: #0F766E;
+  --color-text: #2f251e;
+  --color-light: #fff7ed;
+  --color-dark: #2a1f18;
+  --color-shadow: #CCFBF1;
+  --color-disabled: #e6e6e6;
+}
 
+:root {
   --occurrence-status-pending: #9CA3AF;
   --occurrence-status-done: #22C55E;
   --occurrence-status-missed: #EF4444;
 }
 
 .dark {
-  --background: #181311;
-  --surface: #2b201c;
-  --primary: #ff6b6b;
-  --accent: #d18e90;
-  --text: #f7ede4;
-  --light: #3a2b25;
-  --dark: #0f0b09;
-  --shadow: #1f1714;
-  --disabled: #4f433d;
+  --color-background: #181311;
+  --color-surface: #2b201c;
+  --color-primary: #2DD4BF;
+  --color-accent: #14B8A6;
+  --color-text: #f7ede4;
+  --color-light: #3a2b25;
+  --color-dark: #0f0b09;
+  --color-shadow: #1f1714;
+  --color-disabled: #4f433d;
 }
-
-@theme {
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-primary: var(--primary);
-  --color-accent: var(--accent);
-  --color-text: var(--text);
-  --color-light: var(--light);
-  --color-dark: var(--dark);
-  --color-shadow: var(--shadow);
-  --color-disabled: var(--disabled);
-}
-
-body {
-  background-color: var(--color-background);
-  color: var(--color-text);
-}
-
 
 .nav-link {
   @apply text-4xl cursor-pointer;
@@ -129,4 +113,35 @@ body {
 
 .task-field-group .react-select__control {
   @apply border-accent! rounded-xl bg-light px-1 py-0.5 outline-none shadow-none;
+}
+
+.dark .rbc-off-range-bg {
+  background-color: var(--color-dark);
+}
+
+.dark .task-field-group .react-select__menu {
+  background-color: var(--color-light);
+}
+
+.dark .task-field-group .react-select__option {
+  color: var(--color-text);
+  background-color: var(--color-light);
+}
+
+.dark .task-field-group .react-select__option--is-focused {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+
+.dark .task-field-group .react-select__option--is-selected {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.dark .task-field-group .react-select__single-value {
+  color: var(--color-text);
+}
+
+.dark .task-field-group .react-select__input {
+  color: var(--color-text) !important;
 }

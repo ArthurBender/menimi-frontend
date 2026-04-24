@@ -5,10 +5,10 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
 const LoggedLayout = () => {
-  const { isSidebarOpen, setIsSidebarOpen } = usePreferences();
+  const { theme, isSidebarOpen, setIsSidebarOpen } = usePreferences();
 
   return (
-    <div className="flex min-h-screen">
+    <div className={`flex min-h-screen bg-background text-text${theme === "dark" ? " dark" : ""}`}>
       <Sidebar isOpen={isSidebarOpen} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Navbar

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
 
-import backgroundImage from "../assets/background.jpg";
+import backgroundImage from "../assets/background.webp";
 import splashTexture from "../assets/splash-texture.png";
 import { usePreferences } from "../preferences/usePreferences";
 import PreferenceToggle from "./PreferenceToggle";

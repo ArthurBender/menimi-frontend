@@ -26,7 +26,7 @@ const HomeTaskRow = ({
         <p className="truncate text-lg font-medium">{event.title}</p>
       </div>
 
-      {dateLabel && <p className="shrink-0 text-sm text-dark/70 md:text-base">{dateLabel}</p>}
+      {dateLabel && <p className="shrink-0 text-sm text-text/70 md:text-base">{dateLabel}</p>}
 
       <div className="flex items-center gap-2">
         <button

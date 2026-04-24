@@ -44,7 +44,6 @@ export function PreferencesProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     if (!canUseStorage()) return;
     window.localStorage.setItem(THEME_KEY, theme);
-    document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
   useEffect(() => {

@@ -169,7 +169,7 @@ const CalendarPage = () => {
       {showMoreDate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={closeShowMoreModal}>
           <div
-            className="flex w-full max-w-md flex-col gap-4 rounded-2xl bg-light p-6 shadow-lg"
+            className="flex w-full max-w-md flex-col gap-4 rounded-2xl bg-surface p-6 shadow-lg"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-3">
