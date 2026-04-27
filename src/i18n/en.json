@@ -61,7 +61,7 @@
   },
   "home": {
     "resume": "Your active tasks are loaded from the API and grouped below.",
-    "greeting": "Niece to see you again, {{name}}!",
+    "greeting": "Nice to see you again, {{name}}!",
     "guestName": "there",
     "loading": "Loading tasks...",
     "today": "Today",
