@@ -91,7 +91,7 @@
 }
 
 .task-field-group > input, .task-field-group > textarea, .task-field-group > select {
-  @apply rounded-xl border border-accent bg-light px-3 py-2 outline-none;
+  @apply w-full rounded-xl border border-accent bg-light px-3 py-2 outline-none;
 }
 
 .task-field-group > label {
