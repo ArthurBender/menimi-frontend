@@ -66,7 +66,7 @@ const TaskForm = ({
   };
 
   return (
-    <form className="flex w-full flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
+    <form className="flex w-full flex-col gap-8" onSubmit={handleSubmit}>
       <TextField
         id="title"
         name="title"

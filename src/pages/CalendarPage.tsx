@@ -7,6 +7,7 @@ import moment from "moment";
 
 import type { CalendarTask } from "../api/types";
 import Modal from "../components/Modal";
+import PageTitle from "../components/PageTitle";
 import OccurrenceModal from "../components/OccurrenceModal";
 import { useAuth } from "../api/useAuth";
 import { localeFromLanguage } from "../i18n/config";
@@ -139,14 +140,15 @@ const CalendarPage = () => {
   
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex justify-between items-end gap-5">
-        <h2 className="text-2xl md:text-3xl font-bold">{monthYear}</h2>
-
-        <div className="flex gap-2">
-          <button className="button" onClick={() => handleMonthChange("previous")}>{t("common.previous")}</button>
-          <button className="button" onClick={() => handleMonthChange("next")}>{t("common.next")}</button>
-        </div>
-      </div>
+      <PageTitle
+        title={monthYear}
+        actions={
+          <>
+            <button className="button" onClick={() => handleMonthChange("previous")}>{t("common.previous")}</button>
+            <button className="button" onClick={() => handleMonthChange("next")}>{t("common.next")}</button>
+          </>
+        }
+      />
 
       {isLoading && <p className="rounded-2xl bg-surface p-4 text-center">{t("calendar.loading")}</p>}
 

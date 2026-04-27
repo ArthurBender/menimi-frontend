@@ -52,7 +52,7 @@ const AuthLayout = ({ title, description, children }: AuthLayoutProps) => {
               />
             </div>
 
-            <p className="text-sm text-primary/70">{description}</p>
+            <p className="text-sm text-primary">{description}</p>
           </div>
 
           <div className="flex flex-1 flex-col pt-8">

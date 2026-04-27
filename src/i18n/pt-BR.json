@@ -80,8 +80,10 @@
     "logout": "Sair"
   },
   "settings": {
+    "pageDescription": "Gerencie sua conta e preferências.",
     "preferences": "Preferências",
     "account": {
+      "title": "Conta",
       "themeDescription": "Armazenado localmente entre sessões.",
       "languageDescription": "Atualiza o idioma do app imediatamente."
     },
@@ -107,7 +109,9 @@
   },
   "task": {
     "newTitle": "Nova Tarefa",
+    "newDescription": "Preencha os detalhes abaixo para criar uma nova tarefa.",
     "editTitle": "Editar Tarefa",
+    "editDescription": "Atualize os detalhes e a recorrência da tarefa.",
     "create": "Criar Tarefa",
     "creating": "Criando...",
     "delete": "Excluir Tarefa",

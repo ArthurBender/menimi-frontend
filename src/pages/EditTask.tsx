@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
+import PageTitle from "../components/PageTitle";
+import Panel from "../components/Panel";
 import TaskForm from "../components/TaskForm";
 import { useTasks } from "../api/useTasks";
 
@@ -71,10 +72,8 @@ const EditTask = () => {
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <div className="flex justify-center">
-        <h2 className="text-4xl font-bold">{t("task.editTitle")}</h2>
-      </div>
-      <div className="mx-auto w-full max-w-4xl">
+      <PageTitle title={t("task.editTitle")} description={t("task.editDescription")} />
+      <Panel>
         <TaskForm
           initialValues={{
             title: task.title,
@@ -98,7 +97,7 @@ const EditTask = () => {
             </button>
           )}
         />
-      </div>
+      </Panel>
     </div>
   );
 };

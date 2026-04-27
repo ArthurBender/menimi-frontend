@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import PageTitle from "../components/PageTitle";
+import Panel from "../components/Panel";
 import TaskForm from "../components/TaskForm";
 import { useAuth } from "../api/useAuth";
 import { useTasks } from "../api/useTasks";
@@ -59,10 +61,8 @@ const NewTask = () => {
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <div className="flex justify-center">
-        <h2 className="text-4xl font-bold">{t("task.newTitle")}</h2>
-      </div>
-      <div className="w-full">
+      <PageTitle title={t("task.newTitle")} description={t("task.newDescription")} />
+      <Panel>
         <TaskForm
           initialValues={{
             title: "",
@@ -76,7 +76,7 @@ const NewTask = () => {
           submittingLabel={t("task.creating")}
           onSubmit={handleSubmit}
         />
-      </div>
+      </Panel>
     </div>
   );
 }

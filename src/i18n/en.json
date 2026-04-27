@@ -80,8 +80,10 @@
     "logout": "Logout"
   },
   "settings": {
+    "pageDescription": "Manage your account and preferences.",
     "preferences": "Preferences",
     "account": {
+      "title": "Account",
       "themeDescription": "Stored locally between sessions.",
       "languageDescription": "Updates the app language immediately."
     },
@@ -107,7 +109,9 @@
   },
   "task": {
     "newTitle": "New Task",
+    "newDescription": "Fill in the details below to create a new task.",
     "editTitle": "Edit Task",
+    "editDescription": "Update the task details and schedule.",
     "create": "Create Task",
     "creating": "Creating...",
     "delete": "Delete Task",

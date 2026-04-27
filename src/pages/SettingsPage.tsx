@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { FiUser, FiSliders } from "react-icons/fi";
 
+import PageTitle from "../components/PageTitle";
+import Panel from "../components/Panel";
 import PreferenceToggle from "../components/PreferenceToggle";
 import SelectField from "../components/custom-fields/SelectField";
 import TextField from "../components/custom-fields/TextField";
@@ -123,158 +126,158 @@ const SettingsPage = () => {
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <div className="flex justify-center">
-        <h2 className="text-4xl font-bold">{t("common.settings")}</h2>
-      </div>
+      <PageTitle title={t("common.settings")} description={t("settings.pageDescription")} />
 
-      <form className="flex w-full flex-col gap-8 rounded-2xl bg-surface p-6" onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <Panel title={t("settings.account.title")} icon={<FiUser />} isCollapsible>
+        <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <TextField
+              id="settings-first-name"
+              label={t("common.firstName")}
+              value={firstName}
+              onChange={(event) => setFirstName(event.target.value)}
+              required
+              requiredLabel
+              disabled={isSaving}
+            />
+
+            <TextField
+              id="settings-last-name"
+              label={t("common.lastName")}
+              value={lastName}
+              onChange={(event) => setLastName(event.target.value)}
+              required
+              requiredLabel
+              disabled={isSaving}
+            />
+          </div>
+
           <TextField
-            id="settings-first-name"
-            label={t("common.firstName")}
-            value={firstName}
-            onChange={(event) => setFirstName(event.target.value)}
+            id="settings-email"
+            label={t("common.email")}
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
             required
             requiredLabel
             disabled={isSaving}
           />
 
-          <TextField
-            id="settings-last-name"
-            label={t("common.lastName")}
-            value={lastName}
-            onChange={(event) => setLastName(event.target.value)}
-            required
+          <SelectField
+            id="settings-timezone"
+            label={t("common.timezone")}
             requiredLabel
-            disabled={isSaving}
-          />
-        </div>
-
-        <TextField
-          id="settings-email"
-          label={t("common.email")}
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          required
-          requiredLabel
-          disabled={isSaving}
-        />
-
-        <SelectField
-          id="settings-timezone"
-          label={t("common.timezone")}
-          requiredLabel
-          value={timezone}
-          options={timezoneOptions}
-          onChange={(value) => {
-            if (value) setTimezone(value);
-          }}
-          isSearchable
-          isDisabled={isSaving}
-        />
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
-            id="settings-password"
-            label={t("settings.newPassword")}
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            disabled={isSaving}
-            autoComplete="new-password"
+            value={timezone}
+            options={timezoneOptions}
+            onChange={(value) => {
+              if (value) setTimezone(value);
+            }}
+            isSearchable
+            isDisabled={isSaving}
           />
 
-          <TextField
-            id="settings-password-confirmation"
-            label={t("common.passwordConfirmation")}
-            type="password"
-            value={passwordConfirmation}
-            onChange={(event) => setPasswordConfirmation(event.target.value)}
-            disabled={isSaving}
-            autoComplete="new-password"
-          />
-        </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <TextField
+              id="settings-password"
+              label={t("settings.newPassword")}
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              disabled={isSaving}
+              autoComplete="new-password"
+            />
 
-        <div className="mt-2 flex justify-center gap-3">
-          <button type="submit" className="button" disabled={isSaving}>
-            {isSaving ? t("common.saving") : t("common.saveChanges")}
-          </button>
-        </div>
-      </form>
-
-      <div className="flex w-full flex-col gap-6 rounded-2xl bg-surface p-6">
-        <h3 className="text-2xl font-semibold">{t("settings.preferences")}</h3>
-
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="font-semibold">{t("common.theme")}</p>
-            <p className="text-sm text-primary/70">{t("settings.account.themeDescription")}</p>
-          </div>
-
-          <div className="w-fit self-start sm:self-auto">
-            <PreferenceToggle
-              value={theme}
-              onChange={setTheme}
-              options={[
-                { value: "light", label: t("settings.light") },
-                { value: "dark", label: t("settings.dark") },
-              ]}
+            <TextField
+              id="settings-password-confirmation"
+              label={t("common.passwordConfirmation")}
+              type="password"
+              value={passwordConfirmation}
+              onChange={(event) => setPasswordConfirmation(event.target.value)}
+              disabled={isSaving}
+              autoComplete="new-password"
             />
           </div>
+
+          <div className="mt-2 flex justify-center gap-3">
+            <button type="submit" className="button" disabled={isSaving}>
+              {isSaving ? t("common.saving") : t("common.saveChanges")}
+            </button>
+          </div>
+        </form>
+      </Panel>
+
+      <Panel title={t("settings.preferences")} icon={<FiSliders />} isCollapsible>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-semibold">{t("common.theme")}</p>
+              <p className="text-sm text-primary">{t("settings.account.themeDescription")}</p>
+            </div>
+
+            <div className="w-fit self-start sm:self-auto">
+              <PreferenceToggle
+                value={theme}
+                onChange={setTheme}
+                options={[
+                  { value: "light", label: t("settings.light") },
+                  { value: "dark", label: t("settings.dark") },
+                ]}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-semibold">{t("common.language")}</p>
+              <p className="text-sm text-primary">{t("settings.account.languageDescription")}</p>
+            </div>
+
+            <div className="w-fit self-start sm:self-auto">
+              <PreferenceToggle
+                value={language}
+                onChange={handleLanguageChange}
+                disabled={isUpdatingLanguage}
+                options={[
+                  { value: "en", label: t("common.english") },
+                  { value: "pt-BR", label: t("common.portugueseBrazil") },
+                ]}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-semibold">{t("settings.notifications.title")}</p>
+              <p className="text-sm text-primary">{pushDescription}</p>
+              <p className="mt-1 text-xs uppercase text-text">
+                {t("settings.notifications.status")}: {pushStatusLabel}
+              </p>
+            </div>
+
+            <div className="w-fit">
+              {pushStatus === "enabled" ? (
+                <button
+                  type="button"
+                  className="button"
+                  onClick={handleDisablePush}
+                  disabled={isUpdatingPush}
+                >
+                  {isUpdatingPush ? t("settings.notifications.disabling") : t("settings.notifications.disable")}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="button"
+                  onClick={handleEnablePush}
+                  disabled={isUpdatingPush || !canUsePushNotifications()}
+                >
+                  {isUpdatingPush ? t("settings.notifications.enabling") : t("settings.notifications.enable")}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
-
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="font-semibold">{t("common.language")}</p>
-            <p className="text-sm text-primary/70">{t("settings.account.languageDescription")}</p>
-          </div>
-
-          <div className="w-fit self-start sm:self-auto">
-            <PreferenceToggle
-              value={language}
-              onChange={handleLanguageChange}
-              disabled={isUpdatingLanguage}
-              options={[
-                { value: "en", label: t("common.english") },
-                { value: "pt-BR", label: t("common.portugueseBrazil") },
-              ]}
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="font-semibold">{t("settings.notifications.title")}</p>
-            <p className="text-sm text-primary/70">{pushDescription}</p>
-            <p className="mt-1 text-xs uppercase tracking-[0.24em] text-primary/50">
-              {t("settings.notifications.status")}: {pushStatusLabel}
-            </p>
-          </div>
-
-          <div className="w-fit self-start sm:self-auto">
-            {pushStatus === "enabled" ? (
-              <button
-                type="button"
-                className="button"
-                onClick={handleDisablePush}
-                disabled={isUpdatingPush}
-              >
-                {isUpdatingPush ? t("settings.notifications.disabling") : t("settings.notifications.disable")}
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="button"
-                onClick={handleEnablePush}
-                disabled={isUpdatingPush || !canUsePushNotifications()}
-              >
-                {isUpdatingPush ? t("settings.notifications.enabling") : t("settings.notifications.enable")}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+      </Panel>
     </div>
   );
 };
