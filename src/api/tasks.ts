@@ -60,3 +60,15 @@ export function deleteTaskOccurrence(id: number) {
     method: "DELETE",
   });
 }
+
+export interface TaskOccurrenceStats {
+  done: number;
+  missed: number;
+}
+
+export function getTaskOccurrenceStats() {
+  return apiRequest<TaskOccurrenceStats>({
+    url: `${API_BASE_URL}/task_occurrences/stats`,
+    method: "GET",
+  });
+}

@@ -61,7 +61,7 @@
   },
   "home": {
     "resume": "Suas tarefas ativas são carregadas da API e agrupadas abaixo.",
-    "greeting": "Oi, {{name}}!",
+    "greeting": "Que bom te ver de novo, {{name}}!",
     "guestName": "você",
     "loading": "Carregando tarefas...",
     "today": "Hoje",
@@ -69,7 +69,10 @@
     "empty": "Nenhuma tarefa agendada.",
     "openCalendar": "Abrir calendário",
     "completeOccurrence": "Concluir ocorrência",
-    "missOccurrence": "Marcar ocorrência como perdida"
+    "missOccurrence": "Marcar ocorrência como perdida",
+    "yourStats": "Suas estatísticas",
+    "tasksDone": "tarefas concluídas",
+    "tasksMissed": "tarefas perdidas"
   },
   "nav": {
     "home": "Início",

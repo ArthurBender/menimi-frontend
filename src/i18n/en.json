@@ -61,7 +61,7 @@
   },
   "home": {
     "resume": "Your active tasks are loaded from the API and grouped below.",
-    "greeting": "Hey, {{name}}!",
+    "greeting": "Niece to see you again, {{name}}!",
     "guestName": "there",
     "loading": "Loading tasks...",
     "today": "Today",
@@ -69,7 +69,10 @@
     "empty": "No tasks scheduled.",
     "openCalendar": "Open calendar",
     "completeOccurrence": "Complete occurrence",
-    "missOccurrence": "Mark occurrence as missed"
+    "missOccurrence": "Mark occurrence as missed",
+    "yourStats": "Your stats",
+    "tasksDone": "tasks done",
+    "tasksMissed": "tasks missed"
   },
   "nav": {
     "home": "Home",

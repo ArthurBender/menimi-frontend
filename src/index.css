@@ -12,12 +12,15 @@
   --color-dark: #2a1f18;
   --color-shadow: #CCFBF1;
   --color-disabled: #e6e6e6;
+
+  --color-done: #059669;
+  --color-missed: #DC4848;
 }
 
 :root {
   --occurrence-status-pending: #A8A29E;
-  --occurrence-status-done: #059669;
-  --occurrence-status-missed: #DC4848;
+  --occurrence-status-done: var(--color-done);
+  --occurrence-status-missed: var(--color-missed);
 }
 
 .dark {
