@@ -170,7 +170,7 @@ const Home = () => {
 
       {isLoading && <p className="rounded-2xl bg-surface p-4 text-center">{t("home.loading")}</p>}
 
-      <div className="flex flex-col gap-4 md:flex-row">
+      <div className="flex flex-col gap-4 xl:flex-row">
         <Panel title={`${t("home.today")}: ${todayTasks.length}`}>
           <div className="flex flex-col">
             {todayTasks.map((task) => (
