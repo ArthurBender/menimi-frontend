@@ -124,7 +124,8 @@
     "description": "Descrição",
     "startsAt": "Data / Início",
     "recurrent": "Recorrente",
-    "carryOver": "Adiável"
+    "carryOver": "Adiável",
+    "noDescription": "Nenhuma descrição fornecida."
   },
   "rrule": {
     "frequency": "Frequência",

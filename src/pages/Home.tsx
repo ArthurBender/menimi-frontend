@@ -185,6 +185,7 @@ const Home = () => {
                 key={task.id}
                 event={task}
                 isSaving={savingEventId === task.id}
+                description={tasks.find((t) => t.id === task.resource.taskId)?.description}
                 onComplete={() => void handleOccurrenceStatusUpdate(task.id, "done")}
                 onMiss={() => void handleOccurrenceStatusUpdate(task.id, "missed")}
               />
@@ -202,6 +203,7 @@ const Home = () => {
                 key={task.id}
                 event={task}
                 isSaving={savingEventId === task.id}
+                description={tasks.find((t) => t.id === task.resource.taskId)?.description}
                 dateLabel={weekTaskDateFormatter.format(task.start)}
                 onComplete={() => void handleOccurrenceStatusUpdate(task.id, "done")}
                 onMiss={() => void handleOccurrenceStatusUpdate(task.id, "missed")}
