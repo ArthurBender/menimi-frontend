@@ -45,13 +45,20 @@ const Home = () => {
 
   const homeTasks = buildTaskEventsForMonth(tasks, new Date(), timezone);
   const DateHeader = useHomeCalendarEventRenderer(homeTasks);
-  const pendingHomeTasks = homeTasks.filter((task) => task.resource.status === "pending");
   const today = moment();
+  const endOfWeek = moment().endOf("week");
+  const crossesMonthBoundary = endOfWeek.month() !== today.month();
+  const nextMonthTasks = crossesMonthBoundary
+    ? buildTaskEventsForMonth(tasks, endOfWeek.toDate(), timezone)
+    : [];
+  const pendingHomeTasks = homeTasks.filter((task) => task.resource.status === "pending");
   const todayTasks = pendingHomeTasks.filter((task) => moment(task.start).isSame(today, "day"));
-  const weekTasks = pendingHomeTasks.filter((task) => {
-    const taskDate = moment(task.start);
-    return taskDate.isSame(today, "week") && taskDate.isAfter(today, "day");
-  });
+  const weekTasks = [...pendingHomeTasks, ...nextMonthTasks.filter((t) => t.resource.status === "pending")].filter(
+    (task) => {
+      const taskDate = moment(task.start);
+      return taskDate.isSame(today, "week") && taskDate.isAfter(today, "day");
+    },
+  );
 
   useEffect(() => {
     let isActive = true;
