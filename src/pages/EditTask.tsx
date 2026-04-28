@@ -81,6 +81,7 @@ const EditTask = () => {
             startsAt: toDateInputValue(task.starts_at),
             carryOver: task.carry_over,
             isRecurrent: Boolean(task.rrule),
+            rrule: task.rrule,
           }}
           isSubmitting={isSubmitting || isDeleting}
           submitLabel={t("common.saveChanges")}

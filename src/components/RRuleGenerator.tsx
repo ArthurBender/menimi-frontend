@@ -62,29 +62,99 @@ interface SquareOption {
 
 interface RRuleGeneratorProps {
   name?: string;
+  initialRRule?: string | null;
 }
 
-const RRuleGenerator = ({ name = "rrule" }: RRuleGeneratorProps) => {
+function parseRRule(rrule: string) {
+  const params: Record<string, string> = {};
+  for (const part of rrule.split(";")) {
+    const eqIndex = part.indexOf("=");
+    if (eqIndex !== -1) params[part.slice(0, eqIndex)] = part.slice(eqIndex + 1);
+  }
+
+  const frequency = (["DAILY", "WEEKLY", "MONTHLY", "YEARLY"].includes(params.FREQ ?? "")
+    ? params.FREQ
+    : "DAILY") as Frequency;
+  const interval = params.INTERVAL || "1";
+
+  const weekdays = params.BYDAY && !params.BYSETPOS ? params.BYDAY.split(",") : [];
+
+  let monthlyMode: MonthlyMode = "monthday";
+  let monthlyMonthDays = ["1"];
+  let monthlyWeekdays: string[] = [];
+  let monthlyWeekPositions = ["1"];
+  if (frequency === "MONTHLY") {
+    if (params.BYMONTHDAY) {
+      monthlyMode = "monthday";
+      monthlyMonthDays = params.BYMONTHDAY.split(",");
+    } else if (params.BYDAY && params.BYSETPOS) {
+      monthlyMode = "weekday";
+      monthlyWeekdays = params.BYDAY.split(",");
+      monthlyWeekPositions = params.BYSETPOS.split(",");
+    }
+  }
+
+  let yearlyMode: YearlyMode = "monthday";
+  const yearlyMonths = params.BYMONTH ? params.BYMONTH.split(",") : ["1"];
+  let yearlyMonthDays = ["1"];
+  let yearlyWeekdays: string[] = [];
+  let yearlyWeekPositions = ["1"];
+  if (frequency === "YEARLY") {
+    if (params.BYMONTHDAY) {
+      yearlyMode = "monthday";
+      yearlyMonthDays = params.BYMONTHDAY.split(",");
+    } else if (params.BYDAY && params.BYSETPOS) {
+      yearlyMode = "weekday";
+      yearlyWeekdays = params.BYDAY.split(",");
+      yearlyWeekPositions = params.BYSETPOS.split(",");
+    }
+  }
+
+  let endMode: EndMode = "never";
+  let untilDate = "";
+  let count = "10";
+  if (params.UNTIL) {
+    endMode = "until";
+    untilDate = `${params.UNTIL.slice(0, 4)}-${params.UNTIL.slice(4, 6)}-${params.UNTIL.slice(6, 8)}`;
+  } else if (params.COUNT) {
+    endMode = "count";
+    count = params.COUNT;
+  }
+
+  return {
+    frequency, interval,
+    weekdays,
+    monthlyMode, monthlyMonthDays, monthlyWeekdays, monthlyWeekPositions,
+    yearlyMode, yearlyMonths, yearlyMonthDays, yearlyWeekdays, yearlyWeekPositions,
+    endMode, untilDate, count,
+  };
+}
+
+const defaultRRuleState = parseRRule("");
+
+const RRuleGenerator = ({ name = "rrule", initialRRule }: RRuleGeneratorProps) => {
   const { t } = useTranslation();
-  const [frequency, setFrequency] = useState<Frequency>("DAILY");
-  const [interval, setInterval] = useState("1");
+  const initial = initialRRule ? parseRRule(initialRRule) : defaultRRuleState;
 
-  const [weekdays, setWeekdays] = useState<string[]>([]);
+  const [frequency, setFrequency] = useState<Frequency>(initial.frequency);
+  const [interval, setInterval] = useState(initial.interval);
 
-  const [monthlyMode, setMonthlyMode] = useState<MonthlyMode>("monthday");
-  const [monthlyMonthDays, setMonthlyMonthDays] = useState<string[]>(["1"]);
-  const [monthlyWeekdays, setMonthlyWeekdays] = useState<string[]>([]);
-  const [monthlyWeekPositions, setMonthlyWeekPositions] = useState<string[]>(["1"]);
+  const [weekdays, setWeekdays] = useState<string[]>(initial.weekdays);
 
-  const [yearlyMode, setYearlyMode] = useState<YearlyMode>("monthday");
-  const [yearlyMonths, setYearlyMonths] = useState<string[]>(["1"]);
-  const [yearlyMonthDays, setYearlyMonthDays] = useState<string[]>(["1"]);
-  const [yearlyWeekdays, setYearlyWeekdays] = useState<string[]>([]);
-  const [yearlyWeekPositions, setYearlyWeekPositions] = useState<string[]>(["1"]);
+  const [monthlyMode, setMonthlyMode] = useState<MonthlyMode>(initial.monthlyMode);
+  const [monthlyMonthDays, setMonthlyMonthDays] = useState<string[]>(initial.monthlyMonthDays);
+  const [monthlyWeekdays, setMonthlyWeekdays] = useState<string[]>(initial.monthlyWeekdays);
+  const [monthlyWeekPositions, setMonthlyWeekPositions] = useState<string[]>(initial.monthlyWeekPositions);
 
-  const [endMode, setEndMode] = useState<EndMode>("never");
-  const [untilDate, setUntilDate] = useState("");
-  const [count, setCount] = useState("10");
+  const [yearlyMode, setYearlyMode] = useState<YearlyMode>(initial.yearlyMode);
+  const [yearlyMonths, setYearlyMonths] = useState<string[]>(initial.yearlyMonths);
+  const [yearlyMonthDays, setYearlyMonthDays] = useState<string[]>(initial.yearlyMonthDays);
+  const [yearlyWeekdays, setYearlyWeekdays] = useState<string[]>(initial.yearlyWeekdays);
+  const [yearlyWeekPositions, setYearlyWeekPositions] = useState<string[]>(initial.yearlyWeekPositions);
+
+  const [endMode, setEndMode] = useState<EndMode>(initial.endMode);
+  const [untilDate, setUntilDate] = useState(initial.untilDate);
+  const [count, setCount] = useState(initial.count);
 
   const rruleValue = useMemo(() => {
     const safeInterval = Math.max(1, Number(interval) || 1);

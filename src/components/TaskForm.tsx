@@ -13,6 +13,7 @@ export interface TaskFormInitialValues {
   startsAt: string;
   carryOver: boolean;
   isRecurrent: boolean;
+  rrule?: string | null;
 }
 
 export interface TaskFormSubmitValues {
@@ -113,7 +114,7 @@ const TaskForm = ({
         />
       </div>
 
-      {isRecurrent && <RRuleGenerator />}
+      {isRecurrent && <RRuleGenerator initialRRule={initialValues.rrule} />}
 
       <div className="mt-2 flex justify-center gap-3">
         {extraActions}
