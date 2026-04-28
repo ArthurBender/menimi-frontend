@@ -71,7 +71,7 @@
 }
 
 .rbc-today {
-  background-color: var(--color-surface);
+  @apply bg-primary/20;
 }
 
 .rbc-button-link {
